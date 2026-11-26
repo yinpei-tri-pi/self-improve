@@ -104,6 +104,7 @@ table.tbl th, table.tbl td { border-bottom: 1px solid var(--grid); padding: 3px 
 table.tbl th { color: var(--muted); font-weight: 600; }
 details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin-top: 6px; }
 .hbar { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin: 3px 0; }
+.node text.eta { font-weight: 600; fill: var(--run); }
 .s3tree { list-style: none; padding-left: 0; margin: 8px 0; font-size: 13px; } .s3tree ul { list-style: none; padding-left: 22px; border-left: 1px dashed var(--grid); margin: 2px 0 2px 6px; } .s3tree li { margin: 3px 0; } .s3tree summary { cursor: pointer; } .s3n { font-size: 12.5px; font-weight: 600; } .s3d { color: var(--ink); } .s3b { color: var(--muted); font-size: 12px; }
 .s3t { border-collapse: collapse; width: 100%; font-size: 12.5px; margin-top: 8px; table-layout: fixed; } .s3t th, .s3t td { border-bottom: 1px solid var(--grid); padding: 5px 8px; text-align: left; vertical-align: top; word-break: break-word; } .s3t th:nth-child(1) { width: 30%; } .s3t th:nth-child(2) { width: 30%; } .s3t th:nth-child(5) { width: 22%; } .s3t code { font-size: 11.5px; }
 .hbar .lab { width: 130px; color: var(--ink2); } .hbar .track { flex: 1; height: 10px; background: var(--grid); border-radius: 3px; position: relative; }
@@ -277,6 +278,11 @@ function renderPipe() {
     node.append(svg("title", {text: `${it.label} · ${name}: ${lab}`}));
     node.append(svg("rect", {class: "box", x: p.x, y: p.y, width: bw, height: bh, rx: 8}));
     node.append(svg("text", {class: "t", x: p.x + 10, y: p.y + 19, text: `${ic}  ${name}`}));
+    if (st === "running" && s.eta_short) {
+      const e = svg("text", {class: "k eta", x: p.x + bw - 8, y: p.y + 19, "text-anchor": "end", text: "ETA " + s.eta_short});
+      e.append(svg("title", {text: "ETA " + (s.eta || s.eta_short)}));
+      node.append(e);
+    }
     const kl = keyLine(key, s, k);
     node.append(svg("text", {class: "k", x: p.x + 10, y: p.y + 37, text: lab + (kl ? " · " + kl : "")}));
     const pr = progressOf(key, s);

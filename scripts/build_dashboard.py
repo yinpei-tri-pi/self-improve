@@ -327,14 +327,24 @@ def live_state(config: str) -> dict:
                     rollout["site_label"] = (f"round {k}'s rollout site, being built: {n_pages:,} / {planned:,} episode pages "
                                              f"so far (opens the pages built so far; the index comes at the end)")
         if ro_status == "running" and planned:
+            rate = float(prog.get("episodes_per_hour") or 0)
+            left = planned - int(prog.get("episodes_done") or 0)
+            rollout.update(_eta(left / rate if rate > 0 else None))
             now_running.append({"k": k, "stage": "rollout", "progress": (prog.get("episodes_done") or 0) / planned,
-                                "eta": prog.get("eta") or ""})
+                                "eta": rollout.get("eta", "")})
         s1m = s3.read_json(f"{cfg.s1_shard_uri(k)}/meta.json", default=None)
         s2m = s3.read_json(f"{s2_uri(cfg, k)}/meta.json", default=None)
         pp_status = "done" if s1m else MAP.get(pp_s.get("status", "pending"), "queued")
+        pp_eta = {}
+        if pp_status == "running" and pp_s.get("started"):
+            try:
+                gone = (datetime.now() - datetime.strptime(pp_s["started"], "%Y-%m-%d %H:%M:%S")).total_seconds() / 3600
+                pp_eta = _eta(max(0.05, PREPROCESS_HOURS - gone))
+            except ValueError:
+                pp_eta = {}
         if pp_status == "running":
-            now_running.append({"k": k, "stage": "preprocess", "progress": 0.5, "eta": ""})
-        pre = {"status": pp_status, "started": pp_s.get("started"), "finished": pp_s.get("finished")}
+            now_running.append({"k": k, "stage": "preprocess", "progress": 0.5, "eta": pp_eta.get("eta", "")})
+        pre = {"status": pp_status, "started": pp_s.get("started"), "finished": pp_s.get("finished"), **pp_eta}
         if sites.get("data_site"):
             insp, view = sites.get("inspector", "http://127.0.0.1:7891"), sites.get("view")
             pre["site"] = "../" + sites["data_site"]
@@ -385,8 +395,7 @@ def live_state(config: str) -> dict:
                     "live": live,
                     "loss": loss, "ckpts": [{"step": a, "uri": b} for a, b in ckpts], "ckpt_uri": f"{cfg.s1_ckpt_uri(k)}/"}
         if loss and cw.get("sec_per_step") and tr_status == "running":
-            left_h = (steps - loss[-1][0]) * cw["sec_per_step"] / 3600
-            s1_train["eta"] = (datetime.now() + timedelta(hours=left_h)).strftime("%Y-%m-%d %H:%M") + f" ({left_h:.1f} h left)"
+            s1_train.update(_eta((steps - loss[-1][0]) * cw["sec_per_step"] / 3600))
         if tr_status == "running":
             now_running.append({"k": k, "stage": "s1_train", "progress": (loss[-1][0] / steps) if loss else 0.0,
                                 "eta": s1_train.get("eta") or job.get("secondary") or ""})
@@ -400,6 +409,10 @@ def live_state(config: str) -> dict:
             s2cw = _cw_progress(cfg, s2_live.get("sagemaker_job"), "s2")
             if s2cw.get("points"):
                 s2_train.update(loss=s2cw["points"], step=s2cw["step"], sec_per_step=s2cw.get("sec_per_step"))
+                if s2_job.get("steps"):
+                    s2_train["steps"] = int(s2_job["steps"])
+                    if s2cw.get("sec_per_step"):
+                        s2_train.update(_eta((int(s2_job["steps"]) - s2cw["step"]) * s2cw["sec_per_step"] / 3600))
             s2_train.update(status=_live_status(s2_live, "queued"), job=s2_job.get("name"), live=s2_live,
                             job_state=(f"{s2_live.get('batch')} (Batch) / {s2_live.get('sagemaker')} - {s2_live.get('secondary')} (SageMaker)"
                                        if s2_live.get("sagemaker") else s2_live.get("batch")),
@@ -521,6 +534,20 @@ def s3_layout(cfg) -> dict:
     return {"root": cfg.exp_uri, "trees": [exp, shared],
             "note": f"Locally ({cfg.work_dir}): at most 3 rounds of raw rollouts, 8 S1 / 4 S2 shards per round for checking, "
                     "every round's website."}
+
+
+def _eta(hours_left: float | None) -> dict:
+    """{"eta": "YYYY-MM-DD HH:MM (x.x h left)", "eta_short": "HH:MM" or "HH:MM +1d"} for a stage with hours_left to go."""
+    if hours_left is None or hours_left < 0:
+        return {}
+    t = datetime.now() + timedelta(hours=hours_left)
+    days = (t.date() - datetime.now().date()).days
+    return {"eta": t.strftime("%Y-%m-%d %H:%M") + f" ({hours_left:.1f} h left)",
+            "eta_short": t.strftime("%H:%M") + (f" +{days}d" if days > 0 else "")}
+
+
+#: preprocessing of a round took ~1.9 h (round 0: download 34 min, S1 shards 25, upload 25, S2 26): its ETA from the start
+PREPROCESS_HOURS = 1.9
 
 
 def time_now() -> str:
