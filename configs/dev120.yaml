@@ -38,10 +38,6 @@ train:
 cluster:
   rollout_address: http://10.242.5.98:8265   # the running head: the scheduler never runs ray up itself
 dashboard:
-  links:
-    0:
-      rollout:
-        - {label: "not round 0: the earlier pre-check (70 tasks x 2, the tasks outside the subset), its rollout site", href: "../debug_dev120_check_20261126/index.html"}
   jobs:
     0:
       s2_train: {name: yinpei-sys2-si-mix-qwen3vl-4b-gb192-full-zero2-2-11-26-08-30-15,
