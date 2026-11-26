@@ -62,8 +62,9 @@ def done_episodes(cfg: Config, iteration: int) -> dict[str, dict]:
 class Stats:
     """The round's running numbers (for _status.json and W&B)."""
 
-    def __init__(self, planned: list[T.Episode]):
+    def __init__(self, planned: list[T.Episode], price: dict | None = None):
         self.planned = {e.key: e for e in planned}
+        self.price = price or {}
         self.results: dict[str, dict] = {}
         self.failed: dict[str, dict] = {}
         self.t0 = time.time()
@@ -98,11 +99,29 @@ class Stats:
                                         / max(1.0, sum(float(r.get("tokens_prompt") or 0) for r in res)), 4),
             "episodes_per_hour": round(len(res) / max(elapsed / 3600, 1e-6), 2),
         }
+        out.update(api_cost(res, self.price))
         for by in ("s1", "agent"):
             vals = [r["score"][f"loss_real_{by}"] for r in res if f"loss_real_{by}" in (r.get("score") or {})]
             if vals:
                 out[f"surrogate_loss_{by}"] = round(mean(vals), 6)
         return out
+
+
+def api_cost(results: list[dict], price: dict) -> dict:
+    """The round's API usage and its dollar cost: uncached input, cached input and output tokens of every finished
+    episode (the planner's, i.e. Astra's) at rollout.api_price ($ per 1M tokens; the short-context rate: a request
+    of the loop is ~30k input tokens, the largest ~100k, far below the long-context threshold)."""
+    prompt = sum(int(r.get("tokens_prompt") or 0) for r in results)
+    cached = sum(int(r.get("tokens_cached") or 0) for r in results)
+    completion = sum(int(r.get("tokens_completion") or 0) for r in results)
+    out = {"tokens_input_total": prompt, "tokens_input_cached_total": cached,
+           "tokens_input_uncached_total": prompt - cached, "tokens_output_total": completion}
+    if price:
+        usd = ((prompt - cached) * float(price.get("input", 0)) + cached * float(price.get("cached_input", 0))
+               + completion * float(price.get("output", 0))) / 1e6
+        out.update(api_cost_usd=round(usd, 2), api_cost_usd_per_episode=round(usd / max(1, len(results)), 4),
+                   api_model=price.get("model"))
+    return out
 
 
 def run_round(cfg: Config, iteration: int, ckpt: str, *, local: bool = False, address: str | None = None,
@@ -116,7 +135,7 @@ def run_round(cfg: Config, iteration: int, ckpt: str, *, local: bool = False, ad
     planned = load_or_write_plan(cfg, iteration, ckpt)
     keys = {e.key for e in planned}
     done = {k: v for k, v in done_episodes(cfg, iteration).items() if k in keys}  # a stray folder is not the plan's
-    stats = Stats(planned)
+    stats = Stats(planned, (cfg["rollout"] or {}).get("api_price"))
     for key, uri in list(done.items()):
         rj = s3.read_json(uri, default=None)
         if rj and rj.get("status") == "ok":

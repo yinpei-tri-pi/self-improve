@@ -301,6 +301,10 @@ def episode(args) -> dict:
                         clip(vid, img, "the training span, real time")])
     fin = res.get("finish") or {}
     facts = {k: res.get(k) for k in ("task", "seed", "instruction", "success", "end", "step", "step_limit", "turns", "demo")}
+    sp_ = res.get("start_perturb") or {}
+    facts["start"] = (f"perturbed: {sp_.get('forward_m', 0):+.2f} m forward, {sp_.get('side_m', 0):+.2f} m sideways, "
+                      f"{sp_.get('turn_deg', 0):+.1f} deg ({sp_.get('draws', 1)} draws, salt {sp_.get('salt')})"
+                      if sp_ else "the recorded start")
     if fin:
         facts["finish"] = fin
     page = f"""<!doctype html><html><head><meta charset='utf-8'><title>{esc(slug)}</title><style>{CSS}{EXTRA_CSS}{VIDEO_CSS}</style>{VIDEO_JS}</head>

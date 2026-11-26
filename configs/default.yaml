@@ -21,6 +21,10 @@ wandb:
 
 # ---------------------------------------------------------------------------------------------------
 rollout:
+  # the planner's API prices, $ per 1M tokens (OpenAI's Standard tier for gpt-6.2-astra, short context: requests up
+  # to 272K input tokens; checked 2026-11-25 at developers.openai.com/api/docs/pricing): the rounds' cost in _status /
+  # _DONE (api_cost_usd) and on the dashboard
+  api_price: {model: gpt-6.2-astra, input: 8.00, cached_input: 0.40, output: 40.00}
   # rollout (the default): the 120 development tasks of assets/rollout_tasks.json (scripts/rollout_tasks.py,
   # docs/rollout_tasks.md): the 34 atomic_seen + composite_seen target tasks, all 44 pretrain atomic tasks and 42 of
   # the 64 pretrain composite tasks of the composite_unseen families (the 22 weakest in the prompt A/B dropped). The
