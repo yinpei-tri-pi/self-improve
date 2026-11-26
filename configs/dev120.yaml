@@ -40,7 +40,8 @@ cluster:
 dashboard:
   jobs: {}      # k: {s2_train: {name, queues, steps}}: a round's S2 job, tracked on the dashboard once submitted
   start:
-    s2_train: null   # {name, queues, steps}: the System2 base job, once submitted
+    s2_train: {name: yinpei-sys2-si-base-qwen3vl-4b-gb192-full-zero2-11-26-13-05-59, queues: [fss-vla-p5-48xlarge-us-west-2], steps: 5830,
+               note: "submitted 2026-11-26 13:06: full0804_v4 only (562,183 samples), 2 epochs = 5,830 steps (2,915 / epoch: the smallest rank's batches), LR 1e-5 (ViT 2e-6, aligner 1e-5), cosine, 3% warmup; config sys2_train_eval/scripts/sagemaker/config_si_s2_base_full0804v4_2n.yaml"}
   # the starting checkpoints' own training runs (2026-11-26, from their SageMaker CloudWatch logs and the S2 logging.jsonl)
   reference:
     - {name: "S1 start: the 270k openpi checkpoint (f0717-270k-bs512-progact)", final: "loss 0.0059 (flow_loss_real 0.0162) at step 268,800",
@@ -60,7 +61,7 @@ s2:
     data_uri: s3://tri-ml-datasets-uw2/yinpeidai/self_improve/s2_base/full0804_v4/
     samples: 562183                     # the conversion's meta.json (2026-11-26)
     epochs: 2
-    steps: 5857                         # ceil(2 x 562,183 / 192)
+    steps: 5830                         # 2 x 2,915: the image's epoch is the smallest rank's batches (559,680 samples)
     batch: 192
     lr: "1e-5 (ViT 2e-6, aligner 1e-5), cosine, 3% warmup"
     instances: "2 x p5 (ZeRO-2, 3 per GPU x grad-acc 4)"
