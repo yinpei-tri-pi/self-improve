@@ -203,6 +203,17 @@ function renderNow() {
   }
   if (S.now.next) box.append(el("div", {cls: "item next"}, [el("div", {}, [badge("waiting")]),
     el("div", {cls: "big", text: "Next"}), el("div", {cls: "note", text: S.now.next})]));
+  const mon = S.monitor || {};
+  if (mon.heartbeat || (mon.findings || []).length) {
+    const hb = mon.heartbeat, item = el("div", {cls: "item", style: "flex: 1 1 420px"});
+    item.append(el("div", {}, [badge(hb ? "running" : "waiting"), el("span", {cls: "note", text: "  monitor"})]),
+      el("div", {cls: "big", text: "Monitor"}),
+      el("div", {cls: "note", text: hb ? `heartbeat ${hb.t}: ${hb.text || ""}` : "no heartbeat yet"}));
+    for (const f of (mon.findings || []).slice(0, 8))
+      item.append(el("div", {cls: "note", style: f.level === "error" ? "color: var(--critical)" : (f.level === "warn" ? "color: var(--warn, #b06a10)" : "")},
+        [el("b", {text: `${f.t} ${f.stage || ""}: `}), f.text || ""]));
+    box.append(item);
+  }
 }
 
 /* ---------------- the pipeline picture ---------------- */

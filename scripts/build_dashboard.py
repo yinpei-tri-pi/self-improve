@@ -312,10 +312,28 @@ def live_state(config: str) -> dict:
                        "exp_uri": f"{cfg.exp_uri}/", "local": str(cfg.work_dir),
                        "api_price": r.get("api_price")},
             "now": {"running": now_running, "next": nxt, "events": (st.get("events") or [])[-12:]},
+            "monitor": _monitor(cfg),
             "baseline": {"label": base.get("label", "start: System1 270k + System2"), "success": base.get("overall"),
                          "by_set": {a: base[a] for a in ("atomic_seen", "composite_seen", "composite_unseen") if a in base},
                          "note": base.get("note", "")},
             "trends": trends, "iterations": iters, "generated": time_now()}
+
+
+def _monitor(cfg) -> dict:
+    """The monitoring agent's heartbeat and its findings: one JSON object per line in <work_dir>/monitor.jsonl,
+    {"t": "...", "kind": "heartbeat" | "finding", "level": "info" | "warn" | "error", "stage": ..., "text": ...}."""
+    f = cfg.work_dir / "monitor.jsonl"
+    if not f.exists():
+        return {}
+    rows = []
+    for line in f.read_text().splitlines()[-500:]:
+        try:
+            rows.append(json.loads(line))
+        except ValueError:
+            continue
+    beats = [r for r in rows if r.get("kind") == "heartbeat"]
+    finds = [r for r in rows if r.get("kind") == "finding"]
+    return {"heartbeat": beats[-1] if beats else None, "findings": finds[-15:][::-1]}
 
 
 def time_now() -> str:
