@@ -59,7 +59,7 @@ def main() -> int:
     ap.add_argument("--jobs", type=int, default=24, help="parallel episodes (each encodes ~30-40 videos; 48 cores here)")
     ap.add_argument("--inspector", default="http://127.0.0.1:7891")
     ap.add_argument("--skip-rollout-site", action="store_true")
-    ap.add_argument("--pages-per-task", type=int, default=5, help="full episode pages per task (the index lists all)")
+    ap.add_argument("--pages-per-task", type=int, default=0, help="full episode pages per task, 0: all (the index lists all)")
     args = ap.parse_args()
     cfg = Config.load(args.config, [])
     k = int(args.iteration)
