@@ -404,8 +404,7 @@ def live_state(config: str) -> dict:
                     "note": "optional: only the evaluation needs it; 2 passes over the round's S2 training samples, 50% old set"}
         s2_job = (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train")
         if s2_job:  # a job tracked from the config (e.g. the S2 smoke, until the loop submits S2 itself)
-            s2_live = _job_live(cfg, s2_job.get("name"), s2_job.get("queues") or ["fss-cv-wfm-spot-p5-48xlarge-us-west-2",
-                                                                                  "fss-vla-spot-p5-48xlarge-us-west-2"])
+            s2_live = _job_live(cfg, s2_job.get("name"), s2_job.get("queues") or ["fss-vla-p5-48xlarge-us-west-2"])
             s2cw = _cw_progress(cfg, s2_live.get("sagemaker_job"), "s2")
             if s2cw.get("points"):
                 s2_train.update(loss=s2cw["points"], step=s2cw["step"], sec_per_step=s2cw.get("sec_per_step"))
