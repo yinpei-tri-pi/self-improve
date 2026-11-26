@@ -107,6 +107,8 @@ train:
   instance_type: p5
   instance_count: 2
   queue: vla
+  # S1 training always on the reserved p5 queue at priority 150 (the user, 2026-11-26; spot queues at 200 are for S2)
+  queue_full_name: fss-vla-p5-48xlarge-us-west-2
   queue_priority: 150
   image_tag: null                     # null: build + push from openpi_dir's HEAD at the first round
   config: pi05_robocasa_system1

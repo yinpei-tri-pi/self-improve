@@ -29,8 +29,6 @@ filter:
 train:
   image_tag: "20261125-175016"   # the verified openpi-si image (the two-stream mixer); no rebuild per round
   batch_size: 256
-  queue_full_name: fss-vla-p5-48xlarge-us-west-2   # reserved: spot had no p5 capacity for 10+ h (2026-11-26)
-  queue_priority: 200
   new_data_fraction: 0.8
   steps: 15000
   save_interval: 5000
