@@ -380,10 +380,10 @@ def live_state(config: str) -> dict:
                        "api_price": r.get("api_price")},
             "now": {"running": now_running, "next": nxt, "events": (st.get("events") or [])[-12:]},
             "monitor": _monitor(cfg),
-            "baseline": {"label": base.get("label", "start: System1 270k + System2"), "success": base.get("overall"),
+            "baseline": {"label": base.get("label", "start: System1 270k + System2 (0804), language steering"), "success": base.get("overall"),
                          "by_set": {a: base[a] for a in ("atomic_seen", "composite_seen", "composite_unseen") if a in base},
-                         "note": base.get("note", "")},
-            "trends": trends, "iterations": iters, "generated": time_now()}
+                         "note": base.get("note", "the earlier target-split run, 1,500 episodes")},
+            "trends": trends, "iterations": iters, "generated": time_now(), "s3": s3_layout(cfg)}
 
 
 def _monitor(cfg) -> dict:
@@ -401,6 +401,56 @@ def _monitor(cfg) -> dict:
     beats = [r for r in rows if r.get("kind") == "heartbeat"]
     finds = [r for r in rows if r.get("kind") == "finding"]
     return {"heartbeat": beats[-1] if beats else None, "findings": finds[-15:][::-1]}
+
+
+def s3_layout(cfg) -> dict:
+    """The experiment's S3 layout: every prefix it writes, what is in it, who writes and who reads it."""
+    e = cfg.exp_uri
+    it = f"{e}/iter_NN"
+    r0 = f"{e}/iter_00"
+    rows = [
+        [f"{e}/config.yaml", "the experiment's resolved config (written once at the start)", "scheduler", "you, the scheduler", ""],
+        [f"{e}/state.json", "the loop's state: every round's stages (status, times, the training job's launch record), events, heartbeat",
+         "scheduler (every tick)", "scheduler, this dashboard", ""],
+        [f"{it}/rollout/_plan.json", "round NN's planned episodes: task, recording, start salt (perturbed or not), the S1 checkpoint",
+         "rollout driver", "rollout driver, preprocessing", f"{r0}/rollout/_plan.json"],
+        [f"{it}/rollout/_status.json, _DONE", "the round's progress / final summary: episodes done & failed, success, S1 share, tokens, API cost",
+         "rollout driver", "scheduler, this dashboard", f"{r0}/rollout/_DONE"],
+        [f"{it}/rollout/<task>/<recording>/", "one episode: result.json (success, settings, tokens, start shift), rollout.json, events.jsonl "
+         "(turns), cells.jsonl (Astra's code), transcript.json, states.jsonl, trajectory/ (every step's cameras, state, action: "
+         "steps_*.npz), cells/ frames/ pictures/", "rollout nodes (Ray)", "preprocessing, rollout sites",
+         f"{r0}/rollout/AddSugarCubes/101/"],
+        [f"{it}/s1_training_shard/shards/*.tar", "System1 training samples (openpi webdataset: images, state, action chunk, prompt meta), "
+         "2,048 per shard", "preprocessing", "S1 training (the 80% new stream)", f"{r0}/s1_training_shard/shards/"],
+        [f"{it}/s1_training_shard/{{meta.json, _DONE, manifest.jsonl, segments.jsonl, README.md}}",
+         "S1 data stats (spans kept / dropped and why, samples), per-shard counts, every span's verdict", "preprocessing",
+         "scheduler, this dashboard", f"{r0}/s1_training_shard/meta.json"],
+        [f"{it}/s2_training_shard/shards/*.tar", "System2 training samples (system2-shards: <key>.json messages + <key>.videobin / "
+         ".imagebin0)", "preprocessing", "S2 training (the 50% new stream)", f"{r0}/s2_training_shard/shards/"],
+        [f"{it}/s2_training_shard/{{meta.json, _DONE, manifest.jsonl, README.md}}", "S2 data stats (per kind, judge, decision)",
+         "preprocessing", "this dashboard", f"{r0}/s2_training_shard/meta.json"],
+        [f"{it}/s1_ckpts/si-<exp>-iterNN/pi05_robocasa_system1/si-<exp>-iterNN__progact_granfine_verbsimp_noexec/<step>/",
+         "the round's System1 checkpoint (params/ = EMA weights, assets/ = norm stats); only the final step (24999)",
+         "S1 training (SageMaker)", "the next round's rollout, eval", f"{r0}/s1_ckpts/si-si-dev120-iter00/"],
+        [f"{it}/s1_ckpts/_FINAL", "which checkpoint the next round uses", "scheduler", "scheduler", f"{r0}/s1_ckpts/_FINAL"],
+        [f"{it}/s1_ckpts/_artifacts/", "SageMaker's job output (logs, model.tar.gz placeholder)", "SageMaker", "debugging", ""],
+        [f"{it}/eval/target/", "held-out evaluation of round NN (S1 NN + S2): _status.json, summary.json, _DONE, every episode",
+         "eval driver (Ray)", "scheduler, this dashboard", "(eval off for now)"],
+        [f"{cfg.s3_root}/s2_base/full0804_v3/", "the old System2 set converted to the new format (562,183 samples): the 50% old stream "
+         "of every round's S2 training", "selfimprove/s2/convert_full0804.py (once)", "S2 training", ""],
+        ["s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_ft_ckpts/<S2 run>/", "S2 checkpoints (one folder per S2 training run)",
+         "S2 training (SageMaker)", "eval", ""],
+        [cfg["start"]["s1_ckpt"], "the start System1 (270k openpi checkpoint): round 0's rollout and training start from it", "-",
+         "round 0", ""],
+        ["s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_released_ckpt/Qwen3-VL-4B-Instruct/",
+         "the original Qwen3-VL-4B-Instruct: every round's S2 training starts from it", "-", "S2 training", ""],
+        [f"{cfg.s3_root}/models/, _bundle/, sim_states/", "shared assets: SAM3 weights, the node bundle (RoboCasa assets, norm stats), "
+         "the recorded episodes' start states", "setup", "rollout nodes", ""],
+    ]
+    return {"root": e, "rows": rows,
+            "note": "Rounds are iter_00, iter_01, ... (round k = the rollout with System1 trained in round k-1). Locally "
+                    f"({cfg.work_dir}): at most 3 rounds of raw rollouts, 8 S1 / 4 S2 shards per round for checking, every round's "
+                    "website."}
 
 
 def time_now() -> str:

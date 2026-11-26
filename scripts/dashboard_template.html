@@ -104,6 +104,7 @@ table.tbl th, table.tbl td { border-bottom: 1px solid var(--grid); padding: 3px 
 table.tbl th { color: var(--muted); font-weight: 600; }
 details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin-top: 6px; }
 .hbar { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin: 3px 0; }
+.s3t { border-collapse: collapse; width: 100%; font-size: 12.5px; margin-top: 8px; table-layout: fixed; } .s3t th, .s3t td { border-bottom: 1px solid var(--grid); padding: 5px 8px; text-align: left; vertical-align: top; word-break: break-word; } .s3t th:nth-child(1) { width: 30%; } .s3t th:nth-child(2) { width: 30%; } .s3t th:nth-child(5) { width: 22%; } .s3t code { font-size: 11.5px; }
 .hbar .lab { width: 130px; color: var(--ink2); } .hbar .track { flex: 1; height: 10px; background: var(--grid); border-radius: 3px; position: relative; }
 .hbar .fill { height: 100%; background: var(--s1); border-radius: 3px; } .hbar .base { position: absolute; top: -3px; width: 2px; height: 16px; background: var(--ink2); }
 .hbar .num { width: 84px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -136,6 +137,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin
     <div class="stages" id="stages"></div>
   </section>
   <section class="card"><h2>Experiment</h2><div class="kv" id="config"></div></section>
+  <section class="card"><h2>Data on S3</h2><div id="s3"></div></section>
 </main>
 <script>
 const STATE0 = /*STATE*/null;
@@ -470,7 +472,19 @@ function renderConfig() {
     ["held out", c.held_out], ["per round", `${num(c.episodes_per_round)} episodes`], ["rounds", c.rounds], ["starts", c.split], ["System1 start", c.s1_start, true],
     ["System2", c.s2], ["System1 training", c.train], ["everything on S3", c.exp_uri, true], ["start eval", `${pct(S.baseline.success)} - ${S.baseline.label} (${S.baseline.note})`]]), {id: "config"}));
 }
+function renderS3() {
+  const host = document.getElementById("s3"); if (!host) return; host.replaceChildren();
+  const L = S.s3; if (!L) { host.append(el("div", {cls: "note", text: "(no layout)"})); return; }
+  host.append(el("div", {cls: "note", text: "Everything of " + S.exp + " is under " + L.root + " . " + L.note}));
+  const t = el("table", {cls: "s3t"}), hd = el("tr");
+  for (const h of ["path", "what is in it", "written by", "read by", "round 0 example"]) hd.append(el("th", {text: h}));
+  t.append(el("thead", {}, [hd]));
+  const body = el("tbody");
+  for (const r of L.rows) body.append(el("tr", {}, r.map((c, i) => el("td", {}, [i === 0 || i === 4 ? el("code", {text: c}) : document.createTextNode(c)]))));
+  t.append(body); host.append(t);
+}
 function renderAll(focus) {
+  renderS3();
   document.getElementById("title").textContent = `${S.title} · ${S.exp}`;
   document.getElementById("subtitle").textContent = S.subtitle;
   document.getElementById("updated").textContent = "updated " + S.updated;
