@@ -1,0 +1,14 @@
+# Debug round of the data pipeline: 3 recorded episodes for each of 50 development tasks (stratified: 9 atomic_seen,
+# 8 composite_seen, 17 pretrain atomic, 16 pretrain composite covering the composite_unseen families), with the
+# production settings: split demo, the harness in the demos' action convention, the planner fields (milestone,
+# planner_reasoning), chunk scores. Then: S1 shards (s1_select rules) and S2 rows, shown on the debug site.
+#   scripts/cluster_rollout.sh debug_20261124 0 <270k ckpt> --config configs/debug_round.yaml
+exp_id: debug_20261124
+iterations: 1
+rollout:
+  include_tasks: [CloseBlenderLid, CloseToasterOvenDoor, NavigateKitchen, OpenDrawer, PickPlaceCounterToCabinet, PickPlaceDrawerToCounter, PickPlaceToasterToCounter, TurnOffStove, TurnOnSinkFaucet, DeliverStraw, KettleBoiling, PackIdenticalLunches, PrepareCoffee, ScrubCuttingBoard, SetUpCuttingStation, SteamInMicrowave, WashLettuce, AdjustToasterOvenTemperature, CheesyBread, CloseDrawer, CloseMicrowave, CloseStandMixerHead, MakeIcedCoffee, OpenElectricKettleLid, OpenFridgeDrawer, OpenToasterOvenDoor, PickPlaceCounterToDrawer, PickPlaceCounterToOven, PickPlaceFridgeDrawerToShelf, PickPlaceStoveToCounter, PreheatOven, StartCoffeeMachine, TurnOnStove, TurnSinkSpout, PlaceEqualIceCubes, ResetCabinetDoors, LineUpCondiments, OrganizeCoffeeCondiments, GatherCuttingTools, AddSugarCubes, PrepareToast, ClearFreezer, RecycleBottlesBySize, PortionFruitBowl, GatherVegetables, SimmeringSauce, AlcoholServingPrep, ArrangeBreadBowl, AfterwashSorting, ArrangeDrinkware]
+  pilot_seeds_per_task: 3
+  seeds_per_task: 3
+  num_gpus: 16
+eval:
+  enabled: false

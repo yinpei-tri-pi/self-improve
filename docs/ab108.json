@@ -1,0 +1,1093 @@
+{
+ "a": "ab108_with",
+ "b": "ab108_without",
+ "tasks": [
+  {
+   "task": "AdjustToasterOvenTemperature",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "AdjustWaterTemperature",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CheesyBread",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseCabinet",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseDishwasher",
+   "n": 5,
+   "a": 5,
+   "b": 3,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseDrawer",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseElectricKettleLid",
+   "n": 5,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseFridgeDrawer",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseMicrowave",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseOven",
+   "n": 5,
+   "a": 3,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CloseStandMixerHead",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "CoffeeServeMug",
+   "n": 5,
+   "a": 3,
+   "b": 3,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "LowerHeat",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "MakeIcedCoffee",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenBlenderLid",
+   "n": 5,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenDishwasher",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenElectricKettleLid",
+   "n": 5,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenFridge",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenFridgeDrawer",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenMicrowave",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenOven",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "OpenToasterOvenDoor",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PackDessert",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCabinetToCounter",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToDrawer",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToMicrowave",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToOven",
+   "n": 5,
+   "a": 3,
+   "b": 3,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToSink",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToToasterOven",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceFridgeDrawerToShelf",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceFridgeShelfToDrawer",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceMicrowaveToCounter",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceStoveToCounter",
+   "n": 5,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PickPlaceToasterOvenToCounter",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PreheatOven",
+   "n": 5,
+   "a": 3,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "SlideOvenRack",
+   "n": 5,
+   "a": 3,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "SlideToasterOvenRack",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "StartCoffeeMachine",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "TurnOffMicrowave",
+   "n": 5,
+   "a": 3,
+   "b": 3,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "TurnOffSinkFaucet",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "TurnOnStove",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "TurnOnToaster",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "TurnOnToasterOven",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "TurnSinkSpout",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "PlaceEqualIceCubes",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "adding_ice_to_beverages"
+  },
+  {
+   "task": "PlaceIceInCup",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "adding_ice_to_beverages"
+  },
+  {
+   "task": "RetrieveIceTray",
+   "n": 5,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "adding_ice_to_beverages"
+  },
+  {
+   "task": "ResetCabinetDoors",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "arranging_cabinets"
+  },
+  {
+   "task": "StackCans",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "arranging_cabinets"
+  },
+  {
+   "task": "LineUpCondiments",
+   "n": 5,
+   "a": 5,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "arranging_condiments"
+  },
+  {
+   "task": "OrganizeCondiments",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "arranging_condiments"
+  },
+  {
+   "task": "DeliverBrewedCoffee",
+   "n": 5,
+   "a": 3,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "brewing"
+  },
+  {
+   "task": "OrganizeCoffeeCondiments",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "brewing"
+  },
+  {
+   "task": "SweetenCoffee",
+   "n": 5,
+   "a": 5,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "brewing"
+  },
+  {
+   "task": "GatherCuttingTools",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "chopping_vegetables"
+  },
+  {
+   "task": "AddLemonToFish",
+   "n": 5,
+   "a": 3,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "garnishing_dishes"
+  },
+  {
+   "task": "AddSugarCubes",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "garnishing_dishes"
+  },
+  {
+   "task": "GarnishCupcake",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "garnishing_dishes"
+  },
+  {
+   "task": "PrepareToast",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "making_toast"
+  },
+  {
+   "task": "SweetSavoryToastSetup",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "making_toast"
+  },
+  {
+   "task": "ClearFreezer",
+   "n": 5,
+   "a": 5,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "FreezeBottledWaters",
+   "n": 5,
+   "a": 4,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "FreezeIceTray",
+   "n": 5,
+   "a": 2,
+   "b": 2,
+   "keep": false,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "MaximizeFreezerSpace",
+   "n": 5,
+   "a": 4,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "MoveFridgeToFreezer",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "MoveToFreezerDrawer",
+   "n": 5,
+   "a": 2,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "ReorganizeFrozenVegetables",
+   "n": 5,
+   "a": 5,
+   "b": 2,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "ChooseMeasuringCup",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "measuring_ingredients"
+  },
+  {
+   "task": "RecycleBottlesBySize",
+   "n": 5,
+   "a": 5,
+   "b": 2,
+   "keep": true,
+   "kind": "composite",
+   "family": "organizing_recycling"
+  },
+  {
+   "task": "RecycleSodaCans",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "organizing_recycling"
+  },
+  {
+   "task": "RecycleStackedYogurt",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "organizing_recycling"
+  },
+  {
+   "task": "DistributeChicken",
+   "n": 5,
+   "a": 4,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PortionFruitBowl",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PortionInTupperware",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PortionOnSize",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PortionYogurt",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "ScalePortioning",
+   "n": 5,
+   "a": 0,
+   "b": 2,
+   "keep": false,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "GatherVegetables",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "preparing_sandwiches"
+  },
+  {
+   "task": "HotDogSetup",
+   "n": 5,
+   "a": 4,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "preparing_sandwiches"
+  },
+  {
+   "task": "PrepareSausageCheese",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "preparing_sandwiches"
+  },
+  {
+   "task": "HeatMug",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "reheating_food"
+  },
+  {
+   "task": "MakeLoadedPotato",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "reheating_food"
+  },
+  {
+   "task": "SimmeringSauce",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "reheating_food"
+  },
+  {
+   "task": "WarmCroissant",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "reheating_food"
+  },
+  {
+   "task": "AlcoholServingPrep",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "serving_food"
+  },
+  {
+   "task": "DessertUpgrade",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "serving_food"
+  },
+  {
+   "task": "PlaceFoodInBowls",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "serving_food"
+  },
+  {
+   "task": "PrepareSoupServing",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "serving_food"
+  },
+  {
+   "task": "ServeSteak",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "serving_food"
+  },
+  {
+   "task": "AlignSilverware",
+   "n": 5,
+   "a": 3,
+   "b": 2,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "ArrangeBreadBowl",
+   "n": 5,
+   "a": 5,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "ArrangeDrinkware",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "BeverageOrganization",
+   "n": 5,
+   "a": 1,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "DateNight",
+   "n": 5,
+   "a": 5,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SeasoningSpiceSetup",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetBowlsForSoup",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupBowls",
+   "n": 5,
+   "a": 5,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupButterPlate",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupFruitBowl",
+   "n": 5,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupWineGlasses",
+   "n": 5,
+   "a": 3,
+   "b": 1,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SizeSorting",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "AfterwashSorting",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "AirDryFruit",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "ClearClutter",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "ClearSinkSpace",
+   "n": 5,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "DrainVeggies",
+   "n": 5,
+   "a": 4,
+   "b": 3,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "PrewashFoodAssembly",
+   "n": 5,
+   "a": 4,
+   "b": 2,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "PrewashFoodSorting",
+   "n": 5,
+   "a": 4,
+   "b": 4,
+   "keep": true,
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables"
+  }
+ ],
+ "keep": [
+  "AdjustToasterOvenTemperature",
+  "AdjustWaterTemperature",
+  "CheesyBread",
+  "CloseCabinet",
+  "CloseDishwasher",
+  "CloseDrawer",
+  "CloseElectricKettleLid",
+  "CloseFridgeDrawer",
+  "CloseMicrowave",
+  "CloseOven",
+  "CloseStandMixerHead",
+  "CoffeeServeMug",
+  "LowerHeat",
+  "MakeIcedCoffee",
+  "OpenBlenderLid",
+  "OpenDishwasher",
+  "OpenElectricKettleLid",
+  "OpenFridge",
+  "OpenFridgeDrawer",
+  "OpenMicrowave",
+  "OpenOven",
+  "OpenToasterOvenDoor",
+  "PackDessert",
+  "PickPlaceCabinetToCounter",
+  "PickPlaceCounterToDrawer",
+  "PickPlaceCounterToMicrowave",
+  "PickPlaceCounterToOven",
+  "PickPlaceCounterToSink",
+  "PickPlaceCounterToToasterOven",
+  "PickPlaceFridgeDrawerToShelf",
+  "PickPlaceFridgeShelfToDrawer",
+  "PickPlaceMicrowaveToCounter",
+  "PickPlaceStoveToCounter",
+  "PickPlaceToasterOvenToCounter",
+  "PreheatOven",
+  "SlideOvenRack",
+  "SlideToasterOvenRack",
+  "StartCoffeeMachine",
+  "TurnOffMicrowave",
+  "TurnOffSinkFaucet",
+  "TurnOnStove",
+  "TurnOnToaster",
+  "TurnOnToasterOven",
+  "TurnSinkSpout",
+  "PlaceEqualIceCubes",
+  "PlaceIceInCup",
+  "RetrieveIceTray",
+  "ResetCabinetDoors",
+  "StackCans",
+  "LineUpCondiments",
+  "OrganizeCondiments",
+  "DeliverBrewedCoffee",
+  "OrganizeCoffeeCondiments",
+  "SweetenCoffee",
+  "GatherCuttingTools",
+  "AddLemonToFish",
+  "AddSugarCubes",
+  "GarnishCupcake",
+  "PrepareToast",
+  "SweetSavoryToastSetup",
+  "ClearFreezer",
+  "FreezeBottledWaters",
+  "MaximizeFreezerSpace",
+  "MoveFridgeToFreezer",
+  "MoveToFreezerDrawer",
+  "ReorganizeFrozenVegetables",
+  "ChooseMeasuringCup",
+  "RecycleBottlesBySize",
+  "RecycleSodaCans",
+  "RecycleStackedYogurt",
+  "DistributeChicken",
+  "PortionFruitBowl",
+  "PortionInTupperware",
+  "PortionOnSize",
+  "PortionYogurt",
+  "GatherVegetables",
+  "HotDogSetup",
+  "PrepareSausageCheese",
+  "HeatMug",
+  "MakeLoadedPotato",
+  "SimmeringSauce",
+  "WarmCroissant",
+  "AlcoholServingPrep",
+  "DessertUpgrade",
+  "PlaceFoodInBowls",
+  "PrepareSoupServing",
+  "ServeSteak",
+  "AlignSilverware",
+  "ArrangeBreadBowl",
+  "ArrangeDrinkware",
+  "BeverageOrganization",
+  "DateNight",
+  "SeasoningSpiceSetup",
+  "SetBowlsForSoup",
+  "SetupBowls",
+  "SetupButterPlate",
+  "SetupFruitBowl",
+  "SetupWineGlasses",
+  "SizeSorting",
+  "AfterwashSorting",
+  "AirDryFruit",
+  "ClearClutter",
+  "ClearSinkSpace",
+  "DrainVeggies",
+  "PrewashFoodAssembly",
+  "PrewashFoodSorting"
+ ],
+ "prompts_worse": [
+  "CloseOven",
+  "SlideOvenRack",
+  "MoveToFreezerDrawer",
+  "ScalePortioning",
+  "BeverageOrganization"
+ ]
+}

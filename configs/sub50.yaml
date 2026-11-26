@@ -1,0 +1,30 @@
+# The subset run (stage 2 of the plan agreed on 2026-11-24): the debug round's 50 development tasks (9 atomic_seen,
+# 8 composite_seen, 17 pretrain atomic, 16 pretrain composite covering the composite_unseen families), 30 recorded
+# episodes each per round (split demo; a recording is never played twice in the experiment: most of these tasks have
+# about 100, so 3 rounds). With the debug round's fixes: the gripper settles before a step ends (System1 and the
+# harness), planner_reasoning explains the milestones, S2 history collapsed per step, harness spans kept unless very
+# jerky. Round 0's rollout first; training (steps from round 0's data) and eval (the 17 target tasks) once agreed.
+#   scripts/cluster_rollout.sh si_sub50 0 <270k ckpt> --config configs/sub50.yaml
+exp_id: si_sub50
+iterations: 3
+rollout:
+  include_tasks: [CloseBlenderLid, CloseToasterOvenDoor, NavigateKitchen, OpenDrawer, PickPlaceCounterToCabinet, PickPlaceDrawerToCounter, PickPlaceToasterToCounter, TurnOffStove, TurnOnSinkFaucet, DeliverStraw, KettleBoiling, PackIdenticalLunches, PrepareCoffee, ScrubCuttingBoard, SetUpCuttingStation, SteamInMicrowave, WashLettuce, AdjustToasterOvenTemperature, CheesyBread, CloseDrawer, CloseMicrowave, CloseStandMixerHead, MakeIcedCoffee, OpenElectricKettleLid, OpenFridgeDrawer, OpenToasterOvenDoor, PickPlaceCounterToDrawer, PickPlaceCounterToOven, PickPlaceFridgeDrawerToShelf, PickPlaceStoveToCounter, PreheatOven, StartCoffeeMachine, TurnOnStove, TurnSinkSpout, PlaceEqualIceCubes, ResetCabinetDoors, LineUpCondiments, OrganizeCoffeeCondiments, GatherCuttingTools, AddSugarCubes, PrepareToast, ClearFreezer, RecycleBottlesBySize, PortionFruitBowl, GatherVegetables, SimmeringSauce, AlcoholServingPrep, ArrangeBreadBowl, AfterwashSorting, ArrangeDrinkware]
+  pilot_seeds_per_task: 30
+  seeds_per_task: 30
+  num_gpus: 16
+  # start perturbation from round 1 on (the user, 2026-11-25; round 0 played the recorded starts): the robot placed
+  # up to 30 cm forward/sideways and 30 degrees off the recording's start (HexaShell start_shift / start_turn; draws
+  # closer than 4 cm to the kitchen are redrawn: they come out mostly backward, the robot faces a counter)
+  hexashell_sets:
+    start_shift: 0.3
+    start_turn: 30
+eval:
+  enabled: false
+# S1 training of each round (the user, 2026-11-25): 2 p5 nodes -> batch 256; 80% rollout data / 20% base data;
+# 15k steps (~205 new samples a step: one pass over round 0's 900k samples is ~4.4k steps, so ~3.4 passes;
+# ~0.77M base samples = 2.2% of the base set); checkpoints every 5k (5k / 10k / 15k for the eval)
+train:
+  batch_size: 256
+  new_data_fraction: 0.8
+  steps: 15000
+  save_interval: 5000

@@ -1,0 +1,17 @@
+# Harness drives in the demos form (mode +1, arm 0, gripper held +-1): 4 carry-heavy development tasks, Astra + S1, locally.
+# by Astra + S1 on this workstation; the start pictures are compared with the recordings' first video frames.
+#   HEXASHELL_ROBOCASA_DEMOS=~/selfimprove_work/sim_states/v1.0/pretrain CUDA_VISIBLE_DEVICES=2 \
+#     .venv/bin/python -m selfimprove.rollout.driver --config configs/demo_check.yaml --iteration 0 --ckpt <270k> --local
+exp_id: drive_check_20261124
+iterations: 1
+rollout:
+  include_tasks: [WarmCroissant, SetupBowls, PrepareCoffee, BeverageOrganization]
+  pilot_seeds_per_task: 1
+  slots_per_gpu: 4
+  num_gpus: 1
+  score:
+    enabled: false
+eval:
+  enabled: false
+cluster:
+  mode: local

@@ -1,0 +1,187 @@
+# Ray cluster for the self-improvement loop's rollouts (ray up, AWS EC2; the network, IAM role and tags of
+# kushal's validated RoboCasa eval cluster, same account 124224456861; us-west-2: the bucket's region, and us-east-1's G-instance quota is often full (cluster/us-east-1/ has that variant)). Head: m5.2xlarge (the
+# driver, no GPU); workers: g6e (1 L40S, 45 GB per GPU): 4xlarge first, 8x / 2x when it has no capacity (one GPU per machine: a 4-GPU size packs the request best, so the autoscaler would keep retrying it): one S1 server (~20 GB) + SAM3 (~3 GB) + 4 RoboCasa simulators.
+# Bring it up with cluster/bring_up.sh (validate ONE worker first, then scale). Setup: setup_node.sh.
+cluster_name: si-rollout-w2
+min_workers: 0
+max_workers: 48
+idle_timeout_minutes: 20
+available_node_types:
+  ray.head.default:
+    resources:
+      CPU: 0
+      GPU: 0
+    node_config:
+      SubnetIds: &id001
+      - subnet-0c4e7eb0eee4f34ea
+      - subnet-03c948a985ecdc712
+      - subnet-0610f766a4cd5cdae
+      - subnet-06f3c0b8a74ac6a34
+      - subnet-01cc1bfeaf20155b5
+      - subnet-0983131c672fc3fd2
+      - subnet-029adfb9e225d68f8
+      - subnet-01215ce1bd13e6ff1
+      SecurityGroupIds:
+      - sg-00f130885f2e6ff96
+      IamInstanceProfile:
+        Arn: arn:aws:iam::124224456861:instance-profile/ray-autoscaler-v1
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+      TagSpecifications:
+      - ResourceType: instance
+        Tags:
+        - Key: tri.owner.email
+          Value: yinpei.dai@tri.global
+        - Key: tri.project
+          Value: MM:PJ-0077
+      ImageId: ami-0b87420e2a817294d
+      InstanceType: m5.2xlarge
+      BlockDeviceMappings:
+      - DeviceName: /dev/sda1
+        Ebs:
+          VolumeSize: 200
+          VolumeType: gp3
+  ray.worker.gpu:
+    min_workers: 0
+    max_workers: 48
+    resources:
+      CPU: 16
+      GPU: 1
+    node_config:
+      SubnetIds: *id001
+      SecurityGroupIds:
+      - sg-00f130885f2e6ff96
+      IamInstanceProfile:
+        Arn: arn:aws:iam::124224456861:instance-profile/ray-autoscaler-v1
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+      TagSpecifications:
+      - ResourceType: instance
+        Tags:
+        - Key: tri.owner.email
+          Value: yinpei.dai@tri.global
+        - Key: tri.project
+          Value: MM:PJ-0077
+      ImageId: ami-0b87420e2a817294d
+      InstanceType: g6e.4xlarge
+      BlockDeviceMappings:
+      - DeviceName: /dev/sda1
+        Ebs:
+          VolumeSize: 300
+          VolumeType: gp3
+          Throughput: 500
+          Iops: 6000
+  ray.worker.gpu8x:
+    min_workers: 0
+    max_workers: 16
+    resources:
+      CPU: 32
+      GPU: 1
+    node_config:
+      SubnetIds: *id001
+      SecurityGroupIds:
+      - sg-00f130885f2e6ff96
+      IamInstanceProfile:
+        Arn: arn:aws:iam::124224456861:instance-profile/ray-autoscaler-v1
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+      TagSpecifications:
+      - ResourceType: instance
+        Tags:
+        - Key: tri.owner.email
+          Value: yinpei.dai@tri.global
+        - Key: tri.project
+          Value: MM:PJ-0077
+      ImageId: ami-0b87420e2a817294d
+      InstanceType: g6e.8xlarge
+      BlockDeviceMappings:
+      - DeviceName: /dev/sda1
+        Ebs:
+          VolumeSize: 300
+          VolumeType: gp3
+          Throughput: 500
+          Iops: 6000
+  ray.worker.gpu2x:
+    min_workers: 0
+    max_workers: 16
+    resources:
+      CPU: 8
+      GPU: 1
+    node_config:
+      SubnetIds: *id001
+      SecurityGroupIds:
+      - sg-00f130885f2e6ff96
+      IamInstanceProfile:
+        Arn: arn:aws:iam::124224456861:instance-profile/ray-autoscaler-v1
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+      TagSpecifications:
+      - ResourceType: instance
+        Tags:
+        - Key: tri.owner.email
+          Value: yinpei.dai@tri.global
+        - Key: tri.project
+          Value: MM:PJ-0077
+      ImageId: ami-0b87420e2a817294d
+      InstanceType: g6e.2xlarge
+      BlockDeviceMappings:
+      - DeviceName: /dev/sda1
+        Ebs:
+          VolumeSize: 300
+          VolumeType: gp3
+          Throughput: 500
+          Iops: 6000
+head_node_type: ray.head.default
+provider:
+  type: aws
+  region: us-west-2
+  cache_stopped_nodes: false
+  use_internal_ips: true
+auth:
+  ssh_user: ubuntu
+file_mounts:
+  /home/ubuntu/selfimprove: ~/selfimprove
+  /home/ubuntu/HexaShell-s1: ~/HexaShell-s1
+  /home/ubuntu/openpi-si: ~/openpi-si
+  /home/ubuntu/sys2_train_eval: ~/sys2_train_eval
+  /home/ubuntu/hexashell_third_party/robocasa: ~/HexaShell/third_party/robocasa
+  /home/ubuntu/hexashell_third_party/robosuite: ~/HexaShell/third_party/robosuite
+  /home/ubuntu/.config/hexashell/api-key: ~/.config/selfimprove/secrets/openai-api-key
+  /home/ubuntu/.config/selfimprove/wandb-api-key: ~/.config/selfimprove/secrets/wandb-api-key
+rsync_exclude:
+- '**/.venv'
+- '**/.venvs'
+- '**/results'
+- '**/logs'
+- '**/wandb'
+- '**/__pycache__'
+- '**/*.pyc'
+- '**/eval_results'
+- '**/robocasa_final_training_shard'
+- '**/openpi_pretrained_ckpt'
+- '**/libero_data'
+- '**/checkpoints'
+- '**/.bench-data'
+- '**/_evallogs'
+- '**/sites'
+- third_party/robocasa
+- third_party/robosuite
+- robocasa/models/assets
+- '**/.git'
+- .git
+- config/env.sh
+- config/env.learn.sh
+setup_commands:
+- sudo mkdir -p /mnt/data && sudo chown -R ubuntu:ubuntu /mnt/data
+head_setup_commands:
+- bash /home/ubuntu/selfimprove/cluster/setup_node.sh head
+worker_setup_commands:
+- bash /home/ubuntu/selfimprove/cluster/setup_node.sh rollout
+head_start_ray_commands:
+- source ~/.profile; ulimit -n 65536; ray stop; ray start --head --port=6379 --object-manager-port=8076 --autoscaling-config=~/ray_bootstrap_config.yaml --dashboard-host=0.0.0.0 --temp-dir=/mnt/data/ray_tmp
+worker_start_ray_commands:
+- source ~/.profile; ulimit -n 65536; ray stop; ray start --address=$RAY_HEAD_IP:6379 --object-manager-port=8076 --temp-dir=/mnt/data/ray_tmp

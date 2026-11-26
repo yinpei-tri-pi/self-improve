@@ -1,0 +1,58 @@
+{
+ "a": "ab108r2_with",
+ "b": "ab108r2_without",
+ "tasks": [
+  {
+   "task": "CloseOven",
+   "n": 6,
+   "a": 3,
+   "b": 3,
+   "keep": false,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "SlideOvenRack",
+   "n": 6,
+   "a": 5,
+   "b": 6,
+   "keep": true,
+   "kind": "atomic",
+   "family": null
+  },
+  {
+   "task": "MoveToFreezerDrawer",
+   "n": 6,
+   "a": 5,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "ScalePortioning",
+   "n": 6,
+   "a": 4,
+   "b": 5,
+   "keep": true,
+   "kind": "composite",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "BeverageOrganization",
+   "n": 6,
+   "a": 6,
+   "b": 6,
+   "keep": true,
+   "kind": "composite",
+   "family": "setting_the_table"
+  }
+ ],
+ "keep": [
+  "SlideOvenRack",
+  "MoveToFreezerDrawer",
+  "ScalePortioning",
+  "BeverageOrganization"
+ ],
+ "prompts_worse": []
+}

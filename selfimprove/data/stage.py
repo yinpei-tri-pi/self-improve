@@ -1,0 +1,102 @@
+"""The preprocessing stage of a round: download the rollouts, score and select segments, write the S1 shards.
+
+``iter_k/rollout/<task>/<seed>/`` (only what the shards need: result.json, events.jsonl, rollout.json,
+chunk_scores.jsonl, trajectory/; not the pictures the model saw) -> ``<work_dir>/iter_k/rollout`` ->
+``<work_dir>/iter_k/s1_training_shard`` -> ``iter_k/s1_training_shard/`` on S3, with ``_DONE``.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import shutil
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+
+from .. import s3
+from .. import tasks as T
+from ..config import Config
+from . import s1_shards
+
+NEEDED = ("result.json", "events.jsonl", "rollout.json", "chunk_scores.jsonl", "trajectory/*")
+
+
+def planned_episodes(cfg: Config, k: int) -> list[dict]:
+    plan = s3.read_json(f"{cfg.rollout_uri(k)}/_plan.json", default=None)
+    if plan is None:
+        raise RuntimeError(f"iteration {k} has no rollout/_plan.json")
+    return plan["episodes"]
+
+
+def download_round(cfg: Config, k: int, dest: Path, workers: int = 16, log=print) -> list[tuple[str, str, int]]:
+    """(local folder, task, seed) of every planned episode that was played (has rollout.json); never one of a
+    held-out (composite_unseen) task."""
+    eps = planned_episodes(cfg, k)
+    held = T.held_out_tasks()
+    skipped = sorted({e["task"] for e in eps if e["task"] in held})
+    if skipped:
+        log(f"iteration {k}: held-out composite_unseen tasks left out of the training data: {', '.join(skipped)}")
+        eps = [e for e in eps if e["task"] not in held]
+
+    def one(e):
+        uri = cfg.episode_uri(k, e["task"], e["seed"])
+        local = dest / e["task"] / str(e["seed"])
+        if (local / "rollout.json").exists() and (local / "trajectory" / "trajectory.json").exists():
+            return str(local), e["task"], int(e["seed"])
+        if not s3.exists(f"{uri}/rollout.json"):
+            return None
+        s3.sync_down(uri, local, excludes=("*",), includes=NEEDED)
+        return str(local), e["task"], int(e["seed"])
+
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        out = [r for r in ex.map(one, eps) if r is not None]
+    log(f"iteration {k}: {len(out)}/{len(eps)} planned episodes downloaded to {dest}")
+    return out
+
+
+def run(cfg: Config, k: int, *, upload: bool = True, keep_local: bool = True, log=print) -> dict:
+    work = cfg.work_dir / f"iter_{int(k):02d}"
+    episodes = download_round(cfg, k, work / "rollout", log=log)
+    out = work / "s1_training_shard"
+    if out.exists():
+        shutil.rmtree(out)
+    f = cfg["filter"]
+    meta = s1_shards.build(episodes, out, exp_id=cfg.exp_id, iteration=k, fcfg=f, workers=int(f.get("workers", 16)),
+                           log=log)
+    if upload:
+        s3.sync_up(out, cfg.s1_shard_uri(k), delete=True)
+        s3.write_json(f"{cfg.s1_shard_uri(k)}/_DONE", meta)
+    if not keep_local:
+        shutil.rmtree(out / "shards", ignore_errors=True)
+    return meta
+
+
+def summary_metrics(meta: dict) -> dict:
+    """The data/* points of the loop's W&B run."""
+    out = {f"data/{k}": meta[k] for k in ("episodes", "episodes_used", "segments", "samples", "positive_samples",
+                                          "negative_samples", "shards") if k in meta}
+    for k, v in (meta.get("segment_use") or {}).items():
+        out[f"data/use/{k.replace('None', 'dropped')}"] = v
+    for k, v in (meta.get("segment_scores") or {}).items():
+        out[f"data/score/{k}"] = v
+    return out
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--config", default=None)
+    ap.add_argument("--set", action="append", default=[])
+    ap.add_argument("--iteration", type=int, required=True)
+    ap.add_argument("--no-upload", action="store_true")
+    args = ap.parse_args(argv)
+    cfg = Config.load(args.config, args.set)
+    s3.configure(cfg.get("aws_profile"), cfg.region)
+    meta = run(cfg, args.iteration, upload=not args.no_upload)
+    print(json.dumps({k: v for k, v in meta.items() if k != "filter"}, indent=1))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

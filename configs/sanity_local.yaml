@@ -1,0 +1,20 @@
+# The sanity check on one workstation: Ray on this machine's GPUs, 2 short tasks x 1 seed, real Astra +
+# S1 + RoboCasa, real S3 (a separate experiment id), training as a SageMaker dry run.
+#   selfimprove tick --config configs/sanity_local.yaml          (repeat; or `run`)
+exp_id: sanity_local
+iterations: 1
+rollout:
+  include_tasks: [CloseCabinet, CloseDrawer]
+  pilot_seeds_per_task: 1
+  slots_per_gpu: 2
+  num_gpus: 1
+train:
+  dry_run: true            # plan the SageMaker job, do not submit it
+eval:
+  num_gpus: 1
+  s2_gpu_run_args: "--runtime=nvidia -e NVIDIA_VISIBLE_DEVICES={gpu}"   # this workstation's snap docker
+cluster:
+  mode: local
+  local_env:
+    CUDA_VISIBLE_DEVICES: "2"
+    SI_TARGET_DATA: /home/yinpeidai/data/robocasa_dataset/v1.0/target

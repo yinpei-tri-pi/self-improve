@@ -1,0 +1,17 @@
+# Does an episode of split demo start as its recording? A few development tasks, one recorded episode each, played
+# by Astra + S1 on this workstation; the start pictures are compared with the recordings' first video frames.
+#   HEXASHELL_ROBOCASA_DEMOS=~/selfimprove_work/sim_states/v1.0/pretrain CUDA_VISIBLE_DEVICES=2 \
+#     .venv/bin/python -m selfimprove.rollout.driver --config configs/demo_check.yaml --iteration 0 --ckpt <270k> --local
+exp_id: demo_check_20261123
+iterations: 1
+rollout:
+  include_tasks: [CloseDrawer, TurnOnStove, PrepareCoffee, SetupBowls]
+  pilot_seeds_per_task: 1
+  slots_per_gpu: 4
+  num_gpus: 1
+  score:
+    enabled: false
+eval:
+  enabled: false
+cluster:
+  mode: local

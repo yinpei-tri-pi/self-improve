@@ -1,0 +1,1304 @@
+{
+ "rule": "A: all pretrain atomic + all pretrain composite members of the composite_unseen tasks' families",
+ "total": 108,
+ "atomic": 44,
+ "composite": 64,
+ "min_replay_success": 0.8,
+ "excluded_target": [
+  "ArrangeBreadBasket",
+  "ArrangeTea",
+  "BreadSelection",
+  "CategorizeCondiments",
+  "CloseBlenderLid",
+  "CloseFridge",
+  "CloseToasterOvenDoor",
+  "CoffeeSetupMug",
+  "CuttingToolSelection",
+  "DeliverStraw",
+  "GarnishPancake",
+  "GatherTableware",
+  "GetToastedBread",
+  "HeatKebabSandwich",
+  "KettleBoiling",
+  "LoadDishwasher",
+  "MakeIceLemonade",
+  "NavigateKitchen",
+  "OpenCabinet",
+  "OpenDrawer",
+  "OpenStandMixerHead",
+  "PackIdenticalLunches",
+  "PanTransfer",
+  "PickPlaceCounterToCabinet",
+  "PickPlaceCounterToStove",
+  "PickPlaceDrawerToCounter",
+  "PickPlaceSinkToCounter",
+  "PickPlaceToasterToCounter",
+  "PortionHotDogs",
+  "PreSoakPan",
+  "PrepareCoffee",
+  "RecycleBottlesByType",
+  "RinseSinkBasin",
+  "ScrubCuttingBoard",
+  "SearingMeat",
+  "SeparateFreezerRack",
+  "SetUpCuttingStation",
+  "SlideDishwasherRack",
+  "StackBowlsCabinet",
+  "SteamInMicrowave",
+  "StirVegetables",
+  "StoreLeftoversInBowl",
+  "TurnOffStove",
+  "TurnOnElectricKettle",
+  "TurnOnMicrowave",
+  "TurnOnSinkFaucet",
+  "WaffleReheat",
+  "WashFruitColander",
+  "WashLettuce",
+  "WeighIngredients"
+ ],
+ "dropped_low_replay": {
+  "PickPlaceCounterToBlender": {
+   "kind": "atomic",
+   "family": null,
+   "replay_success": 0.2736
+  },
+  "PickPlaceCounterToStandMixer": {
+   "kind": "atomic",
+   "family": null,
+   "replay_success": 0.2523
+  },
+  "TurnOnBlender": {
+   "kind": "atomic",
+   "family": null,
+   "replay_success": 0.0841
+  }
+ },
+ "families": {
+  "adding_ice_to_beverages": {
+   "unseen": "MakeIceLemonade",
+   "members": [
+    "PlaceEqualIceCubes",
+    "PlaceIceInCup",
+    "RetrieveIceTray"
+   ]
+  },
+  "arranging_cabinets": {
+   "unseen": "GatherTableware",
+   "members": [
+    "ResetCabinetDoors",
+    "StackCans"
+   ]
+  },
+  "arranging_condiments": {
+   "unseen": "CategorizeCondiments",
+   "members": [
+    "LineUpCondiments",
+    "OrganizeCondiments"
+   ]
+  },
+  "brewing": {
+   "unseen": "ArrangeTea",
+   "members": [
+    "DeliverBrewedCoffee",
+    "OrganizeCoffeeCondiments",
+    "SweetenCoffee"
+   ]
+  },
+  "chopping_vegetables": {
+   "unseen": "CuttingToolSelection",
+   "members": [
+    "GatherCuttingTools"
+   ]
+  },
+  "garnishing_dishes": {
+   "unseen": "GarnishPancake",
+   "members": [
+    "AddLemonToFish",
+    "AddSugarCubes",
+    "GarnishCupcake"
+   ]
+  },
+  "making_toast": {
+   "unseen": "BreadSelection",
+   "members": [
+    "PrepareToast",
+    "SweetSavoryToastSetup"
+   ]
+  },
+  "managing_freezer_space": {
+   "unseen": "SeparateFreezerRack",
+   "members": [
+    "ClearFreezer",
+    "FreezeBottledWaters",
+    "FreezeIceTray",
+    "MaximizeFreezerSpace",
+    "MoveFridgeToFreezer",
+    "MoveToFreezerDrawer",
+    "ReorganizeFrozenVegetables"
+   ]
+  },
+  "measuring_ingredients": {
+   "unseen": "WeighIngredients",
+   "members": [
+    "ChooseMeasuringCup"
+   ]
+  },
+  "organizing_recycling": {
+   "unseen": "RecycleBottlesByType",
+   "members": [
+    "RecycleBottlesBySize",
+    "RecycleSodaCans",
+    "RecycleStackedYogurt"
+   ]
+  },
+  "portioning_meals": {
+   "unseen": "PortionHotDogs",
+   "members": [
+    "DistributeChicken",
+    "PortionFruitBowl",
+    "PortionInTupperware",
+    "PortionOnSize",
+    "PortionYogurt",
+    "ScalePortioning"
+   ]
+  },
+  "preparing_sandwiches": {
+   "unseen": "HeatKebabSandwich",
+   "members": [
+    "GatherVegetables",
+    "HotDogSetup",
+    "PrepareSausageCheese"
+   ]
+  },
+  "reheating_food": {
+   "unseen": "WaffleReheat",
+   "members": [
+    "HeatMug",
+    "MakeLoadedPotato",
+    "SimmeringSauce",
+    "WarmCroissant"
+   ]
+  },
+  "serving_food": {
+   "unseen": "PanTransfer",
+   "members": [
+    "AlcoholServingPrep",
+    "DessertUpgrade",
+    "PlaceFoodInBowls",
+    "PrepareSoupServing",
+    "ServeSteak"
+   ]
+  },
+  "setting_the_table": {
+   "unseen": "ArrangeBreadBasket",
+   "members": [
+    "AlignSilverware",
+    "ArrangeBreadBowl",
+    "ArrangeDrinkware",
+    "BeverageOrganization",
+    "DateNight",
+    "SeasoningSpiceSetup",
+    "SetBowlsForSoup",
+    "SetupBowls",
+    "SetupButterPlate",
+    "SetupFruitBowl",
+    "SetupWineGlasses",
+    "SizeSorting"
+   ]
+  },
+  "washing_fruits_and_vegetables": {
+   "unseen": "WashFruitColander",
+   "members": [
+    "AfterwashSorting",
+    "AirDryFruit",
+    "ClearClutter",
+    "ClearSinkSpace",
+    "DrainVeggies",
+    "PrewashFoodAssembly",
+    "PrewashFoodSorting"
+   ]
+  }
+ },
+ "tasks": [
+  {
+   "task": "AddLemonToFish",
+   "kind": "composite",
+   "family": "garnishing_dishes",
+   "unseen_in_family": "GarnishPancake",
+   "horizon": 2100,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take the lemon wedge from the fridge and place it on the plate with fish on the dining counter."
+  },
+  {
+   "task": "AddSugarCubes",
+   "kind": "composite",
+   "family": "garnishing_dishes",
+   "unseen_in_family": "GarnishPancake",
+   "horizon": 900,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the two sugar cubes and place them on the plate with the cake."
+  },
+  {
+   "task": "AdjustToasterOvenTemperature",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Decrease the toaster oven temperature."
+  },
+  {
+   "task": "AdjustWaterTemperature",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "The water running in the sink is cold. Adjust the faucet handle to run the water hot. Make sure to keep the water on."
+  },
+  {
+   "task": "AfterwashSorting",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 3000,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the broccolis from the sink and place them in one bowl. Place the tomato in the other bowl. Then turn off the sink faucet."
+  },
+  {
+   "task": "AirDryFruit",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 2850,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the mango, mango from the sink and place them on the cutting board to airdry. Then turn off the sink faucet."
+  },
+  {
+   "task": "AlcoholServingPrep",
+   "kind": "composite",
+   "family": "serving_food",
+   "unseen_in_family": "PanTransfer",
+   "horizon": 4650,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the cabinet directly in front. Then move the liquor and the cup to the dining counter with the jar on it."
+  },
+  {
+   "task": "AlignSilverware",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 2550,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the fork and place it on the left side of the plate. Then take the spoon and place it on the right side of the plate. Make sure they're directly next to the plate."
+  },
+  {
+   "task": "ArrangeBreadBowl",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 1350,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Pick up the heated bread from the toaster oven and place it in the bowl. Then move the bread bowl to the dining counter."
+  },
+  {
+   "task": "ArrangeDrinkware",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 1650,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place the pitcher and cup on the dining counter for serving."
+  },
+  {
+   "task": "BeverageOrganization",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 4500,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": "Move the drinks to the dining counter."
+  },
+  {
+   "task": "CheesyBread",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick up the wedge of cheese and place it on the slice of bread to prepare a simple cheese on bread dish."
+  },
+  {
+   "task": "ChooseMeasuringCup",
+   "kind": "composite",
+   "family": "measuring_ingredients",
+   "unseen_in_family": "WeighIngredients",
+   "horizon": 1800,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the left drawer and place the smaller measuring cup on the counter."
+  },
+  {
+   "task": "ClearClutter",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 3300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick up all produce items and place them in the sink. Turn on the sink faucet to wash them. Then turn the sink off and put them in the tray."
+  },
+  {
+   "task": "ClearFreezer",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 3600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the chicken drumstick, peach, and peach from the freezer and place them in the bowl on the counter."
+  },
+  {
+   "task": "ClearSinkSpace",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 1800,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the objects in the sink and place them on the counter to clear sink space for washing produce."
+  },
+  {
+   "task": "CloseCabinet",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the cabinet doors."
+  },
+  {
+   "task": "CloseDishwasher",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the dishwasher door."
+  },
+  {
+   "task": "CloseDrawer",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the right drawer."
+  },
+  {
+   "task": "CloseElectricKettleLid",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the lid of the electric kettle."
+  },
+  {
+   "task": "CloseFridgeDrawer",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Fully close the fridge drawer."
+  },
+  {
+   "task": "CloseMicrowave",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the microwave door."
+  },
+  {
+   "task": "CloseOven",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the oven door."
+  },
+  {
+   "task": "CloseStandMixerHead",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close the stand mixer head."
+  },
+  {
+   "task": "CoffeeServeMug",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": "Pick the mug from under the coffee machine dispenser and place it on the counter."
+  },
+  {
+   "task": "DateNight",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 4800,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Get the candle and the beer from the cabinet and move them to the dining counter."
+  },
+  {
+   "task": "DeliverBrewedCoffee",
+   "kind": "composite",
+   "family": "brewing",
+   "unseen_in_family": "ArrangeTea",
+   "horizon": 1050,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Pick up the brewed coffee from the coffee machine and place it next to the breakfast plate on the dining counter."
+  },
+  {
+   "task": "DessertUpgrade",
+   "kind": "composite",
+   "family": "serving_food",
+   "unseen_in_family": "PanTransfer",
+   "horizon": 1200,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Move the dessert items from the plates to the tray."
+  },
+  {
+   "task": "DistributeChicken",
+   "kind": "composite",
+   "family": "portioning_meals",
+   "unseen_in_family": "PortionHotDogs",
+   "horizon": 2400,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take the chicken drumsticks from the pan and place one on each plate on the dining counter."
+  },
+  {
+   "task": "DrainVeggies",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 2400,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Dump the lemon from the pot into the sink. Then turn on the water and wash the lemon. Then turn off the water and put the lemon back in the pot."
+  },
+  {
+   "task": "FreezeBottledWaters",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 3900,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take the bottled waters from the counter and place them in the freezer to freeze. Close the freezer door after placing the bottles."
+  },
+  {
+   "task": "FreezeIceTray",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 2400,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": "The ice cube tray has been filled with water. Take the tray and place it in the freezer to make ice. Close the freezer door after placing the tray."
+  },
+  {
+   "task": "GarnishCupcake",
+   "kind": "composite",
+   "family": "garnishing_dishes",
+   "unseen_in_family": "GarnishPancake",
+   "horizon": 1800,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the cinnamon bottle from the cabinet and place it on the dining table, next to the plate with the cupcake. Then take the chocolate from the dining counter and place it on the cupcake plate."
+  },
+  {
+   "task": "GatherCuttingTools",
+   "kind": "composite",
+   "family": "chopping_vegetables",
+   "unseen_in_family": "CuttingToolSelection",
+   "horizon": 2400,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the drawer on the left and place the cutting tools on the cutting board."
+  },
+  {
+   "task": "GatherVegetables",
+   "kind": "composite",
+   "family": "preparing_sandwiches",
+   "unseen_in_family": "HeatKebabSandwich",
+   "horizon": 1350,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick up the bell pepper and eggplant from the sink and place them on the cutting board on the counter."
+  },
+  {
+   "task": "HeatMug",
+   "kind": "composite",
+   "family": "reheating_food",
+   "unseen_in_family": "WaffleReheat",
+   "horizon": 1800,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Pick the mug from the counter and place it inside the microwave. Then close the microwave."
+  },
+  {
+   "task": "HotDogSetup",
+   "kind": "composite",
+   "family": "preparing_sandwiches",
+   "unseen_in_family": "HeatKebabSandwich",
+   "horizon": 4200,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": ""
+  },
+  {
+   "task": "LineUpCondiments",
+   "kind": "composite",
+   "family": "arranging_condiments",
+   "unseen_in_family": "CategorizeCondiments",
+   "horizon": 3000,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take two condiments from the cabinet and move them on the counter near the stove.Make sure the condiments are lined up with each other, next to each other."
+  },
+  {
+   "task": "LowerHeat",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Lower the heat of the kettle."
+  },
+  {
+   "task": "MakeIcedCoffee",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick up an ice cube and place it in the glass of coffee."
+  },
+  {
+   "task": "MakeLoadedPotato",
+   "kind": "composite",
+   "family": "reheating_food",
+   "unseen_in_family": "WaffleReheat",
+   "horizon": 3000,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Retrieve the reheated potato from the microwave, then place the potato, cheese, and condiment on the cutting board."
+  },
+  {
+   "task": "MaximizeFreezerSpace",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 1650,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take the lemon and broccoli from the highest rack and move them to the second highest rack where the steak and orange are located, to maximize freezer space. Close the freezer door after rearranging."
+  },
+  {
+   "task": "MoveFridgeToFreezer",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 1650,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "There's a steak in the fridge that needs to be moved to the freezer for freezing. Pick up the steak from the fridge, place it on any shelf in the freezer, and close the fridge and freezer doors when done."
+  },
+  {
+   "task": "MoveToFreezerDrawer",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 1800,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the broccoli and kiwi from the fridge shelf and place them in the freezer drawer to begin freezing them."
+  },
+  {
+   "task": "OpenBlenderLid",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the blender by taking off the lid and placing it on the counter."
+  },
+  {
+   "task": "OpenDishwasher",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the dishwasher door."
+  },
+  {
+   "task": "OpenElectricKettleLid",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Press the button to open the lid of the electric kettle."
+  },
+  {
+   "task": "OpenFridge",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 900,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the fridge door."
+  },
+  {
+   "task": "OpenFridgeDrawer",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Fully open the fridge drawer."
+  },
+  {
+   "task": "OpenMicrowave",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the microwave door."
+  },
+  {
+   "task": "OpenOven",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the oven door."
+  },
+  {
+   "task": "OpenToasterOvenDoor",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the toaster oven door."
+  },
+  {
+   "task": "OrganizeCoffeeCondiments",
+   "kind": "composite",
+   "family": "brewing",
+   "unseen_in_family": "ArrangeTea",
+   "horizon": 1950,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the cinnamon and honey bottle from the cabinet and place them next to the mug."
+  },
+  {
+   "task": "OrganizeCondiments",
+   "kind": "composite",
+   "family": "arranging_condiments",
+   "unseen_in_family": "CategorizeCondiments",
+   "horizon": 2250,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "There are various items on the counter. Only move the condiments/shakers into the cabinet."
+  },
+  {
+   "task": "PackDessert",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Add the cupcake to the tupperware that contains the kebab skewer."
+  },
+  {
+   "task": "PickPlaceCabinetToCounter",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the croissant from the cabinet and place it on the counter."
+  },
+  {
+   "task": "PickPlaceCounterToDrawer",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the aluminum foil from the counter and place it in the drawer."
+  },
+  {
+   "task": "PickPlaceCounterToMicrowave",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 1050,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the broccoli from the counter and place it in the microwave."
+  },
+  {
+   "task": "PickPlaceCounterToOven",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place the corn on the rack of the oven."
+  },
+  {
+   "task": "PickPlaceCounterToSink",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the dish brush from the counter and place it in the sink."
+  },
+  {
+   "task": "PickPlaceCounterToToasterOven",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place the bread on the rack of the toaster oven."
+  },
+  {
+   "task": "PickPlaceFridgeDrawerToShelf",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the lemon wedge from the fridge drawer and place it on a fridge shelf."
+  },
+  {
+   "task": "PickPlaceFridgeShelfToDrawer",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 600,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the apple from the fridge shelf and place it in the fridge drawer."
+  },
+  {
+   "task": "PickPlaceMicrowaveToCounter",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the garlic from the microwave and place it on plate located on the counter."
+  },
+  {
+   "task": "PickPlaceStoveToCounter",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the garlic from the pan and place it in the bowl."
+  },
+  {
+   "task": "PickPlaceToasterOvenToCounter",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the bread from the rack and place it on the plate on the counter."
+  },
+  {
+   "task": "PlaceEqualIceCubes",
+   "kind": "composite",
+   "family": "adding_ice_to_beverages",
+   "unseen_in_family": "MakeIceLemonade",
+   "horizon": 2850,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "There are four ice cubes in the ice bowl. Place two ice cubes in each glass of water."
+  },
+  {
+   "task": "PlaceFoodInBowls",
+   "kind": "composite",
+   "family": "serving_food",
+   "unseen_in_family": "PanTransfer",
+   "horizon": 2550,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick both bowls and place them on the counter. Then place the mango in one bowl and place the hotdog bun in the other bowl."
+  },
+  {
+   "task": "PlaceIceInCup",
+   "kind": "composite",
+   "family": "adding_ice_to_beverages",
+   "unseen_in_family": "MakeIceLemonade",
+   "horizon": 1200,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "There are two ice cubes in the ice bowl. Place both ice cubes in the glass cup."
+  },
+  {
+   "task": "PortionFruitBowl",
+   "kind": "composite",
+   "family": "portioning_meals",
+   "unseen_in_family": "PortionHotDogs",
+   "horizon": 2100,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the fruits from the plate on the dining counter and place two fruits in each bowl."
+  },
+  {
+   "task": "PortionInTupperware",
+   "kind": "composite",
+   "family": "portioning_meals",
+   "unseen_in_family": "PortionHotDogs",
+   "horizon": 1950,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place one cooked food and one vegetable from the large plate to each tupperware container."
+  },
+  {
+   "task": "PortionOnSize",
+   "kind": "composite",
+   "family": "portioning_meals",
+   "unseen_in_family": "PortionHotDogs",
+   "horizon": 2700,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take the smaller bowl and place it next to the appetizer plate on the dining counter, and place the larger bowl next to the plate with cooked food."
+  },
+  {
+   "task": "PortionYogurt",
+   "kind": "composite",
+   "family": "portioning_meals",
+   "unseen_in_family": "PortionHotDogs",
+   "horizon": 2100,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place two yogurt containers on each plate."
+  },
+  {
+   "task": "PreheatOven",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Preheat the oven by turning the temperature knob."
+  },
+  {
+   "task": "PrepareSausageCheese",
+   "kind": "composite",
+   "family": "preparing_sandwiches",
+   "unseen_in_family": "HeatKebabSandwich",
+   "horizon": 3600,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": ""
+  },
+  {
+   "task": "PrepareSoupServing",
+   "kind": "composite",
+   "family": "serving_food",
+   "unseen_in_family": "PanTransfer",
+   "horizon": 3450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Open the cabinet and move the ladle to the pot. Then close the cabinet."
+  },
+  {
+   "task": "PrepareToast",
+   "kind": "composite",
+   "family": "making_toast",
+   "unseen_in_family": "BreadSelection",
+   "horizon": 3750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the bread, place it on the cutting board, pick the jam, place it on the counter, and close the cabinet."
+  },
+  {
+   "task": "PrewashFoodAssembly",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 1650,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the cucumber from the cabinet and place it in the bowl. Then pick the bowl and place it in the sink. Then turn on the sink facuet."
+  },
+  {
+   "task": "PrewashFoodSorting",
+   "kind": "composite",
+   "family": "washing_fruits_and_vegetables",
+   "unseen_in_family": "WashFruitColander",
+   "horizon": 3600,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Pick the bananas from the cabinet and place them in one bowl. Pick the lemon wedge from the sink and place it in the other bowl."
+  },
+  {
+   "task": "RecycleBottlesBySize",
+   "kind": "composite",
+   "family": "organizing_recycling",
+   "unseen_in_family": "RecycleBottlesByType",
+   "horizon": 3750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place the large bottle from the dining counter next to the other large bottle outside the sink, and place the small bottle from the dining counter next to the other small bottle inside the sink."
+  },
+  {
+   "task": "RecycleSodaCans",
+   "kind": "composite",
+   "family": "organizing_recycling",
+   "unseen_in_family": "RecycleBottlesByType",
+   "horizon": 6750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Four empty soda cans are scattered around the kitchen. Gather all the cans and cluster them next to the stove for recycling."
+  },
+  {
+   "task": "RecycleStackedYogurt",
+   "kind": "composite",
+   "family": "organizing_recycling",
+   "unseen_in_family": "RecycleBottlesByType",
+   "horizon": 2100,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Stack the yogurt containers by placing the smaller containers on top of the larger containers."
+  },
+  {
+   "task": "ReorganizeFrozenVegetables",
+   "kind": "composite",
+   "family": "managing_freezer_space",
+   "unseen_in_family": "SeparateFreezerRack",
+   "horizon": 2700,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": "Take the bell pepper and onion out of the freezer and place them in the tupperware container on the counter. Then put the tupperware containing the vegetables back in the freezer."
+  },
+  {
+   "task": "ResetCabinetDoors",
+   "kind": "composite",
+   "family": "arranging_cabinets",
+   "unseen_in_family": "GatherTableware",
+   "horizon": 3300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Close all open cabinet doors."
+  },
+  {
+   "task": "RetrieveIceTray",
+   "kind": "composite",
+   "family": "adding_ice_to_beverages",
+   "unseen_in_family": "MakeIceLemonade",
+   "horizon": 2550,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Open the freezer door, pick up the ice cube tray from the freezer, and place it on the dining counter."
+  },
+  {
+   "task": "ScalePortioning",
+   "kind": "composite",
+   "family": "portioning_meals",
+   "unseen_in_family": "PortionHotDogs",
+   "horizon": 2100,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Take the chicken drumstick from the fridge and place it on the digital scale on the counter by the fridge. Wait a few seconds for a reading, then move it to the plate on the dining counter."
+  },
+  {
+   "task": "SeasoningSpiceSetup",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 4200,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Move the ketchup and mustard from the cabinet to the dining counter."
+  },
+  {
+   "task": "ServeSteak",
+   "kind": "composite",
+   "family": "serving_food",
+   "unseen_in_family": "PanTransfer",
+   "horizon": 2100,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Pick up the pan with the steak in it and place it on the dining table. Then place the steak on the plate."
+  },
+  {
+   "task": "SetBowlsForSoup",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 5400,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Move the bowls from the cabinet to the plates on the dining table."
+  },
+  {
+   "task": "SetupBowls",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 2700,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Pick up the bowls from the cabinet and place each bowl in front of a stool on the dining counter."
+  },
+  {
+   "task": "SetupButterPlate",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 4050,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": ""
+  },
+  {
+   "task": "SetupFruitBowl",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 3750,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Retrieve the peach and kiwi from the fridge and place them into the bowl on the dining table."
+  },
+  {
+   "task": "SetupWineGlasses",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 3150,
+   "replay_success": 1.0,
+   "pilot": "0/2",
+   "goal": ""
+  },
+  {
+   "task": "SimmeringSauce",
+   "kind": "composite",
+   "family": "reheating_food",
+   "unseen_in_family": "WaffleReheat",
+   "horizon": 3450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Place the pan on the front center burner on the stove. Then place the tomato and the onion in the pan and turn on the front center burner."
+  },
+  {
+   "task": "SizeSorting",
+   "kind": "composite",
+   "family": "setting_the_table",
+   "unseen_in_family": "ArrangeBreadBasket",
+   "horizon": 1500,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Stack the cups from largest to smallest."
+  },
+  {
+   "task": "SlideOvenRack",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Fully slide the bottom oven rack in."
+  },
+  {
+   "task": "SlideToasterOvenRack",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Fully slide the toaster oven rack out."
+  },
+  {
+   "task": "StackCans",
+   "kind": "composite",
+   "family": "arranging_cabinets",
+   "unseen_in_family": "GatherTableware",
+   "horizon": 1800,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Stack two cans on top of the other two cans in the cabinet."
+  },
+  {
+   "task": "StartCoffeeMachine",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Press the button on the coffee machine to serve coffee."
+  },
+  {
+   "task": "SweetSavoryToastSetup",
+   "kind": "composite",
+   "family": "making_toast",
+   "unseen_in_family": "BreadSelection",
+   "horizon": 4050,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Pick the avocado and bread from the counter and place them on the plate. Then pick the jam from the cabinet and place it next to the plate. Lastly close the cabinet door."
+  },
+  {
+   "task": "SweetenCoffee",
+   "kind": "composite",
+   "family": "brewing",
+   "unseen_in_family": "ArrangeTea",
+   "horizon": 1950,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Take a sugar cube from the saucer and place it inside the coffee. Then, grab milk from the fridge and place it next to the coffee on the counter to sweeten the coffee."
+  },
+  {
+   "task": "TurnOffMicrowave",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 0.9907,
+   "pilot": "2/2",
+   "goal": "Press the stop button on the microwave."
+  },
+  {
+   "task": "TurnOffSinkFaucet",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Turn off the sink faucet."
+  },
+  {
+   "task": "TurnOnStove",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "1/2",
+   "goal": "Turn on the front center burner of the stove."
+  },
+  {
+   "task": "TurnOnToaster",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 0.9444,
+   "pilot": "2/2",
+   "goal": "Push down the lever of the toaster to turn it on."
+  },
+  {
+   "task": "TurnOnToasterOven",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 450,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Turn on the toaster oven by setting the timer."
+  },
+  {
+   "task": "TurnSinkSpout",
+   "kind": "atomic",
+   "family": null,
+   "unseen_in_family": null,
+   "horizon": 300,
+   "replay_success": 1.0,
+   "pilot": "2/2",
+   "goal": "Turn the sink spout to the right."
+  },
+  {
+   "task": "WarmCroissant",
+   "kind": "composite",
+   "family": "reheating_food",
+   "unseen_in_family": "WaffleReheat",
+   "horizon": 1650,
+   "replay_success": 0.8411,
+   "pilot": "1/2",
+   "goal": "Pick the croissant and place it on the pan. Then turn on the stove to warm the croissant."
+  }
+ ]
+}

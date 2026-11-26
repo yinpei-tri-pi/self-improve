@@ -1,0 +1,13 @@
+# Sanity check of the development rollouts on Ray, end to end, with the production settings: the 120 development
+# tasks (assets/rollout_tasks.json), each episode started from a recorded pretrain episode (split demo, the sim states
+# on S3), 5 recordings per task, Astra + S1 with the task notes and System1 tables, chunk scores, trajectories.
+# Its pace gives the time of a 30-recordings round (3600 episodes).
+#   scripts/cluster_rollout.sh ray_check_demo_20261123 0 <270k ckpt> --config configs/ray_check_demo.yaml
+exp_id: ray_check_demo_20261123
+iterations: 1
+rollout:
+  pilot_seeds_per_task: 5
+  seeds_per_task: 5
+  num_gpus: 16
+eval:
+  enabled: false

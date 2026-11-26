@@ -1,0 +1,2108 @@
+{
+ "rule": "target sets atomic_seen+composite_seen + the selected tasks (rule A) without the 22 weakest composite ones in the prompt A/B (current notes; ties by the without arm, then name)",
+ "total": 120,
+ "target": 34,
+ "selected": 86,
+ "tasks": [
+  {
+   "task": "CloseBlenderLid",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 900,
+   "source": "target"
+  },
+  {
+   "task": "CloseFridge",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 900,
+   "source": "target"
+  },
+  {
+   "task": "CloseToasterOvenDoor",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 450,
+   "source": "target"
+  },
+  {
+   "task": "CoffeeSetupMug",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 600,
+   "source": "target"
+  },
+  {
+   "task": "DeliverStraw",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2550,
+   "source": "target"
+  },
+  {
+   "task": "GetToastedBread",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 3000,
+   "source": "target"
+  },
+  {
+   "task": "KettleBoiling",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 1500,
+   "source": "target"
+  },
+  {
+   "task": "LoadDishwasher",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 1800,
+   "source": "target"
+  },
+  {
+   "task": "NavigateKitchen",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 450,
+   "source": "target"
+  },
+  {
+   "task": "OpenCabinet",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 1050,
+   "source": "target"
+  },
+  {
+   "task": "OpenDrawer",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 750,
+   "source": "target"
+  },
+  {
+   "task": "OpenStandMixerHead",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 450,
+   "source": "target"
+  },
+  {
+   "task": "PackIdenticalLunches",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 3900,
+   "source": "target"
+  },
+  {
+   "task": "PickPlaceCounterToCabinet",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 750,
+   "source": "target"
+  },
+  {
+   "task": "PickPlaceCounterToStove",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 600,
+   "source": "target"
+  },
+  {
+   "task": "PickPlaceDrawerToCounter",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 750,
+   "source": "target"
+  },
+  {
+   "task": "PickPlaceSinkToCounter",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 900,
+   "source": "target"
+  },
+  {
+   "task": "PickPlaceToasterToCounter",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 600,
+   "source": "target"
+  },
+  {
+   "task": "PreSoakPan",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2400,
+   "source": "target"
+  },
+  {
+   "task": "PrepareCoffee",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 1800,
+   "source": "target"
+  },
+  {
+   "task": "RinseSinkBasin",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 1350,
+   "source": "target"
+  },
+  {
+   "task": "ScrubCuttingBoard",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 1200,
+   "source": "target"
+  },
+  {
+   "task": "SearingMeat",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 4350,
+   "source": "target"
+  },
+  {
+   "task": "SetUpCuttingStation",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2400,
+   "source": "target"
+  },
+  {
+   "task": "SlideDishwasherRack",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 450,
+   "source": "target"
+  },
+  {
+   "task": "StackBowlsCabinet",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2100,
+   "source": "target"
+  },
+  {
+   "task": "SteamInMicrowave",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2100,
+   "source": "target"
+  },
+  {
+   "task": "StirVegetables",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2400,
+   "source": "target"
+  },
+  {
+   "task": "StoreLeftoversInBowl",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 2550,
+   "source": "target"
+  },
+  {
+   "task": "TurnOffStove",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 750,
+   "source": "target"
+  },
+  {
+   "task": "TurnOnElectricKettle",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 450,
+   "source": "target"
+  },
+  {
+   "task": "TurnOnMicrowave",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 450,
+   "source": "target"
+  },
+  {
+   "task": "TurnOnSinkFaucet",
+   "kind": "atomic",
+   "task_set": "atomic_seen",
+   "horizon": 600,
+   "source": "target"
+  },
+  {
+   "task": "WashLettuce",
+   "kind": "composite",
+   "task_set": "composite_seen",
+   "horizon": 1650,
+   "source": "target"
+  },
+  {
+   "task": "AddSugarCubes",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 900,
+   "source": "selected",
+   "family": "garnishing_dishes"
+  },
+  {
+   "task": "AdjustToasterOvenTemperature",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "AdjustWaterTemperature",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "AfterwashSorting",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3000,
+   "source": "selected",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "AirDryFruit",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2850,
+   "source": "selected",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "AlcoholServingPrep",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 4650,
+   "source": "selected",
+   "family": "serving_food"
+  },
+  {
+   "task": "ArrangeBreadBowl",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1350,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "ArrangeDrinkware",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1650,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "BeverageOrganization",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 4500,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "CheesyBread",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 750,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "ClearClutter",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3300,
+   "source": "selected",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "ClearFreezer",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3600,
+   "source": "selected",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "ClearSinkSpace",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1800,
+   "source": "selected",
+   "family": "washing_fruits_and_vegetables"
+  },
+  {
+   "task": "CloseCabinet",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 750,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseDishwasher",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseDrawer",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseElectricKettleLid",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseFridgeDrawer",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseMicrowave",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseOven",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CloseStandMixerHead",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "CoffeeServeMug",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "DateNight",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 4800,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "DessertUpgrade",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1200,
+   "source": "selected",
+   "family": "serving_food"
+  },
+  {
+   "task": "GatherCuttingTools",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2400,
+   "source": "selected",
+   "family": "chopping_vegetables"
+  },
+  {
+   "task": "GatherVegetables",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1350,
+   "source": "selected",
+   "family": "preparing_sandwiches"
+  },
+  {
+   "task": "LineUpCondiments",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3000,
+   "source": "selected",
+   "family": "arranging_condiments"
+  },
+  {
+   "task": "LowerHeat",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 750,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "MakeIcedCoffee",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 750,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "MoveFridgeToFreezer",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1650,
+   "source": "selected",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "MoveToFreezerDrawer",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1800,
+   "source": "selected",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "OpenBlenderLid",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenDishwasher",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenElectricKettleLid",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenFridge",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 900,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenFridgeDrawer",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenMicrowave",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 600,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenOven",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OpenToasterOvenDoor",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "OrganizeCoffeeCondiments",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1950,
+   "source": "selected",
+   "family": "brewing"
+  },
+  {
+   "task": "PackDessert",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 600,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCabinetToCounter",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToDrawer",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 750,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToMicrowave",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 1050,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToOven",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 600,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToSink",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 600,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceCounterToToasterOven",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceFridgeDrawerToShelf",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 600,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceFridgeShelfToDrawer",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 600,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceMicrowaveToCounter",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 750,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceStoveToCounter",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PickPlaceToasterOvenToCounter",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PlaceEqualIceCubes",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2850,
+   "source": "selected",
+   "family": "adding_ice_to_beverages"
+  },
+  {
+   "task": "PlaceIceInCup",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1200,
+   "source": "selected",
+   "family": "adding_ice_to_beverages"
+  },
+  {
+   "task": "PortionFruitBowl",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2100,
+   "source": "selected",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PortionInTupperware",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1950,
+   "source": "selected",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PortionYogurt",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2100,
+   "source": "selected",
+   "family": "portioning_meals"
+  },
+  {
+   "task": "PreheatOven",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "PrepareSausageCheese",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3600,
+   "source": "selected",
+   "family": "preparing_sandwiches"
+  },
+  {
+   "task": "PrepareSoupServing",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3450,
+   "source": "selected",
+   "family": "serving_food"
+  },
+  {
+   "task": "PrepareToast",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3750,
+   "source": "selected",
+   "family": "making_toast"
+  },
+  {
+   "task": "RecycleBottlesBySize",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3750,
+   "source": "selected",
+   "family": "organizing_recycling"
+  },
+  {
+   "task": "RecycleStackedYogurt",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2100,
+   "source": "selected",
+   "family": "organizing_recycling"
+  },
+  {
+   "task": "ReorganizeFrozenVegetables",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2700,
+   "source": "selected",
+   "family": "managing_freezer_space"
+  },
+  {
+   "task": "ResetCabinetDoors",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3300,
+   "source": "selected",
+   "family": "arranging_cabinets"
+  },
+  {
+   "task": "SeasoningSpiceSetup",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 4200,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "ServeSteak",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2100,
+   "source": "selected",
+   "family": "serving_food"
+  },
+  {
+   "task": "SetBowlsForSoup",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 5400,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupBowls",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 2700,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupButterPlate",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 4050,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SetupFruitBowl",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3750,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SimmeringSauce",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 3450,
+   "source": "selected",
+   "family": "reheating_food"
+  },
+  {
+   "task": "SizeSorting",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1500,
+   "source": "selected",
+   "family": "setting_the_table"
+  },
+  {
+   "task": "SlideOvenRack",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "SlideToasterOvenRack",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "StackCans",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1800,
+   "source": "selected",
+   "family": "arranging_cabinets"
+  },
+  {
+   "task": "StartCoffeeMachine",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "SweetSavoryToastSetup",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 4050,
+   "source": "selected",
+   "family": "making_toast"
+  },
+  {
+   "task": "SweetenCoffee",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1950,
+   "source": "selected",
+   "family": "brewing"
+  },
+  {
+   "task": "TurnOffMicrowave",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "TurnOffSinkFaucet",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "TurnOnStove",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "TurnOnToaster",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "TurnOnToasterOven",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 450,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "TurnSinkSpout",
+   "kind": "atomic",
+   "task_set": "pretrain_atomic",
+   "horizon": 300,
+   "source": "selected",
+   "family": null
+  },
+  {
+   "task": "WarmCroissant",
+   "kind": "composite",
+   "task_set": "pretrain_composite",
+   "horizon": 1650,
+   "source": "selected",
+   "family": "reheating_food"
+  }
+ ],
+ "dropped": [
+  {
+   "task": "FreezeIceTray",
+   "current": "2/5",
+   "rate": 0.4,
+   "ab_with": "2/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "SetupWineGlasses",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "1/5",
+   "without_rate": 0.2,
+   "revised": false
+  },
+  {
+   "task": "AlignSilverware",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "AddLemonToFish",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "DeliverBrewedCoffee",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "ScalePortioning",
+   "current": "4/6",
+   "rate": 0.6666666666666666,
+   "ab_with": "0/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": true
+  },
+  {
+   "task": "PrewashFoodAssembly",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "DistributeChicken",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "DrainVeggies",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "FreezeBottledWaters",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "HotDogSetup",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "MaximizeFreezerSpace",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "ChooseMeasuringCup",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "GarnishCupcake",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "HeatMug",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "MakeLoadedPotato",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "OrganizeCondiments",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PlaceFoodInBowls",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PortionOnSize",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PrewashFoodSorting",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "RecycleSodaCans",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "RetrieveIceTray",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  }
+ ],
+ "ranking": [
+  {
+   "task": "FreezeIceTray",
+   "current": "2/5",
+   "rate": 0.4,
+   "ab_with": "2/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "CloseOven",
+   "current": "3/6",
+   "rate": 0.5,
+   "ab_with": "3/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": true
+  },
+  {
+   "task": "SetupWineGlasses",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "1/5",
+   "without_rate": 0.2,
+   "revised": false
+  },
+  {
+   "task": "AlignSilverware",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "AddLemonToFish",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "CoffeeServeMug",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceCounterToOven",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "TurnOffMicrowave",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "DeliverBrewedCoffee",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PreheatOven",
+   "current": "3/5",
+   "rate": 0.6,
+   "ab_with": "3/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "ScalePortioning",
+   "current": "4/6",
+   "rate": 0.6666666666666666,
+   "ab_with": "0/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": true
+  },
+  {
+   "task": "PrewashFoodAssembly",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "DistributeChicken",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "DrainVeggies",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "FreezeBottledWaters",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "HotDogSetup",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "MaximizeFreezerSpace",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "AdjustToasterOvenTemperature",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "CheesyBread",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "ChooseMeasuringCup",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "CloseFridgeDrawer",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "GarnishCupcake",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "HeatMug",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "MakeLoadedPotato",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "OrganizeCondiments",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceCabinetToCounter",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceCounterToMicrowave",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceCounterToToasterOven",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceFridgeDrawerToShelf",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PlaceFoodInBowls",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PortionOnSize",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PrewashFoodSorting",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "RecycleSodaCans",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "StartCoffeeMachine",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "CloseElectricKettleLid",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "OpenBlenderLid",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "OpenElectricKettleLid",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceStoveToCounter",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "RetrieveIceTray",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "SetupFruitBowl",
+   "current": "4/5",
+   "rate": 0.8,
+   "ab_with": "4/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "MoveToFreezerDrawer",
+   "current": "5/6",
+   "rate": 0.8333333333333334,
+   "ab_with": "2/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": true
+  },
+  {
+   "task": "SlideOvenRack",
+   "current": "5/6",
+   "rate": 0.8333333333333334,
+   "ab_with": "3/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": true
+  },
+  {
+   "task": "RecycleBottlesBySize",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "ReorganizeFrozenVegetables",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "2/5",
+   "without_rate": 0.4,
+   "revised": false
+  },
+  {
+   "task": "ArrangeBreadBowl",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "ClearFreezer",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "CloseDishwasher",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "DateNight",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "LineUpCondiments",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "SweetenCoffee",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "3/5",
+   "without_rate": 0.6,
+   "revised": false
+  },
+  {
+   "task": "AdjustWaterTemperature",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "BeverageOrganization",
+   "current": "6/6",
+   "rate": 1.0,
+   "ab_with": "1/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": true
+  },
+  {
+   "task": "CloseCabinet",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "CloseMicrowave",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "DessertUpgrade",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "OpenDishwasher",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "OpenOven",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "OpenToasterOvenDoor",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceToasterOvenToCounter",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PlaceEqualIceCubes",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "PrepareToast",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "SetupBowls",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "SimmeringSauce",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "SlideToasterOvenRack",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "SweetSavoryToastSetup",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "4/5",
+   "without_rate": 0.8,
+   "revised": false
+  },
+  {
+   "task": "AddSugarCubes",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "AfterwashSorting",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "AirDryFruit",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "AlcoholServingPrep",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "ArrangeDrinkware",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "ClearClutter",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "ClearSinkSpace",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "CloseDrawer",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "CloseStandMixerHead",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "GatherCuttingTools",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "GatherVegetables",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "LowerHeat",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "MakeIcedCoffee",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "MoveFridgeToFreezer",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "OpenFridge",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "OpenFridgeDrawer",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "OpenMicrowave",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "OrganizeCoffeeCondiments",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PackDessert",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceCounterToDrawer",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceCounterToSink",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceFridgeShelfToDrawer",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PickPlaceMicrowaveToCounter",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PlaceIceInCup",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PortionFruitBowl",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PortionInTupperware",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PortionYogurt",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PrepareSausageCheese",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "PrepareSoupServing",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "RecycleStackedYogurt",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "ResetCabinetDoors",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "SeasoningSpiceSetup",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "ServeSteak",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "SetBowlsForSoup",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "SetupButterPlate",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "SizeSorting",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "StackCans",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "TurnOffSinkFaucet",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "TurnOnStove",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "TurnOnToaster",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "TurnOnToasterOven",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "TurnSinkSpout",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  },
+  {
+   "task": "WarmCroissant",
+   "current": "5/5",
+   "rate": 1.0,
+   "ab_with": "5/5",
+   "ab_without": "5/5",
+   "without_rate": 1.0,
+   "revised": false
+  }
+ ]
+}

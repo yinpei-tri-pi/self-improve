@@ -1,0 +1,25 @@
+# Re-check of the 5 tasks whose notes were revised after the ab108 A/B (docs/ab108_findings.md), on fresh seeds.
+# Derived from configs/ab108_without.yaml.
+# A/B of the task-specific prompts on the 108 selected tasks (assets/selected_tasks.json, rule A), this arm:
+# the generic card: no task notes, no System1 step table (as the pilot si_v1).
+# Both arms play the same 5 seeds per task (seed_key ab108, RoboCasa's pretrain split, new seeds: not the pilot's)
+# with the same S1 (the 270k checkpoint) and Astra settings; they share the rollout cluster, 8 GPUs each.
+#   scripts/cluster_rollout.sh ab108_without 0 <270k ckpt> --config configs/ab108_without.yaml
+exp_id: ab108r2_without
+iterations: 1
+rollout:
+  tasks: selected
+  include_tasks: [CloseOven, SlideOvenRack, MoveToFreezerDrawer, ScalePortioning, BeverageOrganization]
+  seed_key: ab108_r2
+  pilot_seeds_per_task: 6
+  seeds_per_task: 6
+  split: pretrain
+  num_gpus: 4
+  cluster_gpus: 8             # both arms' drivers ask the autoscaler for the cluster's total
+  score:
+    enabled: false            # not needed for the comparison (and it would lengthen each episode)
+  hexashell_sets:
+    skills: "no"
+    s1_skills: "no"
+eval:
+  enabled: false

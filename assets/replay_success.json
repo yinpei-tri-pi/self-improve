@@ -1,0 +1,2107 @@
+{
+ "source": "RoboAnnotator data_annotation/RoboCasa/_meta/replay_success_rates.html (strict _check_success replay of the recorded demos)",
+ "pretrain": {
+  "PlaceVegetablesEvenly": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 0,
+   "rate": 0.0
+  },
+  "TurnOnBlender": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 9,
+   "rate": 0.0841
+  },
+  "BlendMarinade": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 12,
+   "rate": 0.1111
+  },
+  "CloseBlenderLid": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 15,
+   "rate": 0.1415
+  },
+  "BlendIngredients": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 16,
+   "rate": 0.1495
+  },
+  "PickPlaceCounterToStandMixer": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 27,
+   "rate": 0.2523
+  },
+  "AddSweetener": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 28,
+   "rate": 0.2642
+  },
+  "PickPlaceCounterToBlender": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 29,
+   "rate": 0.2736
+  },
+  "AddIceCubes": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 40,
+   "rate": 0.3636
+  },
+  "ChooseRipeFruit": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 41,
+   "rate": 0.3796
+  },
+  "MixCakeFrosting": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 50,
+   "rate": 0.4762
+  },
+  "GetToastedBread": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 79,
+   "rate": 0.767
+  },
+  "NavigateKitchen": {
+   "category": "atomic",
+   "replayed": 503,
+   "success": 398,
+   "rate": 0.7913
+  },
+  "WarmCroissant": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 90,
+   "rate": 0.8411
+  },
+  "ScrubCuttingBoard": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 91,
+   "rate": 0.8835
+  },
+  "ScrubBowl": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 92,
+   "rate": 0.92
+  },
+  "StirVegetables": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 98,
+   "rate": 0.9333
+  },
+  "TurnOnToaster": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 102,
+   "rate": 0.9444
+  },
+  "StoreLeftoversByType": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 95,
+   "rate": 0.95
+  },
+  "JuiceFruitReamer": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 107,
+   "rate": 0.9727
+  },
+  "PressChicken": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 102,
+   "rate": 0.9808
+  },
+  "MicrowaveDefrostMeat": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 103,
+   "rate": 0.981
+  },
+  "OvenBroilFish": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 104,
+   "rate": 0.9905
+  },
+  "PreheatPot": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 104,
+   "rate": 0.9905
+  },
+  "ReheatMeal": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 106,
+   "rate": 0.9907
+  },
+  "TurnOffMicrowave": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 107,
+   "rate": 0.9907
+  },
+  "AdjustToasterOvenTemperature": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "AdjustWaterTemperature": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "CheesyBread": {
+   "category": "atomic",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "CloseCabinet": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "CloseDishwasher": {
+   "category": "atomic",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "CloseDrawer": {
+   "category": "atomic",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "CloseElectricKettleLid": {
+   "category": "atomic",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "CloseFridge": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "CloseFridgeDrawer": {
+   "category": "atomic",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "CloseMicrowave": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "CloseOven": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "CloseStandMixerHead": {
+   "category": "atomic",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "CloseToasterOvenDoor": {
+   "category": "atomic",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "CoffeeServeMug": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "CoffeeSetupMug": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "LowerHeat": {
+   "category": "atomic",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "MakeIcedCoffee": {
+   "category": "atomic",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "OpenBlenderLid": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "OpenCabinet": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "OpenDishwasher": {
+   "category": "atomic",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "OpenDrawer": {
+   "category": "atomic",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "OpenElectricKettleLid": {
+   "category": "atomic",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "OpenFridge": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "OpenFridgeDrawer": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "OpenMicrowave": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "OpenOven": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "OpenStandMixerHead": {
+   "category": "atomic",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "OpenToasterOvenDoor": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "PackDessert": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PickPlaceCabinetToCounter": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToCabinet": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToDrawer": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToMicrowave": {
+   "category": "atomic",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToOven": {
+   "category": "atomic",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToSink": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToStove": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToToasterOven": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PickPlaceDrawerToCounter": {
+   "category": "atomic",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "PickPlaceFridgeDrawerToShelf": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PickPlaceFridgeShelfToDrawer": {
+   "category": "atomic",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "PickPlaceMicrowaveToCounter": {
+   "category": "atomic",
+   "replayed": 112,
+   "success": 112,
+   "rate": 1.0
+  },
+  "PickPlaceSinkToCounter": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PickPlaceStoveToCounter": {
+   "category": "atomic",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "PickPlaceToasterOvenToCounter": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PickPlaceToasterToCounter": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "PreheatOven": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "SlideDishwasherRack": {
+   "category": "atomic",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SlideOvenRack": {
+   "category": "atomic",
+   "replayed": 113,
+   "success": 113,
+   "rate": 1.0
+  },
+  "SlideToasterOvenRack": {
+   "category": "atomic",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "StartCoffeeMachine": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "TurnOffSinkFaucet": {
+   "category": "atomic",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "TurnOffStove": {
+   "category": "atomic",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "TurnOnElectricKettle": {
+   "category": "atomic",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "TurnOnMicrowave": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "TurnOnSinkFaucet": {
+   "category": "atomic",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "TurnOnStove": {
+   "category": "atomic",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "TurnOnToasterOven": {
+   "category": "atomic",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "TurnSinkSpout": {
+   "category": "atomic",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "AddLemonToFish": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "AddMarshmallow": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "AddSugarCubes": {
+   "category": "composite",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "AdjustHeat": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "AfterwashSorting": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "AirDryFruit": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "AlcoholServingPrep": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "AlignSilverware": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "ArrangeBreadBowl": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "ArrangeBuffetDessert": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "ArrangeDrinkware": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "ArrangeTeaAccompaniments": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "ArrangeUtensilsByType": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "ArrangeVegetables": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "AssembleCookingArray": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "BalancedMealPrep": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "BeverageOrganization": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "BeverageSorting": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "BowlAndCup": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "BreadAndCheese": {
+   "category": "composite",
+   "replayed": 215,
+   "success": 215,
+   "rate": 1.0
+  },
+  "BreadSetupSlicing": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "BuildAppetizerPlate": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "ButterOnPan": {
+   "category": "composite",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "CandleCleanup": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "CerealAndBowl": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "ChooseMeasuringCup": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "CleanBoard": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "CleanMicrowave": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "ClearClutter": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "ClearCuttingBoard": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "ClearFoodWaste": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "ClearFreezer": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "ClearReceptaclesForCleaning": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "ClearSink": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "ClearSinkArea": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "ClearSinkSpace": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "CollectWashingSupplies": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "ColorfulSalsa": {
+   "category": "composite",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "CondimentCollection": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "CookieDoughPrep": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "CoolBakedCake": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "CoolKettle": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "CreateChildFriendlyFridge": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "CupcakeCleanup": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "CutBuffetPizza": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "DateNight": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "DefrostByCategory": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "DeliverBrewedCoffee": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "DeliverStraw": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "DessertAssembly": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "DessertUpgrade": {
+   "category": "composite",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "DisplayMeatVariety": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "DistributeChicken": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "DivideBasins": {
+   "category": "composite",
+   "replayed": 152,
+   "success": 152,
+   "rate": 1.0
+  },
+  "DivideBuffetTrays": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "DrainVeggies": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "DrinkwareConsolidation": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "DryDishes": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "DryDrinkware": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "DumpLeftovers": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "FillBlenderJug": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "FillKettle": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "FilterMicrowavableItem": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "FoodCleanup": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "FreezeBottledWaters": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "FreezeCookedFood": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "FreezeIceTray": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "FreshProduceOrganization": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "FryingPanAdjustment": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "GarnishCupcake": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "GatherCuttingTools": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "GatherMarinadeIngredients": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "GatherVegetables": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "HeatMug": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "HeatMultipleWater": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "HotDogSetup": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "KettleBoiling": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "LemonSeasoningFish": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "LineUpCondiments": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "LoadCondimentsInFridge": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "LoadDishwasher": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "LoadFridgeByType": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "LoadFridgeFifo": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "LoadPreparedFood": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "MakeFruitBowl": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "MakeLoadedPotato": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "MatchCupAndDrink": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "MaximizeFreezerSpace": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "MealPrepStaging": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "MeatSkewerAssembly": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "MeatTransfer": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "MicrowaveCorrectMeal": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "MicrowaveThawing": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "MicrowaveThawingFridge": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "MixedFruitPlatter": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "MoveFreezerToFridge": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "MoveFridgeToFreezer": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "MoveToCounter": {
+   "category": "composite",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "MoveToFreezerDrawer": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "MultistepSteaming": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "OrganizeBakingIngredients": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "OrganizeCleaningSupplies": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "OrganizeCoffeeCondiments": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "OrganizeCondiments": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "OrganizeMetallicUtensils": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "OrganizeMugsByHandle": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "OrganizeVegetables": {
+   "category": "composite",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "PackFoodByTemp": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "PackFruitContainer": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PackIdenticalLunches": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "PastryDisplay": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "PlaceBeveragesTogether": {
+   "category": "composite",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "PlaceDishesBySink": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "PlaceEqualIceCubes": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "PlaceFoodInBowls": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PlaceIceInCup": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "PlaceMeatInMarinade": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PlaceMicrowaveSafeItem": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "PlaceStraw": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "PlaceVeggiesInDrawer": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "PlateSteakMeal": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PlateStoreDinner": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "PortionFruitBowl": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PortionInTupperware": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PortionOnSize": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PortionYogurt": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "PreRinseStation": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "PreSoakPan": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PrepForSanitizing": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "PrepForTenderizing": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PrepFridgeForCleaning": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "PrepMarinatingMeat": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "PrepSinkForCleaning": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "PrepareBroilingStation": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "PrepareCheeseStation": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PrepareCocktailStation": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "PrepareCoffee": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "PrepareDishwasher": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "PrepareDrinkStation": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "PrepareSausageCheese": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "PrepareSmoothie": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "PrepareSoupServing": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "PrepareStoringLeftovers": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "PrepareToast": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "PrewashFoodAssembly": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "PrewashFoodSorting": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "QuickThaw": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "RearrangeFridgeItems": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "RecycleBottlesBySize": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "RecycleSodaCans": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "RecycleStackedYogurt": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "RefillCondimentStation": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "RemoveBroiledFish": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "RemoveCuttingBoardItems": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "ReorganizeFrozenVegetables": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "ResetCabinetDoors": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "RestockBowls": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "RestockCannedFood": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "RestockPantry": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "RestockSinkSupplies": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "RetrieveIceTray": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "RetrieveMeat": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "ReturnHeatedFood": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "ReturnWashingSupplies": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "RinseBowls": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "RinseCuttingBoard": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "RinseSinkBasin": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "RotatePan": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "SanitizePrepCuttingBoard": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "ScalePortioning": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "SearingMeat": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "SeasoningSpiceSetup": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "SeasoningSteak": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "ServeSteak": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "ServeTea": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "ServeWarmCroissant": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SetBowlsForSoup": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SetUpCuttingStation": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "SetUpSpiceStation": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SetupBowls": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "SetupButterPlate": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "SetupFruitBowl": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "SetupFrying": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "SetupSodaBowl": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SetupWineGlasses": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "ShakePan": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "SimmeringSauce": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "SizeSorting": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "SnackSorting": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SoakSponge": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "SortingCleanup": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "SpicyMarinade": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "StackBowlsCabinet": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "StackBowlsInSink": {
+   "category": "composite",
+   "replayed": 100,
+   "success": 100,
+   "rate": 1.0
+  },
+  "StackCans": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "StartElectricKettle": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "SteamInMicrowave": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "StockingBreakfastFoods": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  },
+  "StoreDumplings": {
+   "category": "composite",
+   "replayed": 106,
+   "success": 106,
+   "rate": 1.0
+  },
+  "StoreLeftoversInBowl": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "StrainerSetup": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "SweetSavoryToastSetup": {
+   "category": "composite",
+   "replayed": 110,
+   "success": 110,
+   "rate": 1.0
+  },
+  "SweetenCoffee": {
+   "category": "composite",
+   "replayed": 107,
+   "success": 107,
+   "rate": 1.0
+  },
+  "SweetenHotChocolate": {
+   "category": "composite",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "ThawInSink": {
+   "category": "composite",
+   "replayed": 111,
+   "success": 111,
+   "rate": 1.0
+  },
+  "TiltPan": {
+   "category": "composite",
+   "replayed": 108,
+   "success": 108,
+   "rate": 1.0
+  },
+  "ToastBagel": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "ToastBaguette": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "ToastOnCorrectRack": {
+   "category": "composite",
+   "replayed": 103,
+   "success": 103,
+   "rate": 1.0
+  },
+  "TongBuffetSetup": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "TransportCookware": {
+   "category": "composite",
+   "replayed": 101,
+   "success": 101,
+   "rate": 1.0
+  },
+  "TurnOffSimmeredSauceHeat": {
+   "category": "composite",
+   "replayed": 109,
+   "success": 109,
+   "rate": 1.0
+  },
+  "VeggieDipPrep": {
+   "category": "composite",
+   "replayed": 102,
+   "success": 102,
+   "rate": 1.0
+  },
+  "WashFish": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "WashLettuce": {
+   "category": "composite",
+   "replayed": 104,
+   "success": 104,
+   "rate": 1.0
+  },
+  "YogurtDelightPrep": {
+   "category": "composite",
+   "replayed": 105,
+   "success": 105,
+   "rate": 1.0
+  }
+ },
+ "target": {
+  "CloseBlenderLid": {
+   "category": "atomic",
+   "replayed": 502,
+   "success": 140,
+   "rate": 0.2789
+  },
+  "GetToastedBread": {
+   "category": "composite",
+   "replayed": 506,
+   "success": 386,
+   "rate": 0.7628
+  },
+  "NavigateKitchen": {
+   "category": "atomic",
+   "replayed": 500,
+   "success": 415,
+   "rate": 0.83
+  },
+  "ScrubCuttingBoard": {
+   "category": "composite",
+   "replayed": 504,
+   "success": 442,
+   "rate": 0.877
+  },
+  "StirVegetables": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 463,
+   "rate": 0.9242
+  },
+  "CloseFridge": {
+   "category": "atomic",
+   "replayed": 513,
+   "success": 513,
+   "rate": 1.0
+  },
+  "CloseToasterOvenDoor": {
+   "category": "atomic",
+   "replayed": 505,
+   "success": 505,
+   "rate": 1.0
+  },
+  "CoffeeSetupMug": {
+   "category": "atomic",
+   "replayed": 502,
+   "success": 502,
+   "rate": 1.0
+  },
+  "OpenCabinet": {
+   "category": "atomic",
+   "replayed": 500,
+   "success": 500,
+   "rate": 1.0
+  },
+  "OpenDrawer": {
+   "category": "atomic",
+   "replayed": 513,
+   "success": 513,
+   "rate": 1.0
+  },
+  "OpenStandMixerHead": {
+   "category": "atomic",
+   "replayed": 502,
+   "success": 502,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToCabinet": {
+   "category": "atomic",
+   "replayed": 502,
+   "success": 502,
+   "rate": 1.0
+  },
+  "PickPlaceCounterToStove": {
+   "category": "atomic",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "PickPlaceDrawerToCounter": {
+   "category": "atomic",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "PickPlaceSinkToCounter": {
+   "category": "atomic",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "PickPlaceToasterToCounter": {
+   "category": "atomic",
+   "replayed": 512,
+   "success": 512,
+   "rate": 1.0
+  },
+  "SlideDishwasherRack": {
+   "category": "atomic",
+   "replayed": 502,
+   "success": 502,
+   "rate": 1.0
+  },
+  "TurnOffStove": {
+   "category": "atomic",
+   "replayed": 500,
+   "success": 500,
+   "rate": 1.0
+  },
+  "TurnOnElectricKettle": {
+   "category": "atomic",
+   "replayed": 520,
+   "success": 520,
+   "rate": 1.0
+  },
+  "TurnOnMicrowave": {
+   "category": "atomic",
+   "replayed": 543,
+   "success": 543,
+   "rate": 1.0
+  },
+  "TurnOnSinkFaucet": {
+   "category": "atomic",
+   "replayed": 506,
+   "success": 506,
+   "rate": 1.0
+  },
+  "ArrangeBreadBasket": {
+   "category": "composite",
+   "replayed": 514,
+   "success": 514,
+   "rate": 1.0
+  },
+  "ArrangeTea": {
+   "category": "composite",
+   "replayed": 500,
+   "success": 500,
+   "rate": 1.0
+  },
+  "BreadSelection": {
+   "category": "composite",
+   "replayed": 503,
+   "success": 503,
+   "rate": 1.0
+  },
+  "CategorizeCondiments": {
+   "category": "composite",
+   "replayed": 513,
+   "success": 513,
+   "rate": 1.0
+  },
+  "CuttingToolSelection": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "DeliverStraw": {
+   "category": "composite",
+   "replayed": 504,
+   "success": 504,
+   "rate": 1.0
+  },
+  "GarnishPancake": {
+   "category": "composite",
+   "replayed": 503,
+   "success": 503,
+   "rate": 1.0
+  },
+  "GatherTableware": {
+   "category": "composite",
+   "replayed": 509,
+   "success": 509,
+   "rate": 1.0
+  },
+  "HeatKebabSandwich": {
+   "category": "composite",
+   "replayed": 503,
+   "success": 503,
+   "rate": 1.0
+  },
+  "KettleBoiling": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "LoadDishwasher": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "MakeIceLemonade": {
+   "category": "composite",
+   "replayed": 512,
+   "success": 512,
+   "rate": 1.0
+  },
+  "PackIdenticalLunches": {
+   "category": "composite",
+   "replayed": 500,
+   "success": 500,
+   "rate": 1.0
+  },
+  "PanTransfer": {
+   "category": "composite",
+   "replayed": 509,
+   "success": 509,
+   "rate": 1.0
+  },
+  "PortionHotDogs": {
+   "category": "composite",
+   "replayed": 504,
+   "success": 504,
+   "rate": 1.0
+  },
+  "PreSoakPan": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "PrepareCoffee": {
+   "category": "composite",
+   "replayed": 514,
+   "success": 514,
+   "rate": 1.0
+  },
+  "RinseSinkBasin": {
+   "category": "composite",
+   "replayed": 509,
+   "success": 509,
+   "rate": 1.0
+  },
+  "SearingMeat": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "SeparateFreezerRack": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "SetUpCuttingStation": {
+   "category": "composite",
+   "replayed": 504,
+   "success": 504,
+   "rate": 1.0
+  },
+  "StackBowlsCabinet": {
+   "category": "composite",
+   "replayed": 515,
+   "success": 515,
+   "rate": 1.0
+  },
+  "SteamInMicrowave": {
+   "category": "composite",
+   "replayed": 511,
+   "success": 511,
+   "rate": 1.0
+  },
+  "StoreLeftoversInBowl": {
+   "category": "composite",
+   "replayed": 503,
+   "success": 503,
+   "rate": 1.0
+  },
+  "WaffleReheat": {
+   "category": "composite",
+   "replayed": 500,
+   "success": 500,
+   "rate": 1.0
+  },
+  "WashFruitColander": {
+   "category": "composite",
+   "replayed": 507,
+   "success": 507,
+   "rate": 1.0
+  },
+  "WashLettuce": {
+   "category": "composite",
+   "replayed": 501,
+   "success": 501,
+   "rate": 1.0
+  },
+  "WeighIngredients": {
+   "category": "composite",
+   "replayed": 504,
+   "success": 504,
+   "rate": 1.0
+  },
+  "RecycleBottlesByType": {
+   "category": "composite",
+   "replayed": 520,
+   "success": 0,
+   "rate": 0.0
+  }
+ }
+}

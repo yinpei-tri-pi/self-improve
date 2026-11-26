@@ -1,0 +1,18 @@
+# The first real experiment. Run ON THE WORKSTATION (restartable; state on S3):
+#   nohup .venv/bin/python -m selfimprove.cli run --config configs/si_v1.yaml > ~/selfimprove_work/si_v1.log 2>&1 &
+# iterations: 1 = the pilot round only (287 tasks x 2 seeds), then stop for review; raise it to continue.
+exp_id: si_v1
+iterations: 1
+rollout:
+  tasks: pretrain300          # the pilot's task set, kitchens and seeds (the defaults are now the development
+  split: pretrain             # tasks on their recorded episodes, 30 per task)
+  seeds_per_task: 10
+  pilot_seeds_per_task: 2
+  num_gpus: 8                 # 8 g6e nodes x 4 slots = 32 Astra episodes at once
+train:
+  image_tag: null             # the first round builds + pushes the openpi-si image; then pin the tag here
+  steps: 3000                 # pilot: ~300k new samples; 10k steps at 50% would revisit each ~8x
+cluster:
+  mode: ray
+eval:
+  num_gpus: 24                # 1500 episodes ~ 73 stack-hours -> ~3 h; fits us-west-2's G quota next to other users

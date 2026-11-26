@@ -1,0 +1,255 @@
+{
+ "source": "hexashell/benches/robocasa/protocol.py TASKS (the 50 target tasks, official horizons)",
+ "tasks": {
+  "CloseBlenderLid": {
+   "horizon": 900,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "CloseFridge": {
+   "horizon": 900,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "CloseToasterOvenDoor": {
+   "horizon": 450,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "CoffeeSetupMug": {
+   "horizon": 600,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "NavigateKitchen": {
+   "horizon": 450,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "OpenCabinet": {
+   "horizon": 1050,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "OpenDrawer": {
+   "horizon": 750,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "OpenStandMixerHead": {
+   "horizon": 450,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "PickPlaceCounterToCabinet": {
+   "horizon": 750,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "PickPlaceCounterToStove": {
+   "horizon": 600,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "PickPlaceDrawerToCounter": {
+   "horizon": 750,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "PickPlaceSinkToCounter": {
+   "horizon": 900,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "PickPlaceToasterToCounter": {
+   "horizon": 600,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "SlideDishwasherRack": {
+   "horizon": 450,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "TurnOffStove": {
+   "horizon": 750,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "TurnOnElectricKettle": {
+   "horizon": 450,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "TurnOnMicrowave": {
+   "horizon": 450,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "TurnOnSinkFaucet": {
+   "horizon": 600,
+   "kind": "atomic",
+   "task_set": "atomic_seen"
+  },
+  "DeliverStraw": {
+   "horizon": 2550,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "GetToastedBread": {
+   "horizon": 3000,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "KettleBoiling": {
+   "horizon": 1500,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "LoadDishwasher": {
+   "horizon": 1800,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "PackIdenticalLunches": {
+   "horizon": 3900,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "PreSoakPan": {
+   "horizon": 2400,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "PrepareCoffee": {
+   "horizon": 1800,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "RinseSinkBasin": {
+   "horizon": 1350,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "ScrubCuttingBoard": {
+   "horizon": 1200,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "SearingMeat": {
+   "horizon": 4350,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "SetUpCuttingStation": {
+   "horizon": 2400,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "StackBowlsCabinet": {
+   "horizon": 2100,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "SteamInMicrowave": {
+   "horizon": 2100,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "StirVegetables": {
+   "horizon": 2400,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "StoreLeftoversInBowl": {
+   "horizon": 2550,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "WashLettuce": {
+   "horizon": 1650,
+   "kind": "composite",
+   "task_set": "composite_seen"
+  },
+  "ArrangeBreadBasket": {
+   "horizon": 4350,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "ArrangeTea": {
+   "horizon": 2250,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "BreadSelection": {
+   "horizon": 1950,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "CategorizeCondiments": {
+   "horizon": 1650,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "CuttingToolSelection": {
+   "horizon": 1200,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "GarnishPancake": {
+   "horizon": 2700,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "GatherTableware": {
+   "horizon": 2250,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "HeatKebabSandwich": {
+   "horizon": 2700,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "MakeIceLemonade": {
+   "horizon": 3000,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "PanTransfer": {
+   "horizon": 1800,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "PortionHotDogs": {
+   "horizon": 2250,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "RecycleBottlesByType": {
+   "horizon": 2850,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "SeparateFreezerRack": {
+   "horizon": 2400,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "WaffleReheat": {
+   "horizon": 4050,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "WashFruitColander": {
+   "horizon": 3150,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  },
+  "WeighIngredients": {
+   "horizon": 3000,
+   "kind": "composite",
+   "task_set": "composite_unseen"
+  }
+ }
+}

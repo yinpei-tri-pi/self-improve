@@ -1,0 +1,14 @@
+# Is S1 + Harness on the Ray cluster as good as on the workstation? Replays the local run full2_s1first:
+# the 50 target tasks x seeds 0-2 in HexaShell's pretrain50 kitchens, S1 = the 270k checkpoint, the same Astra
+# settings (gpt-6.2-astra, high effort, s1=first, task skills on). Local reference (150 episodes):
+# atomic 92.6 %, composite seen 89.6 %, composite unseen 89.6 %.
+#   scripts/cluster_rollout.sh harness_check_full2 0 <270k ckpt> --config configs/harness_check_full2.yaml --max-nodes 8
+exp_id: harness_check_full2
+iterations: 1
+rollout:
+  tasks: target50
+  fixed_seeds: [0, 1, 2]
+  split: pretrain50
+  num_gpus: 8
+  score:
+    enabled: false            # not needed for the comparison (and it would lengthen each episode)

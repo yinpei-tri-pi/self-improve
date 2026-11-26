@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Self-improvement loop</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b; --queued: #b5b3ab;
+  --run: #2a78d6; --run-wash: rgba(42,120,214,0.10); --good-wash: rgba(12,163,12,0.08); --warn-wash: rgba(250,178,25,0.12);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --queued: #5a5955;
+    --run: #3987e5; --run-wash: rgba(57,135,229,0.16); --good-wash: rgba(12,163,12,0.14); --warn-wash: rgba(250,178,25,0.14);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --queued: #5a5955;
+  --run: #3987e5; --run-wash: rgba(57,135,229,0.16); --good-wash: rgba(12,163,12,0.14); --warn-wash: rgba(250,178,25,0.14);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 18px 28px 10px; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+header h1 { font-size: 21px; margin: 0; } header .sub { color: var(--ink2); }
+header .right { margin-left: auto; display: flex; gap: 10px; align-items: center; color: var(--muted); font-size: 12.5px; }
+button { font: inherit; border: 1px solid var(--axis); background: var(--surface); color: var(--ink); border-radius: 6px; padding: 3px 10px; cursor: pointer; }
+.mock { margin: 0 28px 8px; padding: 6px 12px; border-radius: 6px; background: var(--warn-wash); border: 1px solid var(--warning); font-size: 13px; }
+main { padding: 0 28px 40px; display: grid; gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; }
+.card h2 { font-size: 15px; margin: 0 0 10px; } .card h3 { font-size: 13.5px; margin: 0 0 8px; }
+.note { color: var(--muted); font-size: 12.5px; }
+.now { display: flex; gap: 14px; flex-wrap: wrap; align-items: stretch; }
+.now .item { flex: 1 1 260px; border: 1px solid var(--ring); border-radius: 8px; padding: 8px 12px; background: var(--run-wash); }
+.now .item.next { background: transparent; }
+.now .big { font-size: 18px; font-weight: 600; }
+.bar { height: 6px; border-radius: 3px; background: var(--grid); overflow: hidden; margin: 6px 0 2px; }
+.bar > i { display: block; height: 100%; background: var(--run); border-radius: 3px; }
+.status { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; }
+.status .ic { width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; }
+.st-done .ic { background: var(--good); } .st-running .ic { background: var(--run); }
+.st-waiting .ic { background: var(--warning); color: #0b0b0b; } .st-queued .ic { background: var(--queued); }
+.st-failed .ic { background: var(--critical); }
+/* the pipeline picture */
+#pipe { width: 100%; overflow-x: auto; }
+#pipe svg { display: block; min-width: 980px; }
+.node rect.box { fill: var(--surface); stroke: var(--axis); stroke-width: 1.2; }
+.node.done rect.box { stroke: var(--good); fill: var(--good-wash); }
+.node.running rect.box { stroke: var(--run); stroke-width: 2; fill: var(--run-wash); animation: pulse 1.8s ease-in-out infinite; }
+.node.waiting rect.box { stroke: var(--warning); stroke-dasharray: 5 4; }
+.node.queued rect.box { stroke: var(--queued); }
+.node.failed rect.box { stroke: var(--critical); stroke-width: 2; }
+.node { cursor: pointer; } .node:hover rect.box, .node:focus rect.box { stroke-width: 2.5; }
+.node text { fill: var(--ink); font-size: 12.5px; } .node text.t { font-weight: 600; } .node text.k { fill: var(--ink2); font-size: 11.5px; }
+.node.queued text { fill: var(--muted); }
+.node rect.prog-bg { fill: var(--grid); } .node rect.prog { fill: var(--run); }
+@keyframes pulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.35; } }
+.edge { fill: none; stroke: var(--axis); stroke-width: 1.6; }
+.edge.opt { stroke-dasharray: 4 4; }
+.edge.live { stroke: var(--run); stroke-width: 2; stroke-dasharray: 7 6; animation: flow 1.1s linear infinite; }
+.edge.donee { stroke: var(--good); stroke-opacity: 0.7; }
+@keyframes flow { to { stroke-dashoffset: -26; } }
+.lane-label { fill: var(--ink2); font-size: 12px; font-weight: 600; } .lane-sub { fill: var(--muted); font-size: 11px; }
+.col-label { fill: var(--ink); font-size: 13px; font-weight: 600; } .col-label.sel { fill: var(--run); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; font-size: 12.5px; color: var(--ink2); }
+.legend .sw { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--axis); vertical-align: middle; margin-right: 6px; }
+/* charts */
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.chart { position: relative; } .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart .ttl { font-size: 13px; font-weight: 600; margin-bottom: 2px; } .chart .val { font-size: 22px; font-weight: 600; }
+.axis text { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.axis line, .axis path { stroke: var(--axis); } .gridl { stroke: var(--grid); stroke-width: 1; }
+.line { fill: none; stroke-width: 2; } .dot { stroke: var(--surface); stroke-width: 2; }
+.ref { stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--ring); border-radius: 6px;
+       box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 6px 9px; font-size: 12px; display: none; white-space: nowrap; z-index: 5; }
+.tip .v { font-weight: 700; font-size: 13px; } .tip .row { display: flex; align-items: center; gap: 6px; }
+.tip .key { width: 12px; border-top: 2px solid; }
+.cross { stroke: var(--muted); stroke-width: 1; }
+/* iteration detail */
+.tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.tabs button.sel { background: var(--run); color: #fff; border-color: var(--run); }
+.stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
+.stage { border: 1px solid var(--ring); border-radius: 8px; padding: 10px 12px; scroll-margin-top: 12px; }
+.stage.flash { box-shadow: 0 0 0 3px var(--run); }
+.stage .hd { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.stage .hd b { font-size: 13.5px; }
+.kv { display: grid; grid-template-columns: 150px 1fr; gap: 3px 10px; font-size: 12.5px; }
+.kv .k { color: var(--muted); } .kv .v { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.uri { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+.copy { padding: 0 6px; font-size: 11px; margin-left: 4px; }
+table.tbl { border-collapse: collapse; font-size: 12.5px; margin-top: 6px; }
+table.tbl th, table.tbl td { border-bottom: 1px solid var(--grid); padding: 3px 10px 3px 0; text-align: left; font-variant-numeric: tabular-nums; }
+table.tbl th { color: var(--muted); font-weight: 600; }
+details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin-top: 6px; }
+.hbar { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin: 3px 0; }
+.hbar .lab { width: 130px; color: var(--ink2); } .hbar .track { flex: 1; height: 10px; background: var(--grid); border-radius: 3px; position: relative; }
+.hbar .fill { height: 100%; background: var(--s1); border-radius: 3px; } .hbar .base { position: absolute; top: -3px; width: 2px; height: 16px; background: var(--ink2); }
+.hbar .num { width: 84px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Self-improvement loop</h1><span class="sub" id="subtitle"></span>
+  <span class="right"><span id="updated"></span><button id="theme" type="button">dark / light</button></span>
+</header>
+<div class="mock" id="mock" hidden>Placeholder numbers (mock): the layout and the fields are real, the values beyond round 0's rollout and preprocessing are made up.</div>
+<main>
+  <section class="card"><h2>Now</h2><div class="now" id="now"></div></section>
+  <section class="card">
+    <h2>The loop</h2>
+    <div id="pipe"></div>
+    <div class="legend" id="legend"></div>
+    <p class="note">Round k's rollout (System1 + HexaShell) waits only for System1's training of round k&minus;1. System2 is off that path:
+      it trains on all rounds' rows so far, and the held-out evaluation of round k runs once System1 k and System2 k are both ready.
+      Click a box for its details.</p>
+  </section>
+  <section class="card">
+    <h2>Across rounds</h2>
+    <div class="charts" id="trends"></div>
+    <details><summary>table view</summary><div id="trend-table"></div></details>
+  </section>
+  <section class="card">
+    <h2>Round details</h2>
+    <div class="tabs" id="tabs"></div>
+    <div class="stages" id="stages"></div>
+  </section>
+  <section class="card"><h2>Experiment</h2><div class="kv" id="config"></div></section>
+</main>
+<script>
+const STATE0 = /*STATE*/null;
+const STAGES = [
+  ["rollout", "Rollout", "System1 + HexaShell"],
+  ["preprocess", "Preprocess", "S1 shards, S2 rows"],
+  ["s1_train", "System1 training", "continue-train"],
+  ["s2_train", "System2 training", "optional, for eval"],
+  ["eval", "Held-out eval", "System1 k + System2 k"],
+];
+const STATUS = {done: ["✓", "done"], running: ["●", "running"], waiting: ["⏸", "waiting"],
+                queued: ["○", "queued"], failed: ["✕", "failed"]};
+let S = STATE0, SEL = null;
+
+function el(tag, attrs = {}, kids = []) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "text") e.textContent = v; else if (k === "cls") e.className = v; else if (k.startsWith("on")) e[k] = v; else e.setAttribute(k, v);
+  }
+  for (const c of [].concat(kids)) if (c != null) e.append(c);
+  return e;
+}
+function svg(tag, attrs = {}, kids = []) {
+  const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) { if (k === "text") e.textContent = v; else e.setAttribute(k, v); }
+  for (const c of [].concat(kids)) if (c != null) e.append(c);
+  return e;
+}
+const pct = (v, d = 1) => v == null ? "–" : (100 * v).toFixed(d) + "%";
+const num = v => v == null ? "–" : Number(v).toLocaleString("en-US");
+function badge(status) {
+  const [ic, lab] = STATUS[status] || ["?", status];
+  return el("span", {cls: "status st-" + status}, [el("span", {cls: "ic", text: ic, "aria-hidden": "true"}), el("span", {text: lab})]);
+}
+function progressOf(stage, s) {
+  if (!s) return null;
+  if (stage === "rollout" && s.planned) return s.status === "done" ? 1 : (s.episodes || 0) / s.planned;
+  if ((stage === "s1_train" || stage === "s2_train") && s.steps) return s.status === "done" ? 1 : (s.step || 0) / s.steps;
+  if (stage === "eval" && s.episodes) return s.status === "done" ? 1 : (s.done || 0) / s.episodes;
+  return s.status === "done" ? 1 : null;
+}
+function keyLine(stage, s, k) {
+  if (!s) return "";
+  const st = s.status;
+  if (stage === "rollout") return st === "done" ? `${num(s.episodes)} eps · ${pct(s.success)} · S1 ${pct(s.s1_step_share, 0)}`
+    : st === "running" ? `${num(s.episodes)}/${num(s.planned)} eps` : st === "waiting" ? `waits for System1 of round ${k - 1}` : `${num(s.planned)} eps planned`;
+  if (stage === "preprocess") return st === "done" ? `S1 ${(s.s1.samples / 1e3).toFixed(0)}k · S2 ${(s.s2.rows / 1e3).toFixed(1)}k rows` : "after the rollout";
+  if (stage === "s1_train" || stage === "s2_train") return st === "running" || st === "done" ? `${num(s.step)}/${num(s.steps)} steps` : s.steps ? `${num(s.steps)} steps` : "";
+  if (stage === "eval") return st === "done" ? `${pct(s.success)} held out` : st === "running" ? `${num(s.done)}/${num(s.episodes)} eps` : "needs System1 k + System2 k";
+  return "";
+}
+
+/* ---------------- now ---------------- */
+function renderNow() {
+  const box = document.getElementById("now"); box.replaceChildren();
+  for (const r of S.now.running || []) {
+    const it = S.iterations.find(x => x.k === r.k), name = STAGES.find(x => x[0] === r.stage);
+    const s = it[r.stage];
+    box.append(el("div", {cls: "item"}, [
+      el("div", {}, [badge("running"), el("span", {cls: "note", text: `  ${it.label}`})]),
+      el("div", {cls: "big", text: name[1]}),
+      el("div", {cls: "bar"}, [el("i", {style: `width:${(100 * r.progress).toFixed(1)}%`})]),
+      el("div", {cls: "note", text: `${pct(r.progress, 0)} · ${keyLine(r.stage, s, r.k)} · ETA ${r.eta}`}),
+    ]));
+  }
+  if (S.now.next) box.append(el("div", {cls: "item next"}, [el("div", {}, [badge("waiting")]),
+    el("div", {cls: "big", text: "Next"}), el("div", {cls: "note", text: S.now.next})]));
+}
+
+/* ---------------- the pipeline picture ---------------- */
+function renderPipe() {
+  const its = S.iterations, colW = 270, x0 = 330, laneH = 86, y0 = 46, bw = 214, bh = 58;
+  const W = x0 + 40 + its.length * colW, H = y0 + STAGES.length * laneH + 10;
+  const g = svg("svg", {viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": "the loop's stages per round"});
+  const defs = svg("defs", {}, [svg("marker", {id: "arr", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse"},
+    [svg("path", {d: "M0,0 L8,4 L0,8 z", style: "fill:var(--axis)"})]),
+    svg("marker", {id: "arrl", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse"},
+    [svg("path", {d: "M0,0 L8,4 L0,8 z", style: "fill:var(--run)"})])]);
+  g.append(defs);
+  STAGES.forEach(([key, name, sub], i) => {
+    const y = y0 + i * laneH + bh / 2;
+    g.append(svg("text", {x: 12, y: y - 2, class: "lane-label", text: name}));
+    g.append(svg("text", {x: 12, y: y + 14, class: "lane-sub", text: sub}));
+    g.append(svg("line", {x1: 10, x2: W - 10, y1: y0 + i * laneH - 14, y2: y0 + i * laneH - 14, class: "gridl"}));
+  });
+  // the start column: the checkpoints round 0 starts from
+  const sx = x0 + 20, startNode = svg("g", {class: "node done"}, [
+    svg("rect", {class: "box", x: sx - 150, y: y0, width: 120, height: bh, rx: 8}),
+    svg("text", {class: "t", x: sx - 140, y: y0 + 22, text: "start"}),
+    svg("text", {class: "k", x: sx - 140, y: y0 + 40, text: "System1 270k"})]);
+  g.append(startNode);
+  const pos = (k, i) => ({x: x0 + 30 + k * colW, y: y0 + i * laneH});
+  const center = (k, i, side) => { const p = pos(k, i); return side === "top" ? [p.x + bw / 2, p.y] : side === "bottom" ? [p.x + bw / 2, p.y + bh]
+      : side === "left" ? [p.x, p.y + bh / 2] : [p.x + bw, p.y + bh / 2]; };
+  const status = (k, key) => (S.iterations[k] && S.iterations[k][key] && S.iterations[k][key].status) || "queued";
+  const edge = (d, toStatus, fromStatus, opt) => {
+    const live = toStatus === "running" || (toStatus === "waiting" && fromStatus === "running");
+    const cls = "edge" + (opt ? " opt" : "") + (live ? " live" : fromStatus === "done" && toStatus === "done" ? " donee" : "");
+    g.append(svg("path", {d, class: cls, "marker-end": live ? "url(#arrl)" : "url(#arr)"}));
+  };
+  its.forEach((it, k) => {
+    const cx = pos(k, 0).x + bw / 2;
+    g.append(svg("text", {x: cx, y: 22, "text-anchor": "middle", class: "col-label" + (SEL === k ? " sel" : ""), text: it.label}));
+    // edges of the column
+    const [ax, ay] = center(k, 0, "bottom"), [bx, by] = center(k, 1, "top");
+    edge(`M${ax},${ay} L${bx},${by - 2}`, status(k, "preprocess"), status(k, "rollout"));
+    const [cx1, cy1] = center(k, 1, "bottom"), [dx, dy] = center(k, 2, "top");
+    edge(`M${cx1 - 30},${cy1} L${dx - 30},${dy - 2}`, status(k, "s1_train"), status(k, "preprocess"));
+    const [ex, ey] = center(k, 1, "right"), [fx, fy] = center(k, 3, "right");
+    edge(`M${ex},${ey} C${ex + 34},${ey} ${fx + 34},${fy} ${fx + 2},${fy}`, status(k, "s2_train"), status(k, "preprocess"), true);
+    const [gx, gy] = center(k, 2, "left"), [hx, hy] = center(k, 4, "left");
+    edge(`M${gx},${gy} C${gx - 30},${gy} ${hx - 30},${hy} ${hx - 2},${hy}`, status(k, "eval"), status(k, "s1_train"));
+    const [ix, iy] = center(k, 3, "bottom"), [jx, jy] = center(k, 4, "top");
+    edge(`M${ix},${iy} L${jx},${jy - 2}`, status(k, "eval"), status(k, "s2_train"));
+    if (k + 1 < its.length) {   // System1 k -> the next round's rollout: the loop
+      const [px, py] = center(k, 2, "right"), [qx, qy] = center(k + 1, 0, "left");
+      edge(`M${px},${py} C${px + 60},${py} ${qx - 60},${qy} ${qx - 2},${qy}`, status(k + 1, "rollout"), status(k, "s1_train"));
+    }
+    if (k === 0) { const [qx, qy] = center(0, 0, "left"); edge(`M${sx - 30},${y0 + bh / 2} L${qx - 2},${qy}`, status(0, "rollout"), "done"); }
+  });
+  its.forEach((it, k) => STAGES.forEach(([key, name], i) => {
+    const s = it[key] || {status: "queued"}, p = pos(k, i), st = s.status || "queued";
+    const [ic, lab] = STATUS[st] || ["?", st];
+    const node = svg("g", {class: "node " + st, tabindex: 0, role: "button", "aria-label": `${it.label} ${name}: ${lab}`});
+    node.append(svg("title", {text: `${it.label} · ${name}: ${lab}`}));
+    node.append(svg("rect", {class: "box", x: p.x, y: p.y, width: bw, height: bh, rx: 8}));
+    node.append(svg("text", {class: "t", x: p.x + 10, y: p.y + 19, text: `${ic}  ${name}`}));
+    const kl = keyLine(key, s, k);
+    node.append(svg("text", {class: "k", x: p.x + 10, y: p.y + 37, text: lab + (kl ? " · " + kl : "")}));
+    const pr = progressOf(key, s);
+    if (st === "running" && pr != null) {
+      node.append(svg("rect", {class: "prog-bg", x: p.x + 10, y: p.y + 46, width: bw - 20, height: 5, rx: 2.5}));
+      node.append(svg("rect", {class: "prog", x: p.x + 10, y: p.y + 46, width: (bw - 20) * pr, height: 5, rx: 2.5}));
+    }
+    const go = () => { SEL = k; renderAll(key); };
+    node.addEventListener("click", go); node.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    g.append(node);
+  }));
+  document.getElementById("pipe").replaceChildren(g);
+  const lg = document.getElementById("legend"); lg.replaceChildren();
+  for (const st of ["done", "running", "waiting", "queued", "failed"]) lg.append(badge(st));
+  lg.append(el("span", {}, [el("span", {cls: "sw", style: "border-top-style:dashed"}), "optional (System2)"]));
+  lg.append(el("span", {}, [el("span", {cls: "sw", style: "border-top-color:var(--run)"}), "data flowing now"]));
+}
+
+/* ---------------- a line chart with a crosshair ---------------- */
+function lineChart(host, {title, value, xs, xlabel, series, yfmt, ymin, ymax, ref, categorical}) {
+  const W = 340, H = 170, m = {l: 44, r: 14, t: 10, b: 26};
+  const wrap = el("div", {cls: "chart"}), tip = el("div", {cls: "tip"});
+  wrap.append(el("div", {cls: "ttl", text: title}));
+  if (value != null) wrap.append(el("div", {cls: "val", text: value}));
+  const g = svg("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title});
+  const all = series.flatMap(s => s.values.filter(v => v != null));
+  if (ref != null) all.push(ref.value);
+  let lo = ymin ?? Math.min(...all), hi = ymax ?? Math.max(...all);
+  if (!(hi > lo)) { lo -= 0.05; hi += 0.05; }
+  const X = i => categorical ? m.l + (W - m.l - m.r) * (xs.length === 1 ? 0.5 : i / (xs.length - 1)) : m.l + (W - m.l - m.r) * (xs[i] - xs[0]) / ((xs[xs.length - 1] - xs[0]) || 1);
+  const Y = v => m.t + (H - m.t - m.b) * (1 - (v - lo) / (hi - lo));
+  const ax = svg("g", {class: "axis"});
+  for (let j = 0; j <= 3; j++) { const v = lo + (hi - lo) * j / 3, y = Y(v);
+    ax.append(svg("line", {x1: m.l, x2: W - m.r, y1: y, y2: y, class: "gridl"}));
+    ax.append(svg("text", {x: m.l - 6, y: y + 3.5, "text-anchor": "end", text: yfmt(v)})); }
+  const tickIdx = categorical ? xs.map((_, i) => i) : [0, Math.floor(xs.length / 2), xs.length - 1];
+  for (const i of tickIdx) ax.append(svg("text", {x: X(i), y: H - 8, "text-anchor": "middle", text: categorical ? xs[i] : Number(xs[i]).toLocaleString("en-US")}));
+  ax.append(svg("line", {x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b}));
+  g.append(ax);
+  if (ref != null) { g.append(svg("line", {x1: m.l, x2: W - m.r, y1: Y(ref.value), y2: Y(ref.value), class: "ref"}));
+    g.append(svg("text", {x: W - m.r, y: Y(ref.value) - 5, "text-anchor": "end", class: "axis", style: "fill:var(--ink2);font-size:11px", text: ref.label})); }
+  for (const s of series) {
+    let d = "", pen = false;
+    s.values.forEach((v, i) => { if (v == null) { pen = false; return; } d += (pen ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1); pen = true; });
+    g.append(svg("path", {d, class: "line", style: `stroke:${s.color}`}));
+    if (categorical || s.values.filter(v => v != null).length <= 2)
+      s.values.forEach((v, i) => { if (v != null) g.append(svg("circle", {cx: X(i), cy: Y(v), r: 4.5, class: "dot", style: `fill:${s.color}`})); });
+  }
+  if (series.length > 1) {
+    const ends = series.map(s => { const li = s.values.map((v, i) => v == null ? -1 : i).filter(i => i >= 0).pop();
+      return li == null || li < 0 ? null : {name: s.name, x: X(li), y: Y(s.values[li])}; }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    for (const e of ends) g.append(svg("text", {x: Math.min(e.x - 4, W - 2), y: e.y - 6, "text-anchor": "end", style: "fill:var(--ink2);font-size:11px", text: e.name}));
+  }
+  const cross = svg("line", {class: "cross", y1: m.t, y2: H - m.b, visibility: "hidden"});
+  g.append(cross);
+  const hit = svg("rect", {x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent"});
+  g.append(hit);
+  const show = evt => {
+    const r = g.getBoundingClientRect(), sx = (evt.clientX - r.left) * W / r.width;
+    let best = 0, bd = 1e9; xs.forEach((_, i) => { const dd = Math.abs(X(i) - sx); if (dd < bd) { bd = dd; best = i; } });
+    cross.setAttribute("x1", X(best)); cross.setAttribute("x2", X(best)); cross.setAttribute("visibility", "visible");
+    tip.replaceChildren(el("div", {cls: "note", text: (xlabel ? xlabel + " " : "") + (categorical ? xs[best] : Number(xs[best]).toLocaleString("en-US"))}));
+    for (const s of series) tip.append(el("div", {cls: "row"}, [el("span", {cls: "key", style: `border-color:${s.color}`}),
+      el("span", {cls: "v", text: s.values[best] == null ? "–" : yfmt(s.values[best])}), el("span", {cls: "note", text: s.name})]));
+    tip.style.display = "block";
+    const px = (X(best) / W) * r.width; tip.style.left = Math.min(px + 12, r.width - 150) + "px"; tip.style.top = "38px";
+  };
+  hit.addEventListener("pointermove", show); hit.addEventListener("pointerleave", () => { tip.style.display = "none"; cross.setAttribute("visibility", "hidden"); });
+  wrap.append(g, tip);
+  host.append(wrap);
+}
+
+/* ---------------- across rounds ---------------- */
+function renderTrends() {
+  const t = S.trends, host = document.getElementById("trends"); host.replaceChildren();
+  const last = a => { const v = a.filter(x => x != null); return v.length ? v[v.length - 1] : null; };
+  lineChart(host, {title: "Rollout success (System1 + HexaShell)", value: pct(last(t.rollout_success)), xs: t.iterations, categorical: true,
+    series: [{name: "success", values: t.rollout_success, color: "var(--s1)"}], yfmt: v => pct(v, 0), ymin: 0.8, ymax: 1});
+  lineChart(host, {title: "System1's share of the steps", value: pct(last(t.s1_step_share)), xs: t.iterations, categorical: true,
+    series: [{name: "System1 share", values: t.s1_step_share, color: "var(--s1)"}], yfmt: v => pct(v, 0), ymin: 0.6, ymax: 1});
+  lineChart(host, {title: "Held-out eval (System1 k + System2 k)", value: pct(last(t.eval_success)), xs: t.iterations, categorical: true,
+    series: [{name: "target split", values: t.eval_success, color: "var(--s1)"}], yfmt: v => pct(v, 0), ymin: 0.3, ymax: 0.9,
+    ref: {value: S.baseline.success, label: "start " + pct(S.baseline.success, 1)}});
+  lineChart(host, {title: "Astra prompt tokens per episode (k)", value: last(t.prompt_tokens_k) == null ? "–" : last(t.prompt_tokens_k).toFixed(0) + "k",
+    xs: t.iterations, categorical: true, series: [{name: "tokens (k)", values: t.prompt_tokens_k, color: "var(--s1)"}], yfmt: v => v.toFixed(0), ymin: 0, ymax: 800});
+  const rows = t.iterations.map((x, i) => [x, pct(t.rollout_success[i]), pct(t.s1_step_share[i]), pct(t.eval_success[i]), t.prompt_tokens_k[i] == null ? "–" : t.prompt_tokens_k[i] + "k"]);
+  document.getElementById("trend-table").replaceChildren(table(["", "rollout success", "System1 share", "held-out eval", "prompt tokens"], rows));
+}
+function table(head, rows) {
+  return el("table", {cls: "tbl"}, [el("thead", {}, [el("tr", {}, head.map(h => el("th", {text: h})))]),
+    el("tbody", {}, rows.map(r => el("tr", {}, r.map(c => el("td", {text: String(c)})))))]);
+}
+
+/* ---------------- round details ---------------- */
+function kv(pairs) {
+  const box = el("div", {cls: "kv"});
+  for (const [k, v, isUri] of pairs) {
+    if (v == null || v === "") continue;
+    box.append(el("div", {cls: "k", text: k}));
+    const cell = el("div", {cls: "v" + (isUri ? " uri" : "")});
+    if (isUri) { cell.append(String(v)); cell.append(el("button", {cls: "copy", type: "button", text: "copy", onclick: () => navigator.clipboard && navigator.clipboard.writeText(String(v))})); }
+    else cell.textContent = String(v);
+    box.append(cell);
+  }
+  return box;
+}
+function stageCard(key, name, s, it) {
+  const st = (s && s.status) || "queued", card = el("div", {cls: "stage", id: "stage-" + key});
+  card.append(el("div", {cls: "hd"}, [el("b", {text: name}), badge(st)]));
+  if (!s) return card;
+  const nameOf = w => { const m = STAGES.find(x => x[0] === w); return m ? `${m[1]} of ${it.label}` : w; };
+  if (s.waits_for) card.append(el("div", {cls: "note", text: "waits for: " + s.waits_for.map(nameOf).join(", ")}));
+  const pr = progressOf(key, s);
+  if (st === "running" && pr != null) card.append(el("div", {cls: "bar"}, [el("i", {style: `width:${(100 * pr).toFixed(1)}%`})]));
+  if (key === "rollout") {
+    card.append(kv([["System1 checkpoint", s.s1_ckpt], ["checkpoint URI", s.s1_ckpt_uri, true], ["episodes", s.episodes != null ? `${num(s.episodes)} / ${num(s.planned)}` : num(s.planned) + " planned"],
+      ["success", s.success != null ? pct(s.success) + (s.success_note ? ` (${s.success_note})` : "") : null], ["System1 step share", s.s1_step_share != null ? pct(s.s1_step_share) : null],
+      ["turns / episode", s.turns_mean], ["minutes / episode", s.episode_minutes], ["prompt tokens / episode", s.prompt_tokens_mean != null ? num(s.prompt_tokens_mean) + ` (${pct(s.cached_frac, 0)} cached)` : null],
+      ["nodes / wall time", s.nodes != null ? `${s.nodes} GPU nodes, ${s.hours} h` : null], ["started / finished", s.started ? `${s.started} → ${s.finished || "…"}` : null],
+      ["start perturbation", s.perturb], ["records", s.uri, true]]));
+    if (s.by_set) card.append(table(["task set", "success"], Object.entries(s.by_set).map(([a, b]) => [a, pct(b)])));
+    if (s.site) card.append(el("div", {}, [el("a", {href: s.site, text: "the round's rollout site (every episode, its S1 and S2 labels) →"})]));
+  } else if (key === "preprocess") {
+    if (s.s1) card.append(el("h3", {text: "System1 shards"}), kv([["spans / samples", `${num(s.s1.spans)} / ${num(s.s1.samples)}`], ["recovery spans", num(s.s1.recovery_spans)],
+      ["episodes used", num(s.s1.episodes_used)], ["shards / size", `${num(s.s1.shards)} / ${s.s1.size_gb} GB`], ["location", s.s1.uri, true]]));
+    if (s.s2) card.append(el("h3", {text: "System2 rows"}), kv([["rows", num(s.s2.rows)], ["decisions", Object.entries(s.s2.decisions || {}).map(([a, b]) => `${a} ${num(b)}`).join(", ")],
+      ["closing rows", num(s.s2.closing)], ["location", s.s2.uri, true]]));
+    if (s.finished) card.append(el("div", {cls: "note", text: "finished " + s.finished}));
+  } else if (key === "s1_train" || key === "s2_train") {
+    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} rows (rounds ${s.rounds})` : null)],
+      ["batch / lr", s.batch ? `${s.batch} / ${s.lr || ""}` : null], ["epochs", s.epochs], ["steps", s.step != null ? `${num(s.step)} / ${num(s.steps)}` : num(s.steps)],
+      ["speed", s.sec_per_step ? s.sec_per_step + " s / step" : null], ["started / ETA", s.started ? `${s.started} → ${s.eta}` : null], ["checkpoints", s.ckpt_uri, true]]));
+    if (s.loss && s.loss.length) {
+      const xs = s.loss.map(p => p[0]), series = [{name: "train", values: s.loss.map(p => p[1]), color: "var(--s1)"}];
+      if (s.val_loss && s.val_loss.length) { const m = new Map(s.val_loss); series.push({name: "held-out", values: xs.map(x => m.has(x) ? m.get(x) : null), color: "var(--s2)"}); }
+      const host = el("div"); card.append(host);
+      lineChart(host, {title: "loss", xs, xlabel: "step", series, yfmt: v => v.toFixed(3)});
+      if (series.length > 1) card.append(el("div", {cls: "legend"}, series.map(sr => el("span", {}, [el("span", {cls: "sw", style: `border-top-color:${sr.color}`}), sr.name]))));
+    }
+    for (const c of s.ckpts || []) card.append(kv([["checkpoint " + num(c.step), c.uri, true]]));
+  } else if (key === "eval") {
+    card.append(kv([["pair", s.pair], ["split", s.split], ["episodes", s.done != null ? `${num(s.done)} / ${num(s.episodes)}` : num(s.episodes)],
+      ["success", s.success != null ? pct(s.success) : null], ["results", s.uri, true]]));
+    const sets = s.by_set || null, base = S.baseline.by_set || {};
+    const show = sets || base;
+    if (show) {
+      card.append(el("div", {cls: "note", text: sets ? "by task set (the tick: the start)" : "the start, by task set (this round's bars appear when it is done)"}));
+      for (const [name, v] of Object.entries(show)) {
+        const val = sets ? v : null, b = base[name];
+        card.append(el("div", {cls: "hbar"}, [el("span", {cls: "lab", text: name}),
+          el("span", {cls: "track"}, [val != null ? el("span", {cls: "fill", style: `width:${100 * val}%;display:block`}) : null,
+            b != null ? el("span", {cls: "base", style: `left:${100 * b}%`, title: "start " + pct(b)}) : null]),
+          el("span", {cls: "num", text: val != null ? pct(val, 0) : "start " + pct(b, 0)})]));
+      }
+    }
+  }
+  return card;
+}
+function renderDetail(focus) {
+  const tabs = document.getElementById("tabs"); tabs.replaceChildren();
+  S.iterations.forEach(it => tabs.append(el("button", {type: "button", cls: SEL === it.k ? "sel" : "", text: it.label, onclick: () => { SEL = it.k; renderAll(); }})));
+  const it = S.iterations.find(x => x.k === SEL) || S.iterations[0], box = document.getElementById("stages"); box.replaceChildren();
+  for (const [key, name] of STAGES) box.append(stageCard(key, name, it[key], it));
+  if (focus) { const c = document.getElementById("stage-" + focus); if (c) { c.classList.add("flash"); c.scrollIntoView({behavior: "smooth", block: "nearest"}); setTimeout(() => c.classList.remove("flash"), 1400); } }
+}
+function renderConfig() {
+  const c = S.config;
+  document.getElementById("config").replaceWith(Object.assign(kv([["experiment", S.exp], ["tasks", `${c.tasks} development tasks, ${c.target_tasks} of them target tasks`],
+    ["held out", c.held_out], ["per round", `${num(c.episodes_per_round)} episodes`], ["rounds", c.rounds], ["starts", c.split], ["System1 start", c.s1_start, true],
+    ["System2", c.s2], ["System1 training", c.train], ["everything on S3", c.exp_uri, true], ["start eval", `${pct(S.baseline.success)} - ${S.baseline.label} (${S.baseline.note})`]]), {id: "config"}));
+}
+function renderAll(focus) {
+  document.getElementById("title").textContent = `${S.title} · ${S.exp}`;
+  document.getElementById("subtitle").textContent = S.subtitle;
+  document.getElementById("updated").textContent = "updated " + S.updated;
+  document.getElementById("mock").hidden = !S.mock;
+  if (SEL == null) { const r = (S.now.running || [])[0]; SEL = r ? r.k : S.iterations[0].k; }
+  renderNow(); renderPipe(); renderTrends(); renderDetail(focus); renderConfig();
+}
+document.getElementById("theme").onclick = () => {
+  const dark = getComputedStyle(document.documentElement).colorScheme === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+};
+renderAll();
+if (location.protocol.startsWith("http")) setInterval(async () => {
+  try { const r = await fetch("state.json", {cache: "no-store"}); if (r.ok) { S = await r.json(); renderAll(); } } catch (e) { /* keep the last frame */ }
+}, 60000);
+</script>
+</body>
+</html>

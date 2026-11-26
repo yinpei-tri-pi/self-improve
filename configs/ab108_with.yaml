@@ -1,0 +1,22 @@
+# A/B of the task-specific prompts on the 108 selected tasks (assets/selected_tasks.json, rule A), this arm:
+# the new task notes (skills/robocasa/<Task>.md) and System1 step tables (skills/robocasa_s1/<Task>.md) on the card.
+# Both arms play the same 5 seeds per task (seed_key ab108, RoboCasa's pretrain split, new seeds: not the pilot's)
+# with the same S1 (the 270k checkpoint) and Astra settings; they share the rollout cluster, 8 GPUs each.
+#   scripts/cluster_rollout.sh ab108_with 0 <270k ckpt> --config configs/ab108_with.yaml
+exp_id: ab108_with
+iterations: 1
+rollout:
+  tasks: selected
+  seed_key: ab108
+  pilot_seeds_per_task: 5
+  seeds_per_task: 5
+  split: pretrain
+  num_gpus: 8
+  cluster_gpus: 16            # both arms' drivers ask the autoscaler for the cluster's total
+  score:
+    enabled: false            # not needed for the comparison (and it would lengthen each episode)
+  hexashell_sets:
+    skills: "yes"
+    s1_skills: "yes"
+eval:
+  enabled: false

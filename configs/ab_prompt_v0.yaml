@@ -1,0 +1,17 @@
+# Prompt A/B (the user's worry, 2026-11-25): do the planner fields (milestone, milestones, planner_reasoning, added
+# 2026-11-24/25 for System2's training text) cost Astra performance?  This arm: today's code with planner_fields=no
+# (the turn and the prompt part of 2026-11-19), on 10 of the 30 recordings per task that si_sub50's round 0 played
+# (seed_key si_sub50: the same draw, cut to 10) - paired with round 0's results on the same recordings.
+#   scripts/cluster_rollout.sh ab_prompt_v0 0 <270k ckpt> --config configs/ab_prompt_v0.yaml
+exp_id: ab_prompt_v0
+iterations: 1
+rollout:
+  include_tasks: [CloseBlenderLid, CloseToasterOvenDoor, NavigateKitchen, OpenDrawer, PickPlaceCounterToCabinet, PickPlaceDrawerToCounter, PickPlaceToasterToCounter, TurnOffStove, TurnOnSinkFaucet, DeliverStraw, KettleBoiling, PackIdenticalLunches, PrepareCoffee, ScrubCuttingBoard, SetUpCuttingStation, SteamInMicrowave, WashLettuce, AdjustToasterOvenTemperature, CheesyBread, CloseDrawer, CloseMicrowave, CloseStandMixerHead, MakeIcedCoffee, OpenElectricKettleLid, OpenFridgeDrawer, OpenToasterOvenDoor, PickPlaceCounterToDrawer, PickPlaceCounterToOven, PickPlaceFridgeDrawerToShelf, PickPlaceStoveToCounter, PreheatOven, StartCoffeeMachine, TurnOnStove, TurnSinkSpout, PlaceEqualIceCubes, ResetCabinetDoors, LineUpCondiments, OrganizeCoffeeCondiments, GatherCuttingTools, AddSugarCubes, PrepareToast, ClearFreezer, RecycleBottlesBySize, PortionFruitBowl, GatherVegetables, SimmeringSauce, AlcoholServingPrep, ArrangeBreadBowl, AfterwashSorting, ArrangeDrinkware]
+  seed_key: si_sub50
+  pilot_seeds_per_task: 10
+  seeds_per_task: 10
+  num_gpus: 16
+  hexashell_sets:
+    planner_fields: "no"
+eval:
+  enabled: false

@@ -1,0 +1,28 @@
+# Check rollout (the user, 2026-11-25): the streamlined HexaShell prompt (07_s1.s1.md, the weak tasks' notes) and the
+# latest code (gripper settle, "the expert" in planner_reasoning) on 5 recordings per task of the 50 subset tasks -
+# the first 5 of si_sub50 round 0's own draw (seed_key si_sub50), so every episode pairs with round 0's on the same
+# recording. No start perturbation here (it would blur the comparison; it is on for si_sub50's next rounds).
+#   scripts/cluster_rollout.sh sub50_check_20261125 0 <270k ckpt> --config configs/sub50_check.yaml
+#   .venv/bin/python scripts/build_debug_site.py sub50_check_20261125 --compare si_sub50
+exp_id: sub50_check_20261125
+iterations: 1
+rollout:
+  include_tasks: [CloseBlenderLid, CloseToasterOvenDoor, NavigateKitchen, OpenDrawer, PickPlaceCounterToCabinet, PickPlaceDrawerToCounter, PickPlaceToasterToCounter, TurnOffStove, TurnOnSinkFaucet, DeliverStraw, KettleBoiling, PackIdenticalLunches, PrepareCoffee, ScrubCuttingBoard, SetUpCuttingStation, SteamInMicrowave, WashLettuce, AdjustToasterOvenTemperature, CheesyBread, CloseDrawer, CloseMicrowave, CloseStandMixerHead, MakeIcedCoffee, OpenElectricKettleLid, OpenFridgeDrawer, OpenToasterOvenDoor, PickPlaceCounterToDrawer, PickPlaceCounterToOven, PickPlaceFridgeDrawerToShelf, PickPlaceStoveToCounter, PreheatOven, StartCoffeeMachine, TurnOnStove, TurnSinkSpout, PlaceEqualIceCubes, ResetCabinetDoors, LineUpCondiments, OrganizeCoffeeCondiments, GatherCuttingTools, AddSugarCubes, PrepareToast, ClearFreezer, RecycleBottlesBySize, PortionFruitBowl, GatherVegetables, SimmeringSauce, AlcoholServingPrep, ArrangeBreadBowl, AfterwashSorting, ArrangeDrinkware]
+  seed_key: si_sub50
+  pilot_seeds_per_task: 5
+  seeds_per_task: 5
+  num_gpus: 16
+eval:
+  enabled: false
+# S1 SageMaker smoke on the check run's data (the user, 2026-11-25): 2 p5 nodes, batch 256, 1k steps, 80% new / 20%
+# base per batch (openpi-si MixedRoboCasaWebDataset), the spot VLA queue at priority 200.
+#   .venv/bin/python -m selfimprove.train.launch --config configs/sub50_check.yaml --iteration 0 --ckpt <270k ckpt>
+train:
+  batch_size: 256
+  instance_count: 2
+  steps: 1000
+  save_interval: 1000
+  warmup_steps: 100
+  new_data_fraction: 0.8
+  queue_full_name: fss-vla-spot-p5-48xlarge-us-west-2
+  queue_priority: 200

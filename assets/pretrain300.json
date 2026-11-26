@@ -1,0 +1,1205 @@
+{
+ "source": "robocasa.utils.dataset_registry TASK_SET_REGISTRY['pretrain300']",
+ "tasks": {
+  "AddIceCubes": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "AddLemonToFish": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "AddMarshmallow": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "AddSugarCubes": {
+   "horizon": 900,
+   "kind": "composite"
+  },
+  "AddSweetener": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "AdjustHeat": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "AdjustToasterOvenTemperature": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "AdjustWaterTemperature": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "AfterwashSorting": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "AirDryFruit": {
+   "horizon": 2850,
+   "kind": "composite"
+  },
+  "AlcoholServingPrep": {
+   "horizon": 4650,
+   "kind": "composite"
+  },
+  "AlignSilverware": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "ArrangeBreadBowl": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "ArrangeBuffetDessert": {
+   "horizon": 4050,
+   "kind": "composite"
+  },
+  "ArrangeDrinkware": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "ArrangeTeaAccompaniments": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "ArrangeUtensilsByType": {
+   "horizon": 5100,
+   "kind": "composite"
+  },
+  "ArrangeVegetables": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "AssembleCookingArray": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "BalancedMealPrep": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "BeverageOrganization": {
+   "horizon": 4500,
+   "kind": "composite"
+  },
+  "BeverageSorting": {
+   "horizon": 5250,
+   "kind": "composite"
+  },
+  "BlendIngredients": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "BlendMarinade": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "BowlAndCup": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "BreadAndCheese": {
+   "horizon": 900,
+   "kind": "composite"
+  },
+  "BreadSetupSlicing": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "BuildAppetizerPlate": {
+   "horizon": 4050,
+   "kind": "composite"
+  },
+  "ButterOnPan": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "CandleCleanup": {
+   "horizon": 4500,
+   "kind": "composite"
+  },
+  "CerealAndBowl": {
+   "horizon": 4350,
+   "kind": "composite"
+  },
+  "CheesyBread": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "ChooseMeasuringCup": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "ChooseRipeFruit": {
+   "horizon": 900,
+   "kind": "composite"
+  },
+  "CleanBoard": {
+   "horizon": 4800,
+   "kind": "composite"
+  },
+  "CleanMicrowave": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "ClearClutter": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "ClearCuttingBoard": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "ClearFoodWaste": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "ClearFreezer": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "ClearReceptaclesForCleaning": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "ClearSink": {
+   "horizon": 4950,
+   "kind": "composite"
+  },
+  "ClearSinkArea": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "ClearSinkSpace": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "CloseBlenderLid": {
+   "horizon": 900,
+   "kind": "atomic"
+  },
+  "CloseCabinet": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "CloseDishwasher": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "CloseDrawer": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CloseElectricKettleLid": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "CloseFridge": {
+   "horizon": 900,
+   "kind": "atomic"
+  },
+  "CloseFridgeDrawer": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CloseMicrowave": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CloseOven": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CloseStandMixerHead": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CloseToasterOvenDoor": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CoffeeServeMug": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "CoffeeSetupMug": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "CollectWashingSupplies": {
+   "horizon": 2700,
+   "kind": "composite"
+  },
+  "ColorfulSalsa": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "CondimentCollection": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "CookieDoughPrep": {
+   "horizon": 2850,
+   "kind": "composite"
+  },
+  "CoolBakedCake": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "CoolKettle": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "CreateChildFriendlyFridge": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "CupcakeCleanup": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "CutBuffetPizza": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "DateNight": {
+   "horizon": 4800,
+   "kind": "composite"
+  },
+  "DefrostByCategory": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "DeliverBrewedCoffee": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "DeliverStraw": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "DessertAssembly": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "DessertUpgrade": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "DisplayMeatVariety": {
+   "horizon": 4350,
+   "kind": "composite"
+  },
+  "DistributeChicken": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "DivideBasins": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "DivideBuffetTrays": {
+   "horizon": 7200,
+   "kind": "composite"
+  },
+  "DrainVeggies": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "DrinkwareConsolidation": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "DryDishes": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "DryDrinkware": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "DumpLeftovers": {
+   "horizon": 900,
+   "kind": "composite"
+  },
+  "FillBlenderJug": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "FillKettle": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "FilterMicrowavableItem": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "FoodCleanup": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "FreezeBottledWaters": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "FreezeCookedFood": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "FreezeIceTray": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "FreshProduceOrganization": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "FryingPanAdjustment": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "GarnishCupcake": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "GatherCuttingTools": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "GatherMarinadeIngredients": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "GatherVegetables": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "GetToastedBread": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "HeatMug": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "HeatMultipleWater": {
+   "horizon": 4200,
+   "kind": "composite"
+  },
+  "HotDogSetup": {
+   "horizon": 4200,
+   "kind": "composite"
+  },
+  "JuiceFruitReamer": {
+   "horizon": 600,
+   "kind": "composite"
+  },
+  "KettleBoiling": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "LemonSeasoningFish": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "LineUpCondiments": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "LoadCondimentsInFridge": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "LoadDishwasher": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "LoadFridgeByType": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "LoadFridgeFifo": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "LoadPreparedFood": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "LowerHeat": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "MakeFruitBowl": {
+   "horizon": 3450,
+   "kind": "composite"
+  },
+  "MakeIcedCoffee": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "MakeLoadedPotato": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "MatchCupAndDrink": {
+   "horizon": 3750,
+   "kind": "composite"
+  },
+  "MaximizeFreezerSpace": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "MealPrepStaging": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "MeatSkewerAssembly": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "MeatTransfer": {
+   "horizon": 3450,
+   "kind": "composite"
+  },
+  "MicrowaveCorrectMeal": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "MicrowaveDefrostMeat": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "MicrowaveThawing": {
+   "horizon": 4650,
+   "kind": "composite"
+  },
+  "MicrowaveThawingFridge": {
+   "horizon": 2700,
+   "kind": "composite"
+  },
+  "MixCakeFrosting": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "MixedFruitPlatter": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "MoveFreezerToFridge": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "MoveFridgeToFreezer": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "MoveToCounter": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "MoveToFreezerDrawer": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "MultistepSteaming": {
+   "horizon": 3450,
+   "kind": "composite"
+  },
+  "NavigateKitchen": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "OpenBlenderLid": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "OpenCabinet": {
+   "horizon": 1050,
+   "kind": "atomic"
+  },
+  "OpenDishwasher": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "OpenDrawer": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "OpenElectricKettleLid": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "OpenFridge": {
+   "horizon": 900,
+   "kind": "atomic"
+  },
+  "OpenFridgeDrawer": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "OpenMicrowave": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "OpenOven": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "OpenStandMixerHead": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "OpenToasterOvenDoor": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "OrganizeBakingIngredients": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "OrganizeCleaningSupplies": {
+   "horizon": 4050,
+   "kind": "composite"
+  },
+  "OrganizeCoffeeCondiments": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "OrganizeCondiments": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "OrganizeMetallicUtensils": {
+   "horizon": 3150,
+   "kind": "composite"
+  },
+  "OrganizeMugsByHandle": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "OrganizeVegetables": {
+   "horizon": 900,
+   "kind": "composite"
+  },
+  "OvenBroilFish": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "PackDessert": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PackFoodByTemp": {
+   "horizon": 4950,
+   "kind": "composite"
+  },
+  "PackFruitContainer": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "PackIdenticalLunches": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "PastryDisplay": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "PickPlaceCabinetToCounter": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToBlender": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToCabinet": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToDrawer": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToMicrowave": {
+   "horizon": 1050,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToOven": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToSink": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToStandMixer": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToStove": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PickPlaceCounterToToasterOven": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "PickPlaceDrawerToCounter": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "PickPlaceFridgeDrawerToShelf": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PickPlaceFridgeShelfToDrawer": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PickPlaceMicrowaveToCounter": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "PickPlaceSinkToCounter": {
+   "horizon": 900,
+   "kind": "atomic"
+  },
+  "PickPlaceStoveToCounter": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "PickPlaceToasterOvenToCounter": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "PickPlaceToasterToCounter": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "PlaceBeveragesTogether": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "PlaceDishesBySink": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "PlaceEqualIceCubes": {
+   "horizon": 2850,
+   "kind": "composite"
+  },
+  "PlaceFoodInBowls": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "PlaceIceInCup": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "PlaceMeatInMarinade": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "PlaceMicrowaveSafeItem": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "PlaceStraw": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "PlaceVegetablesEvenly": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "PlaceVeggiesInDrawer": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "PlateSteakMeal": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "PlateStoreDinner": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "PortionFruitBowl": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "PortionInTupperware": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "PortionOnSize": {
+   "horizon": 2700,
+   "kind": "composite"
+  },
+  "PortionYogurt": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "PreRinseStation": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "PreSoakPan": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "PreheatOven": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "PreheatPot": {
+   "horizon": 2700,
+   "kind": "composite"
+  },
+  "PrepForSanitizing": {
+   "horizon": 3750,
+   "kind": "composite"
+  },
+  "PrepForTenderizing": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "PrepFridgeForCleaning": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "PrepMarinatingMeat": {
+   "horizon": 2850,
+   "kind": "composite"
+  },
+  "PrepSinkForCleaning": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "PrepareBroilingStation": {
+   "horizon": 900,
+   "kind": "composite"
+  },
+  "PrepareCheeseStation": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "PrepareCocktailStation": {
+   "horizon": 5250,
+   "kind": "composite"
+  },
+  "PrepareCoffee": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "PrepareDishwasher": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "PrepareDrinkStation": {
+   "horizon": 5850,
+   "kind": "composite"
+  },
+  "PrepareSausageCheese": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "PrepareSmoothie": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "PrepareSoupServing": {
+   "horizon": 3450,
+   "kind": "composite"
+  },
+  "PrepareStoringLeftovers": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "PrepareToast": {
+   "horizon": 3750,
+   "kind": "composite"
+  },
+  "PressChicken": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "PrewashFoodAssembly": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "PrewashFoodSorting": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "QuickThaw": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "RearrangeFridgeItems": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "RecycleBottlesBySize": {
+   "horizon": 3750,
+   "kind": "composite"
+  },
+  "RecycleSodaCans": {
+   "horizon": 6750,
+   "kind": "composite"
+  },
+  "RecycleStackedYogurt": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "RefillCondimentStation": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "ReheatMeal": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "RemoveBroiledFish": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "RemoveCuttingBoardItems": {
+   "horizon": 750,
+   "kind": "composite"
+  },
+  "ReorganizeFrozenVegetables": {
+   "horizon": 2700,
+   "kind": "composite"
+  },
+  "ResetCabinetDoors": {
+   "horizon": 3300,
+   "kind": "composite"
+  },
+  "RestockBowls": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "RestockCannedFood": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "RestockPantry": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "RestockSinkSupplies": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "RetrieveIceTray": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "RetrieveMeat": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "ReturnHeatedFood": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "ReturnWashingSupplies": {
+   "horizon": 5100,
+   "kind": "composite"
+  },
+  "RinseBowls": {
+   "horizon": 2850,
+   "kind": "composite"
+  },
+  "RinseCuttingBoard": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "RinseSinkBasin": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "RotatePan": {
+   "horizon": 600,
+   "kind": "composite"
+  },
+  "SanitizePrepCuttingBoard": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "ScalePortioning": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "ScrubBowl": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "ScrubCuttingBoard": {
+   "horizon": 1200,
+   "kind": "composite"
+  },
+  "SearingMeat": {
+   "horizon": 4350,
+   "kind": "composite"
+  },
+  "SeasoningSpiceSetup": {
+   "horizon": 4200,
+   "kind": "composite"
+  },
+  "SeasoningSteak": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "ServeSteak": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "ServeTea": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "ServeWarmCroissant": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "SetBowlsForSoup": {
+   "horizon": 5400,
+   "kind": "composite"
+  },
+  "SetUpCuttingStation": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "SetUpSpiceStation": {
+   "horizon": 4050,
+   "kind": "composite"
+  },
+  "SetupBowls": {
+   "horizon": 2700,
+   "kind": "composite"
+  },
+  "SetupButterPlate": {
+   "horizon": 4050,
+   "kind": "composite"
+  },
+  "SetupFruitBowl": {
+   "horizon": 3750,
+   "kind": "composite"
+  },
+  "SetupFrying": {
+   "horizon": 3150,
+   "kind": "composite"
+  },
+  "SetupSodaBowl": {
+   "horizon": 3600,
+   "kind": "composite"
+  },
+  "SetupWineGlasses": {
+   "horizon": 3150,
+   "kind": "composite"
+  },
+  "ShakePan": {
+   "horizon": 600,
+   "kind": "composite"
+  },
+  "SimmeringSauce": {
+   "horizon": 3450,
+   "kind": "composite"
+  },
+  "SizeSorting": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "SlideDishwasherRack": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "SlideOvenRack": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "SlideToasterOvenRack": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "SnackSorting": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "SoakSponge": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "SortingCleanup": {
+   "horizon": 3000,
+   "kind": "composite"
+  },
+  "SpicyMarinade": {
+   "horizon": 5400,
+   "kind": "composite"
+  },
+  "StackBowlsCabinet": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "StackBowlsInSink": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "StackCans": {
+   "horizon": 1800,
+   "kind": "composite"
+  },
+  "StartCoffeeMachine": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "StartElectricKettle": {
+   "horizon": 1050,
+   "kind": "composite"
+  },
+  "SteamInMicrowave": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "StirVegetables": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "StockingBreakfastFoods": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "StoreDumplings": {
+   "horizon": 3750,
+   "kind": "composite"
+  },
+  "StoreLeftoversByType": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "StoreLeftoversInBowl": {
+   "horizon": 2550,
+   "kind": "composite"
+  },
+  "StrainerSetup": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "SweetSavoryToastSetup": {
+   "horizon": 4050,
+   "kind": "composite"
+  },
+  "SweetenCoffee": {
+   "horizon": 1950,
+   "kind": "composite"
+  },
+  "SweetenHotChocolate": {
+   "horizon": 2100,
+   "kind": "composite"
+  },
+  "ThawInSink": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "TiltPan": {
+   "horizon": 600,
+   "kind": "composite"
+  },
+  "ToastBagel": {
+   "horizon": 2250,
+   "kind": "composite"
+  },
+  "ToastBaguette": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "ToastOnCorrectRack": {
+   "horizon": 3900,
+   "kind": "composite"
+  },
+  "TongBuffetSetup": {
+   "horizon": 2400,
+   "kind": "composite"
+  },
+  "TransportCookware": {
+   "horizon": 2850,
+   "kind": "composite"
+  },
+  "TurnOffMicrowave": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "TurnOffSimmeredSauceHeat": {
+   "horizon": 1500,
+   "kind": "composite"
+  },
+  "TurnOffSinkFaucet": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "TurnOffStove": {
+   "horizon": 750,
+   "kind": "atomic"
+  },
+  "TurnOnBlender": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "TurnOnElectricKettle": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "TurnOnMicrowave": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "TurnOnSinkFaucet": {
+   "horizon": 600,
+   "kind": "atomic"
+  },
+  "TurnOnStove": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "TurnOnToaster": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "TurnOnToasterOven": {
+   "horizon": 450,
+   "kind": "atomic"
+  },
+  "TurnSinkSpout": {
+   "horizon": 300,
+   "kind": "atomic"
+  },
+  "VeggieDipPrep": {
+   "horizon": 3150,
+   "kind": "composite"
+  },
+  "WarmCroissant": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "WashFish": {
+   "horizon": 1350,
+   "kind": "composite"
+  },
+  "WashLettuce": {
+   "horizon": 1650,
+   "kind": "composite"
+  },
+  "YogurtDelightPrep": {
+   "horizon": 2250,
+   "kind": "composite"
+  }
+ }
+}
