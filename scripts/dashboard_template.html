@@ -229,7 +229,7 @@ function renderNow() {
 /* ---------------- the pipeline picture ---------------- */
 function renderPipe() {
   // drawn at SCALE px per unit: the labels pinned on the left, the columns (start, round 0, ...) in a strip dragged sideways
-  const SCALE = 1.45, labelW = 170, its = S.iterations, colW = 250, x0 = -10, laneH = 86, y0 = 46, bw = 214, bh = 58;
+  const SCALE = 1.1, labelW = 170, its = S.iterations, colW = 250, x0 = -10, laneH = 86, y0 = 46, bw = 214, bh = 58;
   const W = 30 + (its.length + 1) * colW, H = y0 + STAGES.length * laneH + 10;
   const host = document.getElementById("pipe"), oldScroll = host.querySelector(".pipe-scroll");
   const keep = oldScroll ? oldScroll.scrollLeft : null;
