@@ -326,22 +326,29 @@ class RolloutNode:
         return {"name": self.name, "gpu": self.gpu, "slots": self.slots_n, "s1_port": self.s1_port,
                 "sam3_port": self.sam3_port, "ckpt": self.ckpt_uri, "dir": str(self.dir)}
 
-    def hexashell_sets(self) -> list[str]:
+    def hexashell_sets(self, start_salt: int | None = None) -> list[str]:
         sets = dict(self.r.get("hexashell_sets") or {})
+        # the start perturbation is per episode (the plan's start_salt): rollout.start_shift / start_turn, off when None
+        for k in ("start_shift", "start_turn", "start_salt"):
+            sets.pop(k, None)
+        if start_salt is not None and (self.r.get("start_shift") or self.r.get("start_turn")):
+            sets.update(start_shift=self.r.get("start_shift") or 0, start_turn=self.r.get("start_turn") or 0,
+                        start_salt=int(start_salt))
         sets["s1_url"] = f"ws://127.0.0.1:{self.s1_port}"
         if self.sam3 is not None:
             sets["sam3_url"] = f"http://127.0.0.1:{self.sam3_port}"
         return [f"{k}={v}" for k, v in sets.items()]
 
     def run_episode(self, task: str, seed: int, attempt: int = 1, *, upload_uri: str | None = None,
-                    keep_local: bool = False, demo: str | None = None) -> dict:
+                    keep_local: bool = False, demo: str | None = None, start_salt: int | None = None) -> dict:
         slot = self.free.get()
         t0 = time.time()
         out = {"task": task, "seed": int(seed), "attempt": int(attempt), "node": self.name, "gpu": self.gpu,
-               "slot": slot.n, "ckpt": self.ckpt_uri, "iteration": self.iteration, "exp_id": self.cfg["exp_id"]}
+               "slot": slot.n, "ckpt": self.ckpt_uri, "iteration": self.iteration, "exp_id": self.cfg["exp_id"],
+               "start_salt": start_salt}
         try:
             slot.ensure()
-            summary, record = self._play(slot, task, int(seed))
+            summary, record = self._play(slot, task, int(seed), start_salt)
             slot.served += 1
             out.update(summary=summary, play_s=round(time.time() - t0, 1))
             if record is None:
@@ -388,7 +395,7 @@ class RolloutNode:
         finally:
             self.free.put(slot)
 
-    def _play(self, slot: Slot, task: str, seed: int) -> tuple[dict, Path | None]:
+    def _play(self, slot: Slot, task: str, seed: int, start_salt: int | None = None) -> tuple[dict, Path | None]:
         p = self.paths
         out_dir = self.dir / "results"
         cmd = [p.hexashell_python, "-m", "hexashell.benches.run", "--bench", "robocasa", "--task", task, "--seed",
@@ -396,7 +403,7 @@ class RolloutNode:
                p.robocasa_python, "--sim-socket", slot.sock]
         if p.robocasa_env:
             cmd += ["--env-file", p.robocasa_env]
-        for s in self.hexashell_sets():
+        for s in self.hexashell_sets(start_salt):
             cmd += ["--set", s]
         env = {k: v for k, v in os.environ.items() if not k.lower().endswith("_proxy")}
         env.update({k: v for k, v in p.machine.items() if k.startswith("HEXASHELL_")})

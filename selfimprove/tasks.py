@@ -30,6 +30,8 @@ class Episode:
     horizon: int
     #: split demo: the recorded episode the seed starts (its id in the task's index; the seed is its position)
     demo: str | None = None
+    #: the start perturbation's salt (HexaShell start_salt), None = the recorded start as it is
+    start_salt: int | None = None
 
     @property
     def key(self) -> str:
@@ -93,6 +95,33 @@ def demo_episodes() -> dict[str, list[str]]:
     """task -> its recorded pretrain-split episodes, in index order (assets/demo_episodes.json, from the sim states
     scripts/extract_sim_states.py extracted): seed n of HexaShell's split demo starts ids[n]."""
     return json.loads((ASSETS / "demo_episodes.json").read_text())["tasks"]
+
+
+def demo_starts(key: str, iteration: int, task: str, n_recorded: int, n: int, mode: str = "sequential",
+                augment_from: int = 1) -> list[tuple[int, int | None]]:
+    """``n`` (recording position, start salt) of a task for iteration ``iteration`` - always ``n``, every round.
+
+    sequential: the task's recordings in one fixed shuffled order (per experiment and task), ``n`` per round, wrapping
+    to the start when they run out; random: ``n`` distinct recordings drawn afresh each round. The start is perturbed
+    (salt = the round + 1) from round ``augment_from`` on, and always when sequential wraps (a recording played
+    again), so no two starts of the experiment are the same; earlier rounds play the recorded start (salt None)."""
+    n_recorded, n = int(n_recorded), int(n)
+    if n > n_recorded:
+        raise ValueError(f"{task}: {n} episodes per round but only {n_recorded} recordings (a round would repeat one)")
+    if mode == "sequential":
+        order = list(range(n_recorded))
+        _rng(key, -1, task).shuffle(order)  # one order for the whole experiment
+        picks = [(k, (int(iteration) * n + j) // n_recorded) for j, k in enumerate(
+            order[(int(iteration) * n + j) % n_recorded] for j in range(n))]
+    elif mode == "random":
+        picks = [(k, 0) for k in _rng(key, iteration, task).sample(range(n_recorded), n)]
+    else:
+        raise ValueError(f"rollout.start_draw: sequential or random, not {mode!r}")
+    out = []
+    for pos, passes in picks:
+        perturb = int(iteration) >= int(augment_from) or passes > 0
+        out.append((pos, int(iteration) + 1 if perturb else None))
+    return sorted(out)
 
 
 def draw_demos(key: str, iteration: int, task: str, n_recorded: int, n: int,
@@ -164,11 +193,17 @@ def plan_round(cfg, iteration: int, used_seeds: dict[str, set[int]] | None = Non
         missing = sorted(t for t in tasks if t not in recorded)
         if missing:
             raise ValueError(f"split demo: no recorded pretrain episodes of {missing}")
+        mode = str(r.get("start_draw") or "fresh")
         for task in tasks:
             kind, horizon = tables[task] if tables is not None else (table[task]["kind"], int(table[task]["horizon"]))
             ids = recorded[task]
-            for i in draw_demos(key, iteration, task, len(ids), n, used_seeds.get(task, set())):
-                out.append(Episode(task, i, kind, horizon, demo=ids[i]))
+            if mode == "fresh":  # legacy: never a recording an earlier round played (rounds shrink once they run out)
+                salt = int(iteration) + 1 if int(iteration) >= int(r.get("augment_from_round", 10**6)) else None
+                for i in draw_demos(key, iteration, task, len(ids), n, used_seeds.get(task, set())):
+                    out.append(Episode(task, i, kind, horizon, demo=ids[i], start_salt=salt))
+                continue
+            for i, salt in demo_starts(key, iteration, task, len(ids), n, mode, int(r.get("augment_from_round", 1))):
+                out.append(Episode(task, i, kind, horizon, demo=ids[i], start_salt=salt))
         tasks = []
     for task in tasks:
         for seed in draw_seeds(key, iteration, task, n, r.get("seed_range", (100000, 999999)),

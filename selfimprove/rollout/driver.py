@@ -158,7 +158,7 @@ def run_round(cfg: Config, iteration: int, ckpt: str, *, local: bool = False, ad
 
     def submit(node, e: T.Episode, attempt: int):
         return node.run_episode.remote(e.task, e.seed, attempt, upload_uri=cfg.episode_uri(iteration, e.task, e.seed),
-                                       demo=e.demo)
+                                       demo=e.demo, start_salt=e.start_salt)
 
     def on_result(e: T.Episode, res: dict) -> None:
         res.setdefault("task", e.task)

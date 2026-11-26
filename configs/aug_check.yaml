@@ -1,0 +1,20 @@
+# Augmentation check (the user, 2026-11-25): the start perturbation on 2 recordings per task of the 50 subset tasks,
+# the same recordings as sub50_check_20261125's first 2 (seed_key si_sub50, the old fresh draw: a subset of its 5), so
+# every perturbed episode pairs with the check run's unperturbed one. Perturbation always on: up to 30 cm
+# forward/sideways and 30 degrees off the recorded start.
+#   scripts/cluster_rollout.sh aug_check_20261125 0 <270k ckpt> --config configs/aug_check.yaml
+#   .venv/bin/python scripts/build_debug_site.py aug_check_20261125 --compare sub50_check_20261125
+exp_id: aug_check_20261125
+iterations: 1
+rollout:
+  include_tasks: [CloseBlenderLid, CloseToasterOvenDoor, NavigateKitchen, OpenDrawer, PickPlaceCounterToCabinet, PickPlaceDrawerToCounter, PickPlaceToasterToCounter, TurnOffStove, TurnOnSinkFaucet, DeliverStraw, KettleBoiling, PackIdenticalLunches, PrepareCoffee, ScrubCuttingBoard, SetUpCuttingStation, SteamInMicrowave, WashLettuce, AdjustToasterOvenTemperature, CheesyBread, CloseDrawer, CloseMicrowave, CloseStandMixerHead, MakeIcedCoffee, OpenElectricKettleLid, OpenFridgeDrawer, OpenToasterOvenDoor, PickPlaceCounterToDrawer, PickPlaceCounterToOven, PickPlaceFridgeDrawerToShelf, PickPlaceStoveToCounter, PreheatOven, StartCoffeeMachine, TurnOnStove, TurnSinkSpout, PlaceEqualIceCubes, ResetCabinetDoors, LineUpCondiments, OrganizeCoffeeCondiments, GatherCuttingTools, AddSugarCubes, PrepareToast, ClearFreezer, RecycleBottlesBySize, PortionFruitBowl, GatherVegetables, SimmeringSauce, AlcoholServingPrep, ArrangeBreadBowl, AfterwashSorting, ArrangeDrinkware]
+  seed_key: si_sub50
+  start_draw: fresh
+  augment_from_round: 0
+  start_shift: 0.3
+  start_turn: 30
+  pilot_seeds_per_task: 2
+  seeds_per_task: 2
+  num_gpus: 8
+eval:
+  enabled: false

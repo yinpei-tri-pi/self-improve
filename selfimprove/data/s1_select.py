@@ -87,6 +87,7 @@ class S1Span:
     primitive: str = ""
     smooth: dict = field(default_factory=dict)   # metric -> share of steps over the demos' p99
     halt: bool = True             # a halt frame after it (not for a step left partway)
+    cut: bool = False             # a piece of one step cut at max_steps (X, "continue to X", ...)
     grip_relabel: bool = False    # its held partial gripper levels become the demos' -1 / +1 (relabel_grip)
     train_from: int | None = None  # the first trained frame (None: start); earlier frames are context (anchor, progress)
     #: s1 | harness | harness_merged | recovery_within | recovery_request (set by select)
@@ -221,7 +222,7 @@ def _pieces(span: S1Span, max_steps: int) -> list[S1Span]:
         b = min(span.end, a + max_steps - 1)
         word = span.subgoal if first else f"continue to {base}"
         out.append(S1Span(a, b, word, span.by, span.turns, span.kept, span.reason, floor_length(b - a + 1), span.primitive,
-                          span.smooth, halt=span.halt and b == span.end, grip_relabel=span.grip_relabel))
+                          span.smooth, halt=span.halt and b == span.end, grip_relabel=span.grip_relabel, cut=True))
         a, first = b + 1, False
     return out
 
@@ -294,16 +295,23 @@ def _drop_struggles(rec: EpisodeRecord, spans: list[S1Span]) -> None:
         lo, hi = run[0].start, run[-1].end
         mine = [sp for sp in spans if sp.by == "harness" and lo <= sp.start <= hi
                 and not is_navigation(sp.primitive, lean[sp.start:sp.end + 1])]
-        if len(mine) <= STRUGGLE_STEPS:
+        # the pieces of one step cut at max_steps are one step, and a piece before the last is no miss (its step went on)
+        steps = {(tuple(sp.turns), base_step(sp.subgoal)) for sp in mine}
+        if len(steps) <= STRUGGLE_STEPS:
             continue
-        misses = [sp for sp in mine if sp.reason.startswith("judged subgoal_failed") or (sp.kept and not sp.halt)]
+        last_piece = {}
+        for sp in mine:
+            k = (tuple(sp.turns), base_step(sp.subgoal))
+            last_piece[k] = max(last_piece.get(k, -1), sp.end)
+        misses = [sp for sp in mine if sp.reason.startswith("judged subgoal_failed")
+                  or (sp.kept and not sp.halt and not (sp.cut and sp.end < last_piece[(tuple(sp.turns), base_step(sp.subgoal))]))]
         if not misses:
             continue
         last = max(sp.start for sp in misses)
         for sp in mine:
             if sp.start <= last and sp.kept:
                 sp.kept, sp.est_length = False, 0
-                sp.reason = (f"before the last miss of a long harness struggle ({len(mine)} manipulation steps, "
+                sp.reason = (f"before the last miss of a long harness struggle ({len(steps)} manipulation steps, "
                              f"{len(misses)} missed): only its clean tail is kept")
 
 

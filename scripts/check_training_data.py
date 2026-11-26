@@ -104,6 +104,19 @@ def check_episode(folder: str) -> list[tuple[str, str]]:
         u = r["messages"][1]["content"]
         if "Milestones:\n" in u and len(u.split("Milestones:\n")[1].split("\n\nThe last step")[0].splitlines()) > 30:
             bad.append(("S2 milestone view over 30 lines", f"{name} turn {r['meta']['turn']}"))
+    # the milestone view of each row = the latest list emitted in an earlier row's target (S2 rebuilds it at inference)
+    emitted: list = []
+    for r in rows:
+        u, a = r["messages"][1]["content"], r["messages"][2]["content"]
+        if "Milestones:\n" in u and emitted:
+            view = u.split("Milestones:\n")[1].split("\n\nThe last step")[0]
+            listed = [ln.strip().rsplit(" (", 1)[0] for ln in view.splitlines() if re.match(r"\s+M\d+", ln)]
+            want = [txt for _, txt in emitted]
+            if listed[:len(want)] != want:
+                bad.append(("S2 milestone view unlike the emitted list", f"{name} turn {r['meta']['turn']}"))
+        m = re.search(r"<milestones>\n(.*?)\n</milestones>", a, re.S)
+        if m:
+            emitted = rows_v2.parse_milestones(m.group(1))
     for r in rows_v2.trained(rows):
         if r["meta"].get("clip_frames") is not None and r["meta"]["clip_frames"] < rows_v2.MIN_FRAMES:
             bad.append(("S2 trained row with a video under MIN_FRAMES", f"{name} turn {r['meta']['turn']}"))

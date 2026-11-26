@@ -86,6 +86,7 @@ def sagemaker_command(cfg: Config, k: int, ckpt_uri: str, extra_shards: str, *, 
     if dry_run:
         cmd.append("--dry-run")
     env = {"ROBOCASA_MIX_SHARDS": extra_shards, "ROBOCASA_MIX_FRACTION": str(float(t.get("new_data_fraction", 0.8))),
+           "WANDB_BASE_URL": str((cfg.get("wandb") or {}).get("base_url") or "https://api.wandb.ai"),
            "OPENPI_WANDB_GROUP": cfg.exp_id,
            "OPENPI_WANDB_TAGS": f"iter_{int(k):02d},s1-train", "OPENPI_WANDB_JOB_TYPE": "s1-train"}
     cmd += [
@@ -97,6 +98,8 @@ def sagemaker_command(cfg: Config, k: int, ckpt_uri: str, extra_shards: str, *, 
         f"--training.config={t['config']}", f"--training.exp_name={exp_name(cfg, k)}",
         f"--training.extra_args={trainer_args(cfg, k)}",
         f"--output.s3_prefix={cfg.s1_ckpt_uri(k)}/",
+        # checkpoints reach S3 within 30 min of being written (the config's 30000 s is longer than a round's training)
+        f"--output.ckpt_sync_interval={int(t.get('ckpt_sync_interval_s', 1800))}",
         f"--wandb.project={cfg['wandb']['project']}",
     ]
     cmd += [f"--training.env.{key}={value}" for key, value in env.items()]
@@ -200,13 +203,16 @@ def job_status(cfg: Config, job_name: str) -> dict:
 
 
 def find_checkpoints(cfg: Config, k: int) -> list[tuple[int, str]]:
-    """(step, step-dir uri) of every complete checkpoint under iter_k/s1_ckpts/ (has params/ and assets/)."""
+    """(step, step-dir uri) of every complete checkpoint (has params/ and assets/) of THIS round's training run under
+    iter_k/s1_ckpts/: openpi writes <config>/<exp_name>__<tag>/<step>/, so another run sharing the prefix (a smoke, a
+    hand-run job) is never picked."""
     found: dict[str, set[str]] = {}
     root = cfg.s1_ckpt_uri(k) + "/"
+    run = exp_name(cfg, k)
     for uri, _ in s3.iter_keys(root):
-        m = re.match(r"(.*/(\d+))/(params|assets)/", uri)
-        if m:
-            found.setdefault(m.group(1), set()).add(m.group(3))
+        m = re.match(r"(.*/([^/]+)/(\d+))/(params|assets)/", uri)
+        if m and (m.group(2) == run or m.group(2).startswith(run + "__")):
+            found.setdefault(m.group(1), set()).add(m.group(4))
     out = [(int(d.rsplit("/", 1)[1]), d) for d, parts in found.items() if parts >= {"params", "assets"}]
     return sorted(out)
 

@@ -67,7 +67,7 @@ def _add(tar: tarfile.TarFile, name: str, data: bytes) -> None:
 
 
 def build(exps: list[str], iterations: list[int], out: Path, *, workers: int = 8, min_shards: int = 64,
-          per_shard: int = 2048, seed: int = 0) -> dict:
+          per_shard: int = 1024, seed: int = 0) -> dict:
     t0 = time.time()
     jobs = []
     if out.exists():
@@ -124,10 +124,12 @@ def main() -> int:
     ap.add_argument("--iterations", default="0", help="comma-separated rounds")
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--workers", type=int, default=8)
-    ap.add_argument("--min-shards", type=int, default=64)
+    ap.add_argument("--min-shards", type=int, default=64,
+                    help="at least this many shards: the trainer gives every GPU x DataLoader worker whole shards")
+    ap.add_argument("--per-shard", type=int, default=1024, help="rows per shard once the set exceeds min-shards x this")
     args = ap.parse_args()
     meta = build(args.exps, [int(x) for x in args.iterations.split(",")], args.out.expanduser(),
-                 workers=args.workers, min_shards=args.min_shards)
+                 workers=args.workers, min_shards=args.min_shards, per_shard=args.per_shard)
     print(json.dumps({k: v for k, v in meta.items() if k != "per_task"}, indent=1))
     return 0
 

@@ -107,11 +107,13 @@ class EpisodeRecord:
 
 
 def _turns(events: list[dict]) -> list[dict]:
-    """One dict per turn: its judge event, subgoal event and the s1 events that followed it."""
+    """One dict per turn: its judge event (or, after a turn that moved nothing, its planner event), subgoal event and
+    the s1 events that followed it. A turn that only looked or measured opens a turn of zero steps (dropped later), so
+    the motion of the turn after it carries that turn's own subgoal and planner fields, not the earlier turn's."""
     turns: list[dict] = []
     for e in events:
         kind = e.get("kind")
-        if kind == "judge":
+        if kind in ("judge", "planner"):
             turns.append({"judge": e, "subgoal": None, "s1": []})
         elif kind == "subgoal" and turns and turns[-1]["subgoal"] is None:
             turns[-1]["subgoal"] = e

@@ -146,6 +146,10 @@ def span_samples(traj: Trajectory, plan: SpanPlan, *, ep_id: str, extra_meta: di
         lean_ep, _ = padded_chunk(lean_act, t, n - 1, HORIZON, LEAN_HOLD_DIMS)
         raw_sg, mask_sg = padded_chunk(raw_action, t, e, HORIZON, RAW_HOLD_DIMS)
         lean_sg, _ = padded_chunk(lean_act, t, e, HORIZON, LEAN_HOLD_DIMS)
+        if not plan.halt and e < n - 1:
+            # the motion went on past the span (a piece of a cut step, a step left partway): the real continuation,
+            # not the settle pad (that would teach System1 to brake where the motion kept going); the mask still ends at e
+            raw_sg, lean_sg = raw_ep, lean_ep
         if is_halt:
             raw_ep = halt_chunk(raw_action[e], HORIZON, RAW_HOLD_DIMS)
             lean_ep = halt_chunk(lean_act[e], HORIZON, LEAN_HOLD_DIMS)

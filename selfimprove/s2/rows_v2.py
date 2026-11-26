@@ -346,8 +346,13 @@ def episode_rows(folder: str | Path, out_dir: Path, *, make_media: bool = True) 
             user = user_turn(goal, plan, prev["subgoal"], prev["by"], gripper_status(traj, prev["end"]), STATUS["turn"])
             meta.update(clip=f"clips/{media}", clip_frames=n, clip_fps=CLIP_FPS, clip_span=[prev["start"], prev["end"]])
         judge = "task_begin" if prev is None else (t["judge_given"] or prev["judge_of_this"] or "subgoal_complete")
+        # <milestones>: on the first turn, and on any turn where the planner revised the list (the view of the later
+        # rows uses the latest list emitted so far, so S2 can rebuild it at inference from its own outputs)
+        revised = parse_milestones(t["milestones"])
+        emit = prev is None or (revised and revised != latest_milestones(turns[:k]))
+        meta["milestones_emitted"] = bool(emit and t["milestones"])
         out = target_turn(t["reasoning"], judge, t["milestone"], meta["decision"], t["subgoal"],
-                          t["milestones"] if prev is None else "")
+                          t["milestones"] if emit else "")
         rows.append({"messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user},
                                   {"role": "assistant", "content": out}], "meta": meta,
                      "labels": {"judge": judge, "decision": meta["decision"], "milestone": t["milestone"],

@@ -80,13 +80,16 @@ Current task status: begin | ongoing | success | failed.
 - The task status comes from the benchmark (privileged, as the old System2's): the evaluation must pass it the same way.
 
 **Target (assistant text):** `<thought>` (Astra's planner_reasoning: System1 is "the model", the harness "the expert"),
-`<judge>` (task_begin, subgoal_complete, subgoal_incomplete, subgoal_failed), `<milestones>` (first turn),
+`<judge>` (task_begin, subgoal_complete, subgoal_incomplete, subgoal_failed), `<milestones>` (the first turn, and any turn
+where the planner revised the list: the later rows' milestone view is the latest list emitted, so S2 rebuilds it at
+inference from its own outputs with `rows_v2.checklist_text`),
 `<milestone>`, `<decision>` (model | expert: who executed the step; a turn that called System1 is model), `<subgoal>`.
 Closing row: the last step's video and the status success -> `<judge>task_finish</judge>`, failed -> `task_failed`.
 
 Round 0: 24,545 rows (1,289 merged steps); the milestone view 6 lines at the median, 16 at most.
 
-**Shards (next):** the `system2-shards` webdataset that `sys2_train_eval`'s ms-swift plugin reads
+**Shards:** `selfimprove/s2/shards.py`, at least 64 shards (every GPU x DataLoader worker needs whole shards), 1,024 rows
+per shard beyond that; the `system2-shards` webdataset that `sys2_train_eval`'s ms-swift plugin reads
 (`<key>.json` with the messages, `<key>.videobin` or `<key>.imagebin0`, `manifest.jsonl` with num_samples per shard),
 for Qwen3-VL-8B; all rounds' rows so far. On hold: the old full0804 PLAN + EXECUTION records converted to this format as
 20% of the mix.

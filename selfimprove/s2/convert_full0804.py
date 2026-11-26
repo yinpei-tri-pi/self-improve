@@ -7,7 +7,9 @@ What is converted (the rest is dropped):
 - ``plan_exec_v2 · execution`` and the ``failure_v2`` pairs (failure+recovery, incomplete+continue): one new row each.
   The old two-level plan becomes the milestone view: ``[x]`` milestones done, the ``[~]`` one now, ``[ ]`` to do; the
   ``[x]`` fine steps of the current milestone are its steps (done); its ``[~]`` fine step is the last step (the video).
-  The recovery of a failure pair (role y) shows the failed try in the steps and "X again" as the last step. The
+  The recovery of a failure pair (role y) shows the failed try in the steps and "X again" as the last step; the
+  continuation of an incomplete+continue pair (role y) the partial try and "continue to X". Rows whose status says
+  success without a task_finish target are dropped (they contradict the system prompt). The
   target keeps the old thought and judge; the milestone is the ``[~]`` one after ``<plan_update>``; the decision is
   always the model (the demos had no expert); the subgoal as it was. ``task_finish`` rows become closing rows
   (status success, ``<thought>`` + ``<judge>`` only). Rows without a ``[~]`` fine step (the old plan does not say
@@ -132,11 +134,19 @@ def convert_turn(rec: dict) -> tuple[dict | None, str]:
     done = [{"milestone": label(cur), "subgoal": s["text"], "outcome": "done"} for s in cur["steps"] if s["mark"] == "x"]
     last_words = last["text"]
     if str(meta.get("variant", "")).startswith("failure_augmented") and meta.get("role") == "y":
+        # the recovery of a failure pair: the failed try in the steps, "X again" as the last step
         done.append({"milestone": label(cur), "subgoal": last["text"], "outcome": "failed"})
         last_words = f"{base_step(last['text']) or last['text']} again"
+    elif meta.get("variant") == "incomplete" and meta.get("role") == "y":
+        # the continuation of an incomplete+continue pair (its video is the continuation): the partial try in the
+        # steps, "continue to X" as the last step - as S2 sees a continuation at inference
+        done.append({"milestone": label(cur), "subgoal": last["text"], "outcome": "partial"})
+        last_words = f"continue to {base_step(last['text']) or last['text']}"
     # the old plan's [x] marks after the current milestone (rare): keep the order, checklist_text decides by position
     view = R.checklist_text(done, label(cur), milestones)
     status = _status(u)
+    if status == "success" and judge != "task_finish":
+        return None, "status success without task_finish (contradicts the system prompt)"
     user_new = R.user_turn(goal, view, last_words, "s1", _gripper(u), status)
     thought = clean_thought(_tag(a, "thought"))
     out_meta = {"episode_id": meta.get("episode_id"), "task": _task(meta), "source": "full0804",

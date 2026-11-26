@@ -145,7 +145,7 @@ class Scheduler:
             if self.dry_run:
                 return "http://<head>:8265"
             self.event(f"starting the cluster {cluster_yaml} (ray up)")
-            subprocess.run([RAY, "up", "-y", str(path)], check=True, cwd=str(HERE))
+            subprocess.run([RAY, "up", "-y", "--no-restart", str(path)], check=True, cwd=str(HERE))  # never kill live jobs
             ip = subprocess.run([RAY, "get-head-ip", str(path)], capture_output=True, text=True,
                                 check=True).stdout.strip().splitlines()[-1]
         return f"http://{ip}:8265"
@@ -164,7 +164,15 @@ class Scheduler:
         if info.get("job_id"):
             r = subprocess.run([RAY, "job", "status", "--address", info["address"], info["job_id"]],
                                capture_output=True, text=True)
-            return any(x in (r.stdout + r.stderr) for x in ("RUNNING", "PENDING"))
+            out = r.stdout + r.stderr
+            if any(x in out for x in ("RUNNING", "PENDING")):
+                return True
+            if any(x in out for x in ("SUCCEEDED", "FAILED", "STOPPED")):
+                return False
+            # the status could not be read (a network blip, the head restarting): not a dead driver - starting a second
+            # one would play the same episodes twice
+            self.event(f"could not read the status of Ray job {info['job_id']}; treating it as alive this tick")
+            return True
         return False
 
     # -- one pass ------------------------------------------------------------------------------------------
@@ -201,6 +209,17 @@ class Scheduler:
         it = self.it(k)["rollout"]
         done = s3.read_json(f"{self.cfg.rollout_uri(k)}/_DONE", default=None)
         if done is not None:
+            planned = int(done.get("episodes_planned") or 0)
+            failed = int(done.get("episodes_failed") or 0)
+            share = float((self.cfg["rollout"] or {}).get("max_failed_share", 0.1))
+            if planned and failed > share * planned and it.get("status") != "failed":
+                it.update(status="failed", summary=done)
+                self.event(f"iter {k}: rollout finished with {failed}/{planned} episodes failed (over {share:.0%}); "
+                           f"the loop stops here - check the failures, then set rollout.max_failed_share or rerun")
+                self.save()
+                return
+            if it.get("status") == "failed":
+                return
             it.update(status="done", summary=done, finished=time.strftime("%F %T"))
             self.loop.point(k, {f"rollout/{a}": b for a, b in done.items()})
             self.event(f"iter {k}: rollout done: {done.get('episodes_done')} episodes, "
@@ -212,8 +231,18 @@ class Scheduler:
             it["progress"] = status
         if it["status"] == "running" and self._driver_alive({**it.get("driver", {}), "_key": f"rollout{k}"}):
             return
+        if it["status"] == "failed":
+            return
         if it["status"] == "running":
-            self.event(f"iter {k}: the rollout driver is gone without _DONE; starting it again (it resumes)")
+            it["restarts"] = int(it.get("restarts", 0)) + 1
+            cap = int((self.cfg.get("cluster") or {}).get("max_driver_restarts", 3))
+            if it["restarts"] > cap:
+                it["status"] = "failed"
+                self.event(f"iter {k}: the rollout driver died {it['restarts']} times without _DONE; the loop stops here")
+                self.save()
+                return
+            self.event(f"iter {k}: the rollout driver is gone without _DONE; starting it again ({it['restarts']}/{cap}, "
+                       f"it resumes)")
         it["driver"] = self._start_driver("rollout", "selfimprove.rollout.driver", k, ckpt, "rollout")
         it.update(status="running", started=it.get("started") or time.strftime("%F %T"), ckpt=ckpt)
         self.event(f"iter {k}: rollout started with {ckpt}")
@@ -359,6 +388,11 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as exc:  # noqa: BLE001 - a transient failure must not end a week-long loop
             sched.event(f"tick failed: {type(exc).__name__}: {exc}")
             finished = False
+        try:  # the heartbeat: progress and job status of every stage, saved every tick (status, the dashboard)
+            sched.state["heartbeat"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+            sched.save()
+        except Exception as exc:  # noqa: BLE001
+            print(f"state save failed: {exc}", flush=True)
         print(sched.status_text(), flush=True)
         if finished:
             sched.loop.finish()

@@ -201,3 +201,30 @@ def test_system1_own_retry_is_a_recovery():
     assert ("recovery_within", 0, 129, "grasp the colander", 59) in got
     assert ("recovery_request", 59, 129, "grasp the colander again", None) in got
     assert not any(sp.start == 59 and sp.end == 72 for sp in spans)  # the opening alone is no step of its own
+
+
+def test_demo_starts_every_round_full_and_unique():
+    """Sequential start draw: n starts every round however many rounds, every (recording, salt) unique, round 0 the
+    recorded starts, the perturbation from round augment_from on and whenever a recording is played again."""
+    from selfimprove import tasks as T
+
+    starts = set()
+    for k in range(10):
+        d = T.demo_starts("exp", k, "Task", 100, 30, "sequential", 1)
+        assert len(d) == 30 and len({p for p, _ in d}) == 30
+        assert all(s is None for _, s in d) if k == 0 else all(s == k + 1 for _, s in d)
+        starts |= set(d)
+    assert len(starts) == 300
+    strict = [T.demo_starts("exp", k, "Task", 100, 30, "sequential", 99) for k in range(4)]
+    assert all(s is None for _, s in strict[2]) and sum(s is not None for _, s in strict[3]) == 20  # the wrap only
+    assert {s for _, s in T.demo_starts("exp", 0, "Task", 100, 30, "random", 0)} == {1}
+
+
+def test_cut_pieces_are_one_step_not_a_struggle():
+    """A completed 900-step harness step cut at 400 is one step: its pieces are no misses of a struggle."""
+    from selfimprove.data import s1_select as S
+
+    sp = S.S1Span(0, 899, "wipe the counter", "harness", [3], True, "harness step completed", 800, "wipe", {})
+    pieces = S._pieces(sp, 400)
+    assert [p.cut for p in pieces] == [True, True, True] and [p.halt for p in pieces] == [False, False, True]
+    assert [(p.start, p.end) for p in pieces] == [(0, 399), (400, 799), (800, 899)]
