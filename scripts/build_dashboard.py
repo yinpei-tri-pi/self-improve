@@ -213,6 +213,15 @@ def live_state(config: str) -> dict:
         sites = json.loads(sites_f.read_text()) if sites_f.exists() else {}
         if sites.get("rollout_site"):
             rollout["site"] = "../" + sites["rollout_site"]
+        else:  # being built: the pages written so far (the server lists the folder until its index.html exists)
+            sdir = ROOT / "site" / f"debug_{cfg.exp_id}_iter_{k:02d}"
+            if sdir.exists():
+                n_pages = sum(1 for _ in sdir.glob("*.html"))
+                done_idx = (sdir / "index.html").exists()
+                rollout["site"] = f"../debug_{cfg.exp_id}_iter_{k:02d}/" + ("index.html" if done_idx else "")
+                if not done_idx:
+                    rollout["site_label"] = (f"round {k}'s rollout site, being built: {n_pages:,} / {planned:,} episode pages "
+                                             f"so far (opens the pages built so far; the index comes at the end)")
         if ro_status == "running" and planned:
             now_running.append({"k": k, "stage": "rollout", "progress": (prog.get("episodes_done") or 0) / planned,
                                 "eta": prog.get("eta") or ""})
@@ -262,8 +271,9 @@ def live_state(config: str) -> dict:
                     "queue": f"{t.get('queue_full_name') or t.get('queue')} (priority {t.get('queue_priority')})",
                     "job_state": job.get("secondary") or job.get("batch_status"),
                     "loss": loss, "ckpts": [{"step": a, "uri": b} for a, b in ckpts], "ckpt_uri": f"{cfg.s1_ckpt_uri(k)}/"}
-        if tr_status == "running" and loss:
-            now_running.append({"k": k, "stage": "s1_train", "progress": loss[-1][0] / steps, "eta": ""})
+        if tr_status == "running":
+            now_running.append({"k": k, "stage": "s1_train", "progress": (loss[-1][0] / steps) if loss else 0.0,
+                                "eta": job.get("secondary") or ""})
         s2_train = {"status": "queued", "model": "Qwen3-VL-4B (full fine-tune)", "rounds": f"0-{k}",
                     "rows": pre.get("s2", {}).get("rows"), "note": "optional: only the evaluation needs it"}
         ev = {"status": MAP.get(ev_s.get("status", "pending"), "queued") if cfg["eval"].get("enabled", True) else "queued",
@@ -272,7 +282,7 @@ def live_state(config: str) -> dict:
         extra = ((cfg.get("dashboard") or {}).get("links") or {}).get(k) or ((cfg.get("dashboard") or {}).get("links") or {}).get(str(k)) or {}
         for stage, d in (("rollout", rollout), ("preprocess", pre), ("s1_train", s1_train)):
             if extra.get(stage):
-                d["links"] = extra[stage]
+                d["extra_links"] = extra[stage]
         label = f"round {k}" + (" (recorded starts)" if eps and not pert else "")
         iters.append({"k": k, "label": label, "rollout": rollout, "preprocess": pre, "s1_train": s1_train,
                       "s2_train": s2_train, "eval": ev})

@@ -40,5 +40,5 @@ cluster:
 dashboard:
   links:
     0:
-      preprocess:
-        - {label: "the pre-check before round 0: 70 tasks x 2 (the tasks outside the subset), its rollout site", href: "../debug_dev120_check_20261126/index.html"}
+      rollout:
+        - {label: "not round 0: the earlier pre-check (70 tasks x 2, the tasks outside the subset), its rollout site", href: "../debug_dev120_check_20261126/index.html"}
