@@ -37,7 +37,8 @@ def make_view(src: Path, dst: Path, s2: bool) -> None:
     man = src / "shards" / "manifest.jsonl"
     if not man.exists():
         man = src / "manifest.jsonl"
-    rows = [json.loads(x) for x in man.read_text().splitlines() if x.strip()]
+    have = {t.name for t in (src / "shards").glob("*.tar")}  # only the shards kept on this machine
+    rows = [r for r in (json.loads(x) for x in man.read_text().splitlines() if x.strip()) if Path(r["shard"]).name in have]
     (dst / "shards" / "manifest.jsonl").write_text(
         "".join(json.dumps({"shard": Path(r["shard"]).name, "num_samples": r["num_samples"]}) + "\n" for r in rows))
     meta = json.loads((src / "meta.json").read_text())
@@ -55,9 +56,10 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True)
     ap.add_argument("--iteration", type=int, required=True)
-    ap.add_argument("--jobs", type=int, default=8)
+    ap.add_argument("--jobs", type=int, default=24, help="parallel episodes (each encodes ~30-40 videos; 48 cores here)")
     ap.add_argument("--inspector", default="http://127.0.0.1:7891")
     ap.add_argument("--skip-rollout-site", action="store_true")
+    ap.add_argument("--pages-per-task", type=int, default=5, help="full episode pages per task (the index lists all)")
     args = ap.parse_args()
     cfg = Config.load(args.config, [])
     k = int(args.iteration)
@@ -69,7 +71,8 @@ def main() -> int:
     if not args.skip_rollout_site:
         site = ROOT / "site" / f"debug_{tag}"
         subprocess.run([py, str(ROOT / "scripts/build_debug_site.py"), cfg.exp_id, "--iteration", str(k), "--out", str(site),
-                        "--jobs", str(args.jobs), "--reuse-media"], check=True, cwd=ROOT)
+                        "--jobs", str(args.jobs), "--reuse-media", "--pages-per-task", str(args.pages_per_task)],
+                       check=True, cwd=ROOT)
         out["rollout_site"] = f"debug_{tag}/index.html"
     view = Path(WORK_ROOT) / "shard_view"
     s1, s2 = work / "s1_training_shard", work / "s2_training_shard"

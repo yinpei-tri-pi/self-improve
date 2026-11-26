@@ -54,8 +54,33 @@ def download_round(cfg: Config, k: int, dest: Path, workers: int = 16, log=print
     return out
 
 
+def prune_rollouts(cfg: Config, k: int, log=print) -> None:
+    """Raw rollout copies of at most filter.keep_rollout_rounds rounds on this machine (the rest are on S3): before
+    round k's download, the copies of rounds <= k - keep are removed, each only if its rollout _DONE is on S3."""
+    keep = int(cfg["filter"].get("keep_rollout_rounds", 3))
+    for j in range(0, int(k) - keep + 1):
+        d = cfg.work_dir / f"iter_{j:02d}" / "rollout"
+        if d.exists() and s3.read_json(f"{cfg.rollout_uri(j)}/_DONE", default=None) is not None:
+            shutil.rmtree(d)
+            log(f"iteration {k}: removed round {j}'s local rollout copy (on S3: {cfg.rollout_uri(j)})")
+
+
+def prune_shards(out: Path, uri: str, keep: int, log=print) -> None:
+    """After a confirmed upload (uri/_DONE): only the first `keep` shards stay on this machine, for checking."""
+    if s3.read_json(f"{uri}/_DONE", default=None) is None:
+        log(f"{out}: no {uri}/_DONE, local shards kept")
+        return
+    shutil.rmtree(out / "_tmp", ignore_errors=True)
+    tars = sorted((out / "shards").glob("*.tar"))
+    for t in tars[keep:]:
+        t.unlink()
+    log(f"{out}: kept {min(keep, len(tars))} of {len(tars)} shards locally (all on {uri})")
+
+
 def run(cfg: Config, k: int, *, upload: bool = True, keep_local: bool = True, log=print) -> dict:
     work = cfg.work_dir / f"iter_{int(k):02d}"
+    if upload:
+        prune_rollouts(cfg, k, log=log)
     episodes = download_round(cfg, k, work / "rollout", log=log)
     out = work / "s1_training_shard"
     if out.exists():
@@ -68,7 +93,11 @@ def run(cfg: Config, k: int, *, upload: bool = True, keep_local: bool = True, lo
         s3.write_json(f"{cfg.s1_shard_uri(k)}/_DONE", meta)
     if not keep_local:
         shutil.rmtree(out / "shards", ignore_errors=True)
+    elif upload:
+        prune_shards(out, cfg.s1_shard_uri(k), int(f.get("keep_local_s1_shards", 8)), log=log)
     meta["s2"] = s2_rows(cfg, k, work, upload=upload, log=log)
+    if upload and meta["s2"].get("status") == "done":
+        prune_shards(work / "s2_training_shard", s2_uri(cfg, k), int(f.get("keep_local_s2_shards", 4)), log=log)
     return meta
 
 
@@ -90,7 +119,7 @@ def s2_rows(cfg: Config, k: int, work: Path, *, upload: bool = True, log=print) 
     if upload:
         s3.sync_up(out, s2_uri(cfg, k), delete=True)
         s3.write_json(f"{s2_uri(cfg, k)}/_DONE", meta)
-    log(f"iteration {k}: {meta['num_samples']} S2 rows in {meta['num_shards']} shards")
+    log(f"iteration {k}: {meta['num_samples']} S2 training samples in {meta['num_shards']} shards")
     return {"status": "done", "uri": s2_uri(cfg, k), **{a: meta[a] for a in ("num_samples", "num_shards", "per_kind",
                                                                               "per_judge", "per_decision", "built", "seconds")}}
 

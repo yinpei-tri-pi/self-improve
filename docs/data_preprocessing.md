@@ -47,7 +47,7 @@ step, 577 on request.
 
 ## System2 training data
 
-**Which episodes:** all, failures included; **what:** one row per turn that moved the robot (short harness turns joined
+**Which episodes:** all, failures included; **what:** one training sample (a row of the S2 training shards) per turn that moved the robot (short harness turns joined
 as System1's fragments are: one row at the first, decision expert, the merged words), plus one closing row per episode.
 
 **Input (user text):**

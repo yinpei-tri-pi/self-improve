@@ -176,8 +176,9 @@ def astra_table(header: list[str], rows: list[tuple[int, list[str]]], cells: dic
 
 def episode(args) -> dict:
     """One episode's page; returns its summary row."""
-    folder, out, reuse = (list(args) + [False])[:3]
+    folder, out, reuse, page = (list(args) + [False, True])[:4]
     folder, out = Path(folder), Path(out)
+    page_on = bool(page)
     sys.path.insert(0, str(ROOT))
     from selfimprove.data import s1_select
     from selfimprove.data.episode import load_episode
@@ -187,10 +188,12 @@ def episode(args) -> dict:
     res, traj = rec.result, rec.traj
     slug = f"{rec.task}_{rec.seed}"
     assets = out / "assets" / slug
-    assets.mkdir(parents=True, exist_ok=True)
+    if page_on:
+        assets.mkdir(parents=True, exist_ok=True)
     spans = s1_select.select(rec)
-    rows = rows_v2.episode_rows(folder, assets, make_media=True)  # its clips are named for their steps: kept if there
-    have = (lambda p: reuse and p.exists())  # noqa: E731  (--reuse-media: the pictures and clips of an earlier build)
+    # no page (only its row in the index): no pictures, clips or page are written
+    rows = rows_v2.episode_rows(folder, assets if page_on else Path("/tmp/_si_nopage"), make_media=page_on)
+    have = (lambda p: reuse and p.exists()) if page_on else (lambda p: True)  # noqa: E731  (--reuse-media: earlier media)
     turn_cells: dict[int, list[dict]] = {}
     if (folder / "cells.jsonl").exists():
         for line in (folder / "cells.jsonl").read_text().splitlines():
@@ -321,7 +324,8 @@ reply, its code and what it printed.</p>
 <section><h2>S1 training spans ({len(kept_sp)}, {sum(sp.steps for sp in kept_sp)} steps + 1 halt frame each, none after the last frame or a step left partway)</h2>
 {table(['steps', 'length', 'moved', 'subgoal (prompt)', 'Estimated Length', 'turns', 'why', 'video'], sp_rows) if sp_rows else '<p>none</p>'}</section>
 <section><h2>S2 rows ({len(rows_v2.trained(rows))} trained, {len(rows) - len(rows_v2.trained(rows))} skipped)</h2>{''.join(cards)}</section></main></body></html>"""
-    (out / f"{slug}.html").write_text(page)
+    if page_on:
+        (out / f"{slug}.html").write_text(page)
     reasons = collections.Counter(sp.reason.split(" (")[0] for sp in spans if not sp.kept)
     dec = collections.Counter(r["meta"].get("decision") for r in rows if r["meta"]["kind"] != "closing")
     judges = collections.Counter(r["labels"]["judge"] for r in rows)
@@ -352,7 +356,7 @@ reply, its code and what it printed.</p>
         man = [x for x in run if not is_navigation(s1_select.primitive(x.subgoal), traj.lean_act[x.start:x.end + 1])]
         if len({x.turn for x in man}) > s1_select.STRUGGLE_STEPS and all(x.judge in ("subgoal_complete", "task_done") for x in man):
             ex.append(("clean long harness streak, every step kept", run[0].turn))
-    return {"slug": slug, "task": rec.task, "seed": rec.seed, "examples": ex, "kind": res.get("task_set"), "success": rec.success,
+    return {"slug": slug, "page": page_on, "task": rec.task, "seed": rec.seed, "examples": ex, "kind": res.get("task_set"), "success": rec.success,
             "step": res.get("step"), "limit": res.get("step_limit"), "turns": res.get("turns"),
             "s1_share": json.loads((folder / "rollout.json").read_text()).get("s1_step_share"),
             "s1_spans": len(kept_sp), "s1_steps": sum(sp.steps for sp in kept_sp), "s1_samples": sum(sp.trained_steps + (sp.halt and sp.end < len(traj) - 1) for sp in kept_sp),
@@ -453,6 +457,8 @@ def main() -> int:
     ap.add_argument("--jobs", type=int, default=8)
     ap.add_argument("--index-only", action="store_true", help="redraw index.html from summary.json (pages unchanged)")
     ap.add_argument("--reuse-media", action="store_true", help="keep the pictures and clips of an earlier build (pages redone)")
+    ap.add_argument("--pages-per-task", type=int, default=0,
+                    help="full pages (videos) for the first N episodes of each task (by recording order); the index lists all (0: all)")
     ap.add_argument("--compare", default=None, help="another experiment's site (site/debug_<EXP>): compare on the same recordings")
     args = ap.parse_args()
     cfg = Config.load(None, [f"exp_id={args.exp}"])
@@ -471,7 +477,11 @@ def main() -> int:
         (out / "assets").mkdir(parents=True, exist_ok=True)
         folders = fetch(cfg, args.iteration, cache)
         with ProcessPoolExecutor(args.jobs) as pool:
-            summ = list(pool.map(episode, [(str(f), str(out), bool(args.reuse_media)) for f in folders]))
+            by_task: dict = {}
+            for f in sorted(folders, key=lambda f: (f.parent.name, int(f.name) if f.name.isdigit() else 0)):
+                by_task.setdefault(f.parent.name, []).append(f)
+            paged = {str(f) for fs in by_task.values() for f in (fs[:args.pages_per_task] if args.pages_per_task else fs)}
+            summ = list(pool.map(episode, [(str(f), str(out), bool(args.reuse_media), str(f) in paged) for f in folders]))
     summ.sort(key=lambda s: (s["kind"] or "", s["task"], s["seed"]))
     tot = collections.Counter()
     drop, dec, judges, cons = collections.Counter(), collections.Counter(), collections.Counter(), collections.Counter()
@@ -481,7 +491,8 @@ def main() -> int:
         for k in ("s1_spans", "s1_steps", "s1_samples", "s2_rows", "s2_short"):
             tot[k] += s[k]
         drop.update(s["dropped"]); dec.update(s["decisions"]); judges.update(s["judges"]); cons.update(s["consistency"])
-    rows = [[f"<a href='{esc(s['slug'])}.html'>{esc(s['task'])}</a>", str(s["seed"]), esc(s["kind"]),
+    rows = [[(f"<a href='{esc(s['slug'])}.html'>{esc(s['task'])}</a>" if s.get("page", True) else
+              f"{esc(s['task'])} <span class='note'>(no page)</span>"), str(s["seed"]), esc(s["kind"]),
              "<span class='b keep'>success</span>" if s["success"] else "<span class='b skip'>failed</span>", f"{s['step']}/{s['limit']}", str(s["turns"]),
              f"{(s['s1_share'] or 0):.2f}", f"{s['s1_spans']} ({s['s1_samples']})", str(s["s2_rows"]),
              esc(", ".join(f"{k} {v}" for k, v in s["decisions"].items())),

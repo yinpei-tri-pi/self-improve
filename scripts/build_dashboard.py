@@ -7,9 +7,9 @@ server; served over http it polls ``state.json`` every minute). The state lists 
 iteration its stages with their status and facts:
 
 - ``rollout``    System1 (the previous iteration's checkpoint) + HexaShell on the development tasks;
-- ``preprocess`` the round's S1 shards and S2 rows;
+- ``preprocess`` the round's S1 and S2 training shards;
 - ``s1_train``   System1 continue-trained on the round's shards (the next rollout waits only for this);
-- ``s2_train``   System2 trained on all rounds' rows so far (optional: only the evaluation needs it);
+- ``s2_train``   System2 trained on its round's S2 training shards + the old set (optional: only the evaluation needs it);
 - ``eval``       System1 k + System2 k on the held-out target split.
 
 ``--mock`` writes placeholder numbers (real ones where the loop already has them, e.g. round 0's rollout); a collector
@@ -334,7 +334,7 @@ def live_state(config: str) -> dict:
                                 "eta": job.get("secondary") or ""})
         s2_train = {"status": "queued", "model": "Qwen3-VL-4B (full fine-tune, from the original Qwen3-VL-4B-Instruct)",
                     "rounds": f"{k}", "rows": pre.get("s2", {}).get("rows"),
-                    "note": "optional: only the evaluation needs it; 2 passes over the round's rows, 50% old set"}
+                    "note": "optional: only the evaluation needs it; 2 passes over the round's S2 training samples, 50% old set"}
         s2_job = (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train")
         if s2_job:  # a job tracked from the config (e.g. the S2 smoke, until the loop submits S2 itself)
             s2_live = _job_live(cfg, s2_job.get("name"), s2_job.get("queues") or ["fss-cv-wfm-spot-p5-48xlarge-us-west-2",
@@ -372,7 +372,7 @@ def live_state(config: str) -> dict:
                                     else f"perturbed from round {r.get('augment_from_round', 1)}")
                                  + f" (+-{r.get('start_shift', 0) * 100:.0f} cm, +-{r.get('start_turn', 0):g} deg)"),
                        "s1_start": cfg["start"]["s1_ckpt"],
-                       "s2": "Qwen3-VL-4B, single mode (judge, milestone, decision, subgoal); 50% new rows / 50% old set",
+                       "s2": "Qwen3-VL-4B from the original checkpoint, single mode (judge, milestone, decision, subgoal); 50% the round's samples / 50% the old set",
                        "train": f"batch {t['batch_size']}, {float(t.get('new_data_fraction', 0.8)):.0%} rollout / "
                                 f"{1 - float(t.get('new_data_fraction', 0.8)):.0%} base, {int(t['steps']) // 1000}k steps, "
                                 f"ckpts every {int(t['save_interval']) // 1000}k, {t.get('queue_full_name') or t.get('queue')}",

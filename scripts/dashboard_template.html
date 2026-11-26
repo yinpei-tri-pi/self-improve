@@ -122,7 +122,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin
     <div id="pipe"></div>
     <div class="legend" id="legend"></div>
     <p class="note">Round k's rollout (System1 + HexaShell) waits only for System1's training of round k&minus;1. System2 is off that path:
-      it trains on all rounds' rows so far, and the held-out evaluation of round k runs once System1 k and System2 k are both ready.
+      it trains on its round's S2 training shards (50% old set), and the held-out evaluation of round k runs once System1 k and System2 k are both ready.
       Click a box for its details.</p>
   </section>
   <section class="card">
@@ -141,7 +141,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin
 const STATE0 = /*STATE*/null;
 const STAGES = [
   ["rollout", "Rollout", "System1 + HexaShell"],
-  ["preprocess", "Preprocess", "S1 shards, S2 rows"],
+  ["preprocess", "Preprocess", "S1 and S2 training shards"],
   ["s1_train", "System1 training", "continue-train"],
   ["s2_train", "System2 training", "optional, for eval"],
   ["eval", "Held-out eval", "System1 k + System2 k"],
@@ -182,7 +182,7 @@ function keyLine(stage, s, k) {
   const st = s.status;
   if (stage === "rollout") return st === "done" ? `${num(s.episodes)} eps · ${pct(s.success)} · S1 ${pct(s.s1_step_share, 0)}`
     : st === "running" ? `${num(s.episodes)}/${num(s.planned)} eps` : st === "waiting" ? `waits for System1 of round ${k - 1}` : `${num(s.planned)} eps planned`;
-  if (stage === "preprocess") return st === "done" ? `S1 ${(s.s1.samples / 1e3).toFixed(0)}k · S2 ${(s.s2.rows / 1e3).toFixed(1)}k rows` : "after the rollout";
+  if (stage === "preprocess") return st === "done" ? `S1 ${(s.s1.samples / 1e3).toFixed(0)}k · S2 ${(s.s2.rows / 1e3).toFixed(1)}k samples` : "after the rollout";
   if (stage === "s1_train" || stage === "s2_train") return st === "running" || st === "done" ? `${num(s.step)}/${num(s.steps)} steps` : s.steps ? `${num(s.steps)} steps` : "";
   if (stage === "eval") return st === "done" ? `${pct(s.success)} held out` : st === "running" ? `${num(s.done)}/${num(s.episodes)} eps` : "needs System1 k + System2 k";
   return "";
@@ -412,12 +412,12 @@ function stageCard(key, name, s, it) {
       if (s.s1.kept) card.append(table(["spans (mover / verdict)", "count"], Object.entries(s.s1.kept).map(([a, b]) => [a, num(b)])));
     }
     if (s.s2) {
-      card.append(el("h3", {text: "System2 rows"}), kv([["rows / shards", num(s.s2.rows) + " / " + num(s.s2.shards)], ["decisions", Object.entries(s.s2.decisions || {}).map(([a, b]) => a + " " + num(b)).join(", ")],
-        ["closing rows", num(s.s2.closing)], ["size", s.s2.size_gb != null ? s.s2.size_gb + " GB" : null], ["S3", s.s2.uri, true], ["local", s.s2.local, true]]));
-      if (s.s2.judges) card.append(table(["judge", "rows"], Object.entries(s.s2.judges).map(([a, b]) => [a, num(b)])));
+      card.append(el("h3", {text: "System2 training shards"}), kv([["samples / shards", num(s.s2.rows) + " / " + num(s.s2.shards)], ["decisions", Object.entries(s.s2.decisions || {}).map(([a, b]) => a + " " + num(b)).join(", ")],
+        ["closing samples", num(s.s2.closing)], ["size", s.s2.size_gb != null ? s.s2.size_gb + " GB" : null], ["S3", s.s2.uri, true], ["local", s.s2.local, true]]));
+      if (s.s2.judges) card.append(table(["judge", "samples"], Object.entries(s.s2.judges).map(([a, b]) => [a, num(b)])));
     }
   } else if (key === "s1_train" || key === "s2_train") {
-    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} rows (rounds ${s.rounds})` : null)],
+    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} training samples (round ${s.rounds}) + the old set (50%)` : null)],
       ["batch / lr", s.batch ? `${s.batch} / ${s.lr || ""}` : null], ["epochs", s.epochs], ["steps", s.step != null ? `${num(s.step)} / ${num(s.steps)}` : num(s.steps)],
       ["speed", s.sec_per_step ? s.sec_per_step + " s / step" : null], ["queue", s.queue], ["job state", s.job_state],
       ["started / ETA", s.started ? s.started + " → " + (s.eta || "…") : null], ["checkpoints", s.ckpt_uri, true], ["note", s.note]]));
