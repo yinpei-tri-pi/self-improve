@@ -1,0 +1,20 @@
+# Quick check before si_dev120's round 0 (the user, 2026-11-25): the 70 development tasks outside the subset (never
+# run with the current prompt and fixes), 2 each, at si_dev120's own first starts (seed_key si_dev120, sequential:
+# the first 2 of the 30 round 0 plays), recorded starts.
+#   scripts/cluster_rollout.sh dev120_check_20261126 0 <270k ckpt> --config configs/dev120_check.yaml
+#   .venv/bin/python scripts/build_debug_site.py dev120_check_20261126
+exp_id: dev120_check_20261126
+iterations: 1
+rollout:
+  tasks: rollout
+  include_tasks: [CloseFridge, CoffeeSetupMug, GetToastedBread, LoadDishwasher, OpenCabinet, OpenStandMixerHead, PickPlaceCounterToStove, PickPlaceSinkToCounter, PreSoakPan, RinseSinkBasin, SearingMeat, SlideDishwasherRack, StackBowlsCabinet, StirVegetables, StoreLeftoversInBowl, TurnOnElectricKettle, TurnOnMicrowave, AdjustWaterTemperature, AirDryFruit, BeverageOrganization, ClearClutter, ClearSinkSpace, CloseCabinet, CloseDishwasher, CloseElectricKettleLid, CloseFridgeDrawer, CloseOven, CoffeeServeMug, DateNight, DessertUpgrade, LowerHeat, MoveFridgeToFreezer, MoveToFreezerDrawer, OpenBlenderLid, OpenDishwasher, OpenFridge, OpenMicrowave, OpenOven, PackDessert, PickPlaceCabinetToCounter, PickPlaceCounterToMicrowave, PickPlaceCounterToSink, PickPlaceCounterToToasterOven, PickPlaceFridgeShelfToDrawer, PickPlaceMicrowaveToCounter, PickPlaceToasterOvenToCounter, PlaceIceInCup, PortionInTupperware, PortionYogurt, PrepareSausageCheese, PrepareSoupServing, RecycleStackedYogurt, ReorganizeFrozenVegetables, SeasoningSpiceSetup, ServeSteak, SetBowlsForSoup, SetupBowls, SetupButterPlate, SetupFruitBowl, SizeSorting, SlideOvenRack, SlideToasterOvenRack, StackCans, SweetSavoryToastSetup, SweetenCoffee, TurnOffMicrowave, TurnOffSinkFaucet, TurnOnToaster, TurnOnToasterOven, WarmCroissant]
+  seed_key: si_dev120
+  start_draw: sequential
+  augment_from_round: null
+  start_shift: 0.1
+  start_turn: 15
+  pilot_seeds_per_task: 2
+  seeds_per_task: 2
+  num_gpus: 8
+eval:
+  enabled: false

@@ -1,0 +1,35 @@
+# The full development run (the user, 2026-11-25): all 120 development tasks of assets/rollout_tasks.json (18 atomic_seen,
+# 16 composite_seen, 44 pretrain atomic, 42 pretrain composite; no composite_unseen task), 30 recorded episodes each
+# per round (3,600 episodes, ~$2,950 of API, ~8 h on 16 nodes), the subset run's settings otherwise.
+#   .venv/bin/python -m selfimprove.cli run --config configs/dev120.yaml
+exp_id: si_dev120
+iterations: 3  # raise for more rounds (the start draw never runs out)
+rollout:
+  tasks: rollout
+  pilot_seeds_per_task: 30
+  seeds_per_task: 30
+  num_gpus: 16
+  # starts (the user, 2026-11-25): each task's recordings in one fixed shuffled order, 30 per round, wrapping around
+  # when they run out, so every round has 30 per task however many rounds. The first pass plays the recorded starts;
+  # a recording played again (its second pass on) is placed up to 10 cm forward/sideways and 15 degrees off its start,
+  # salted by the round, so no two starts repeat (HexaShell start_shift / start_turn / start_salt per episode; draws
+  # closer than 4 cm to the kitchen are redrawn). With ~100 recordings a task: rounds 0-2 recorded, from 3 perturbed
+  start_draw: sequential
+  augment_from_round: null
+  start_shift: 0.1
+  start_turn: 15
+eval:
+  enabled: false
+# S1 training of each round (the user, 2026-11-25): 2 p5 nodes -> batch 256; 80% rollout data / 20% base data;
+# 15k steps (~205 new samples a step: one pass over round 0's 900k samples is ~4.4k steps, so ~3.4 passes;
+# ~0.77M base samples = 2.2% of the base set); checkpoints every 5k (5k / 10k / 15k for the eval)
+# preprocessing: 4 workers (16 on 1,500 episodes used too much memory, 2026-11-25)
+filter:
+  workers: 4
+train:
+  batch_size: 256
+  queue_full_name: fss-vla-spot-p5-48xlarge-us-west-2
+  queue_priority: 200
+  new_data_fraction: 0.8
+  steps: 15000
+  save_interval: 5000
