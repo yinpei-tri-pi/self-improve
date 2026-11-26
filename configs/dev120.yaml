@@ -30,7 +30,10 @@ train:
   image_tag: "20261125-175016"   # the verified openpi-si image (the two-stream mixer); no rebuild per round
   batch_size: 256
   new_data_fraction: 0.8
-  steps: 15000
-  save_interval: 5000
+  # (the user, 2026-11-26) ~2 passes over a round's ~2.6M new samples (256 x 80% per step), 2k warmup (a fresh
+  # optimizer on the EMA weights), then flat 5e-5; only the final checkpoint
+  steps: 25000
+  save_interval: 25000
+  warmup_steps: 2000
 cluster:
   rollout_address: http://10.242.5.98:8265   # the running head: the scheduler never runs ray up itself

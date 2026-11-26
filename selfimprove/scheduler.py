@@ -122,7 +122,7 @@ class Scheduler:
             return {"mode": "local", "pid": p.pid, "log": str(log), "command": " ".join(cmd)}
         address = c.get(f"{cluster}_address") or self._head_address(c[f"{cluster}_config"])
         cmd = self._driver_cmd(module, k, ckpt, remote=True)
-        runtime_env = {"working_dir": str(HERE), "excludes": [".venv", "wandb", "*.tar", ".git", "docs"],
+        runtime_env = {"working_dir": str(HERE), "excludes": [".venv", "wandb", "*.tar", ".git", "docs", "site", "site/**"],
                        "env_vars": {k2: str(v) for k2, v in (c.get("job_env") or {}).items()}}
         node_py = c.get("head_python", "python")
         submit = [RAY, "job", "submit", "--address", address, "--no-wait",
@@ -261,9 +261,24 @@ class Scheduler:
             done = data_stage.run(self.cfg, k, log=self.log_fn)
         it.update(status="done", summary={a: b for a, b in done.items() if a != "filter"}, finished=time.strftime("%F %T"))
         self.loop.point(k, data_stage.summary_metrics(done))
+        self._build_sites(k)
         self.event(f"iter {k}: {done.get('samples')} S1 samples ({done.get('positive_samples')} positive, "
                    f"{done.get('negative_samples')} negative) in {done.get('shards')} shards")
         self.save()
+
+    def _build_sites(self, k: int) -> None:
+        """The round's rollout site and preprocessed-data site (scripts/build_round_sites.py), in the background: the
+        dashboard links them; the loop does not wait for them."""
+        if self.dry_run:
+            return
+        cfg_file = self.cfg.work_dir / "config.yaml"
+        cfg_file.parent.mkdir(parents=True, exist_ok=True)
+        cfg_file.write_text(self.cfg.dump())
+        log = self.cfg.work_dir / f"sites_iter{k:02d}.log"
+        subprocess.Popen([sys.executable, str(HERE / "scripts" / "build_round_sites.py"), "--config", str(cfg_file),
+                          "--iteration", str(k)], cwd=str(HERE), stdout=open(log, "ab"), stderr=subprocess.STDOUT,
+                         start_new_session=True)
+        self.event(f"iter {k}: building the round's rollout and data sites (log {log})")
 
     def _train(self, k: int, ckpt: str) -> None:
         it = self.it(k)["train"]

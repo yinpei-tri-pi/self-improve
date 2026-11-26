@@ -162,8 +162,9 @@ def main() -> int:
     s1 = indexed(args.view / "s1" / args.s1, s1_scan, args.workers)
     spans = s1_spans(s1)
     s2 = indexed(args.view / "s2" / args.s2, s2_scan, args.workers)
-    old = indexed(args.view / "s2" / args.s2_old, s2_scan, args.workers, limit=args.old_shards)
-    old_meta = json.loads((args.view / "s2" / args.s2_old / "meta.json").read_text())
+    has_old = bool(args.s2_old) and (args.view / "s2" / args.s2_old / "shards").exists()
+    old = indexed(args.view / "s2" / args.s2_old, s2_scan, args.workers, limit=args.old_shards) if has_old else []
+    old_meta = json.loads((args.view / "s2" / args.s2_old / "meta.json").read_text()) if has_old else {}
 
     kinds = collections.Counter(sp["kind"] for sp in spans)
     samples_by_kind = collections.Counter(r["kind"] for r in s1)
@@ -194,8 +195,8 @@ def main() -> int:
     s2k = collections.Counter((r["kind"], r["judge"]) for r in s2)
     s2d = collections.Counter({"s1": "model", "harness": "expert"}.get(r["decision"], "-") for r in s2)
     cards = lambda items: "<div class=cards>" + "".join(f"<div class=card><b>{v}</b><br>{k}</div>" for k, v in items) + "</div>"  # noqa: E731
-    page = f"""<!doctype html><meta charset=utf-8><title>Training shards: sub50_check_20261125</title><style>{CSS}</style>{FILTER_JS}
-<h1>Training shards of the check run <code>sub50_check_20261125</code> (round 0 slot)</h1>
+    page = f"""<!doctype html><meta charset=utf-8><title>Training shards: {esc(args.s1)}</title><style>{CSS}</style>{FILTER_JS}
+<h1>Training shards: S1 <code>{esc(args.s1)}</code>, S2 <code>{esc(args.s2)}</code></h1>
 <p class=note>Every link opens RoboAnnotator's shard inspector on that sample, read from the tar exactly as the trainer reads it
 (<a href='{args.inspector}/system1_training_sample?dataset={args.s1}' target=_blank>S1 inspector</a>,
 <a href='{args.inspector}/system2_training_sample?dataset={args.s2}' target=_blank>S2 inspector</a>; both also offer the
@@ -217,12 +218,13 @@ at most one halt frame. {('Failing: ' + esc(dict(issue_count))) if bad else 'All
 <input class=f placeholder='filter rows (task, judge, expert...)' oninput="filt(this,'s2t')">
 {table(['row', 'task', 'seed', 'turn', 'kind', 'judge', 'decision', 'media', 'subgoal (target)', 'episode'], s2_rows, 's2t')}
 
+""" + (f"""
 <h2>S2 old set, converted: {old_meta.get('num_samples', 0):,} rows ({old_meta.get('num_shards')} shards)</h2>
 <p>Built from <code>system2_full_0804</code> by <code>selfimprove/s2/convert_full0804.py</code>: rows {esc(old_meta.get('rows'))};
 dropped {esc(old_meta.get('dropped'))}. Example links below come from the first {args.old_shards} shards ({len(old):,} rows),
 grouped by the old mode they came from.</p>
 {table(['old mode', 'kind', 'judge', 'rows (scanned)', 'examples'], old_rows)}
-"""
+""" if has_old else "")
     (out / "index.html").write_text(page)
     print(f"{out / 'index.html'}: {len(spans)} S1 spans ({len(bad)} failing), {len(s2)} S2 rows, {len(old)} old rows scanned")
     return 0
