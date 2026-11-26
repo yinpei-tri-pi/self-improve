@@ -42,3 +42,7 @@ dashboard:
     0:
       rollout:
         - {label: "not round 0: the earlier pre-check (70 tasks x 2, the tasks outside the subset), its rollout site", href: "../debug_dev120_check_20261126/index.html"}
+  jobs:
+    0:
+      s2_train: {name: yinpei-sys2-si-mix-qwen3vl-4b-gb192-full-zero2-2-11-26-08-30-15,
+                 note: "the S2 SMOKE test (300 steps, the check run's 4,008 rows + the old set 50/50), not round 0's S2 training: that one is submitted once the smoke passes"}

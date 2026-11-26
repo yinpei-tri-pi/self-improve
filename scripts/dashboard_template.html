@@ -428,6 +428,15 @@ function stageCard(key, name, s, it) {
       lineChart(host, {title: "loss", xs, xlabel: "step", series, yfmt: v => v.toFixed(3)});
       if (series.length > 1) card.append(el("div", {cls: "legend"}, series.map(sr => el("span", {}, [el("span", {cls: "sw", style: `border-top-color:${sr.color}`}), sr.name]))));
     }
+    const L = s.live || {};
+    if (L.batch || L.error) {
+      card.append(el("h3", {text: "the submitted job (live)"}), kv([["queue / priority", L.queue ? L.queue + " / " + L.priority : null],
+        ["AWS Batch", L.batch ? L.batch + (L.batch_reason ? " (" + L.batch_reason + ")" : "") : null], ["Batch job id", L.batch_id],
+        ["SageMaker job", L.sagemaker_job], ["SageMaker status", L.sagemaker ? L.sagemaker + " / " + L.secondary : null],
+        ["submitted / started / ended", [L.submitted, L.started, L.ended].map(x => x || "…").join(" → ")],
+        ["elapsed", L.hours != null ? L.hours + " h (limit " + L.max_run_h + " h)" : null], ["instances", L.instances],
+        ["failure", L.failure], ["history", (L.history || []).join(" · ")], ["error", L.error]]));
+    }
     for (const c of s.ckpts || []) card.append(kv([["checkpoint " + num(c.step), c.uri, true]]));
   } else if (key === "eval") {
     card.append(kv([["pair", s.pair], ["split", s.split], ["episodes", s.done != null ? `${num(s.done)} / ${num(s.episodes)}` : num(s.episodes)],

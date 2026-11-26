@@ -143,6 +143,60 @@ def _wandb_loss(cfg, k: int) -> list:
         return []
 
 
+def _job_live(cfg, name: str | None, queues: list[str]) -> dict:
+    """A submitted training job's live status: the AWS Batch service job (by name, on the given queues) and the SageMaker
+    training job it started ({} when not found)."""
+    if not name:
+        return {}
+    try:
+        import boto3
+
+        sess = boto3.Session(profile_name=cfg.get("aws_profile") or "sagemaker", region_name=cfg.region)
+        b, sm = sess.client("batch"), sess.client("sagemaker")
+        for q in queues:
+            jobs = b.list_service_jobs(jobQueue=q, filters=[{"name": "JOB_NAME", "values": [name]}]).get("jobSummaryList", [])
+            if not jobs:
+                continue
+            j = sorted(jobs, key=lambda x: x.get("createdAt", 0))[-1]
+            d = b.describe_service_job(jobId=j["jobId"])
+            out = {"queue": q, "batch": d.get("status"), "batch_reason": d.get("statusReason"), "batch_id": j["jobId"],
+                   "priority": d.get("schedulingPriority"),
+                   "submitted": datetime.fromtimestamp(d["createdAt"] / 1000).strftime("%Y-%m-%d %H:%M") if d.get("createdAt") else None}
+            arn = ((d.get("latestAttempt") or {}).get("serviceResourceId") or {}).get("value", "")
+            if arn:
+                tj = sm.describe_training_job(TrainingJobName=arn.rsplit("/", 1)[-1])
+                start, end = tj.get("TrainingStartTime"), tj.get("TrainingEndTime")
+                el = ((end or datetime.now(start.tzinfo)) - start).total_seconds() / 3600 if start else None
+                out.update(sagemaker_job=tj["TrainingJobName"], sagemaker=tj["TrainingJobStatus"],
+                           secondary=tj.get("SecondaryStatus"), failure=tj.get("FailureReason"),
+                           started=start.strftime("%Y-%m-%d %H:%M") if start else None,
+                           ended=end.strftime("%Y-%m-%d %H:%M") if end else None,
+                           hours=round(el, 2) if el is not None else None,
+                           instances=f"{tj['ResourceConfig']['InstanceCount']} x {tj['ResourceConfig']['InstanceType']}",
+                           max_run_h=round(tj.get("StoppingCondition", {}).get("MaxRuntimeInSeconds", 0) / 3600, 1),
+                           history=[f"{h['StartTime'].strftime('%H:%M')} {h['Status']}" for h in tj.get("SecondaryStatusTransitions", [])][-6:])
+            return out
+    except Exception as exc:  # noqa: BLE001
+        return {"error": f"{type(exc).__name__}: {str(exc)[:160]}"}
+    return {"batch": "not found on " + ", ".join(queues)}
+
+
+def _live_status(job: dict, fallback: str) -> str:
+    """The card's status from the live job: running only while SageMaker trains; waiting while queued or starting."""
+    if not job or job.get("error"):
+        return fallback
+    sm, b = job.get("sagemaker"), job.get("batch")
+    if sm == "Completed" or b == "SUCCEEDED":
+        return "done"
+    if sm in ("Failed", "Stopped") or b == "FAILED":
+        return "failed"
+    if sm == "InProgress" and job.get("secondary") == "Training":
+        return "running"
+    if b in ("SUBMITTED", "PENDING", "RUNNABLE", "SCHEDULED", "STARTING", "RUNNING") or sm == "InProgress":
+        return "waiting"
+    return fallback
+
+
 def _size_gb(uri: str) -> float:
     from selfimprove import s3
 
@@ -255,8 +309,10 @@ def live_state(config: str) -> dict:
                          "uri": f"{s2_uri(cfg, k)}/", "local": str(cfg.work_dir / f"iter_{k:02d}" / "s2_training_shard")}
         job = tr_s.get("job") or {}
         tr_status = MAP.get(tr_s.get("status", "pending"), "queued")
-        if tr_status == "running" and job.get("status") in (None, "Queued"):
-            tr_status = "waiting"
+        live = _job_live(cfg, (tr_s.get("launch") or {}).get("job_name"),
+                         [t.get("queue_full_name") or "fss-vla-p5-48xlarge-us-west-2"]) if tr_status in ("running", "done", "failed") else {}
+        if tr_status != "done":
+            tr_status = _live_status(live, tr_status)
         ckpts = launch.find_checkpoints(cfg, k) if tr_status in ("running", "done") else []
         loss = _wandb_loss(cfg, k) if tr_status in ("running", "done") else []
         steps = int(t["steps"])
@@ -269,13 +325,24 @@ def live_state(config: str) -> dict:
                              f"each batch) + the base set" if pre.get("s1") else None),
                     "started": job.get("start") or tr_s.get("submitted"), "eta": job.get("end") or "",
                     "queue": f"{t.get('queue_full_name') or t.get('queue')} (priority {t.get('queue_priority')})",
-                    "job_state": job.get("secondary") or job.get("batch_status"),
+                    "job_state": (f"{live.get('batch')} (Batch) / {live.get('sagemaker')} - {live.get('secondary')} (SageMaker)"
+                                  if live.get("sagemaker") else (live.get("batch") or job.get("secondary") or job.get("batch_status"))),
+                    "live": live,
                     "loss": loss, "ckpts": [{"step": a, "uri": b} for a, b in ckpts], "ckpt_uri": f"{cfg.s1_ckpt_uri(k)}/"}
         if tr_status == "running":
             now_running.append({"k": k, "stage": "s1_train", "progress": (loss[-1][0] / steps) if loss else 0.0,
                                 "eta": job.get("secondary") or ""})
-        s2_train = {"status": "queued", "model": "Qwen3-VL-4B (full fine-tune)", "rounds": f"0-{k}",
-                    "rows": pre.get("s2", {}).get("rows"), "note": "optional: only the evaluation needs it"}
+        s2_train = {"status": "queued", "model": "Qwen3-VL-4B (full fine-tune, from the original Qwen3-VL-4B-Instruct)",
+                    "rounds": f"{k}", "rows": pre.get("s2", {}).get("rows"),
+                    "note": "optional: only the evaluation needs it; 2 passes over the round's rows, 50% old set"}
+        s2_job = (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train")
+        if s2_job:  # a job tracked from the config (e.g. the S2 smoke, until the loop submits S2 itself)
+            s2_live = _job_live(cfg, s2_job.get("name"), s2_job.get("queues") or ["fss-cv-wfm-spot-p5-48xlarge-us-west-2",
+                                                                                  "fss-vla-spot-p5-48xlarge-us-west-2"])
+            s2_train.update(status=_live_status(s2_live, "queued"), job=s2_job.get("name"), live=s2_live,
+                            job_state=(f"{s2_live.get('batch')} (Batch) / {s2_live.get('sagemaker')} - {s2_live.get('secondary')} (SageMaker)"
+                                       if s2_live.get("sagemaker") else s2_live.get("batch")),
+                            note=s2_job.get("note") or s2_train["note"])
         ev = {"status": MAP.get(ev_s.get("status", "pending"), "queued") if cfg["eval"].get("enabled", True) else "queued",
               "pair": f"System1 round {k} + System2", "split": "target (held out)", "uri": f"{cfg.eval_uri(k)}/",
               "success": (ev_s.get("summary") or {}).get("overall")}
