@@ -457,7 +457,8 @@ def live_state(config: str) -> dict:
             "baseline": {"label": base.get("label", "start: System1 270k + System2 (0804), language steering"), "success": base.get("overall"),
                          "by_set": {a: base[a] for a in ("atomic_seen", "composite_seen", "composite_unseen") if a in base},
                          "note": base.get("note", "the earlier target-split run, 1,500 episodes")},
-            "trends": trends, "iterations": iters, "generated": time_now(), "s3": s3_layout(cfg)}
+            "trends": trends, "iterations": iters, "generated": time_now(), "s3": s3_layout(cfg),
+            "reference": (cfg.get("dashboard") or {}).get("reference") or []}
 
 
 def _monitor(cfg) -> dict:
@@ -542,8 +543,8 @@ def _eta(hours_left: float | None) -> dict:
         return {}
     t = datetime.now() + timedelta(hours=hours_left)
     days = (t.date() - datetime.now().date()).days
-    rough = (f"~{round(hours_left * 60 / 5) * 5 or 5} min left" if hours_left < 1 else
-             f"~{hours_left:.1f} h left" if hours_left < 10 else f"~{hours_left:.0f} h left")
+    rough = (f"~{round(hours_left * 60 / 5) * 5 or 5} min" if hours_left < 1 else
+             f"~{hours_left:.1f} h" if hours_left < 10 else f"~{hours_left:.0f} h")
     return {"eta": t.strftime("%Y-%m-%d %H:%M") + (f" +{days}d" if days > 0 else "") + f" ({hours_left:.1f} h left)",
             "eta_short": rough}
 

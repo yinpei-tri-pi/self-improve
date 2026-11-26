@@ -140,6 +140,7 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin
   </section>
   <section class="card"><h2>Experiment</h2><div class="kv" id="config"></div></section>
   <section class="card"><h2>Data on S3</h2><div id="s3"></div></section>
+  <section class="card"><h2>Reference runs</h2><div class="note">The starting checkpoints' own training runs, for comparing the rounds' losses (different data: these are the base training sets).</div><div id="reference"></div></section>
 </main>
 <script>
 const STATE0 = /*STATE*/null;
@@ -493,7 +494,13 @@ function renderS3() {
   };
   for (const t of L.trees) host.append(el("ul", {cls: "s3tree"}, [node(t, 0)]));
 }
+function renderReference() {
+  const host = document.getElementById("reference"); if (!host) return; host.replaceChildren();
+  for (const r of S.reference || []) host.append(el("div", {cls: "card", style: "margin-top: 10px"}, [el("b", {text: r.name}),
+    kv([["final", r.final], ["start", r.start], ["run", r.run], ["where", r.where, true]])]));
+}
 function renderAll(focus) {
+  renderReference();
   renderS3();
   document.getElementById("title").textContent = `${S.title} · ${S.exp}`;
   document.getElementById("subtitle").textContent = S.subtitle;

@@ -42,3 +42,12 @@ dashboard:
     0:
       s2_train: {name: yinpei-sys2-si-mix-qwen3vl-4b-gb192-full-zero2-2-11-26-09-31-47, queues: [fss-vla-p5-48xlarge-us-west-2], steps: 300,
                  note: "the S2 SMOKE test (300 steps, the check run's 4,008 rows + the old set 50/50), not round 0's S2 training: that one is submitted once the smoke passes"}
+  # the starting checkpoints' own training runs (2026-11-26, from their SageMaker CloudWatch logs and the S2 logging.jsonl)
+  reference:
+    - {name: "S1 start: the 270k openpi checkpoint (f0717-270k-bs512-progact)", final: "loss 0.0059 (flow_loss_real 0.0162) at step 268,800",
+       start: "0.281 at step 0", run: "4 x p5, batch 512, 270k steps, 2.28 s/step, 7 days (2026-07-27 -> 08-04)",
+       where: "SageMaker AWSBatchyinpei-pi05-robocasa-mnd2686495f7c73354b4de4e11c41a36aa (CloudWatch /aws/sagemaker/TrainingJobs)"}
+    - {name: "S2 reference: the 0804 Qwen3-VL-4B full fine-tune (system2-full-0804-qwen3vl-4b-gb192-full-vitfull-...-ep3)",
+       final: "loss ~0.115, token accuracy ~0.956 (0.150 averaged over the run)", start: "1.39 at step 1",
+       run: "2 x p5, batch 192 (3 x 16 GPUs x grad-acc 4), 17,124 steps = 3 epochs of full0804 (1.1M samples), 30 h",
+       where: "s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_ft_ckpts/system2-full-0804-qwen3vl-4b-gb192-full-vitfull-lr1e5-vitlr2e6-alignerlr1e5-zero2-2n-ep3/logging.jsonl"}
