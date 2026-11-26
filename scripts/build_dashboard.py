@@ -181,6 +181,56 @@ def _job_live(cfg, name: str | None, queues: list[str]) -> dict:
     return {"batch": "not found on " + ", ".join(queues)}
 
 
+def _cw_progress(cfg, sm_job: str | None, kind: str) -> dict:
+    """{"step", "loss", "sec_per_step", "points": [[step, loss], ...]} from the training job's CloudWatch log ({} if none)."""
+    if not sm_job:
+        return {}
+    import re
+
+    try:
+        import boto3
+
+        logs = boto3.Session(profile_name=cfg.get("aws_profile") or "sagemaker", region_name=cfg.region).client("logs")
+        group = "/aws/sagemaker/TrainingJobs"
+        streams = logs.describe_log_streams(logGroupName=group, logStreamNamePrefix=sm_job + "/algo-1").get("logStreams", [])
+        if not streams:
+            return {}
+        stream = streams[0]["logStreamName"]
+        pat = "Step" if kind == "s1" else "global_step"
+        pts, last, sps, token = [], None, None, None
+        for _ in range(40):  # up to ~40 pages of matching lines
+            kw = {"logGroupName": group, "logStreamNames": [stream], "filterPattern": f'"{pat}"', "limit": 10000}
+            if token:
+                kw["nextToken"] = token
+            r = logs.filter_log_events(**kw)
+            for e in r.get("events", []):
+                m = (re.search(r"Step (\d+): .*?\bloss=([\d.eE+-]+)(?:.*?t/step_s=([\d.]+))?", e["message"]) if kind == "s1" else
+                     re.search(r"'loss': '([\d.eE+-]+)'.*?'global_step/max_steps': '(\d+)/\d+'", e["message"]))
+                if not m:
+                    continue
+                if kind == "s1":
+                    step, loss = int(m.group(1)), float(m.group(2))
+                    if m.group(3):
+                        sps = float(m.group(3))
+                else:
+                    loss, step = float(m.group(1)), int(m.group(2))
+                    t = re.search(r"'train_speed\(s/it\)': '([\d.]+)'", e["message"])
+                    if t:
+                        sps = float(t.group(1))
+                pts.append([step, round(loss, 5)])
+                last = (step, loss)
+            token = r.get("nextToken")
+            if not token:
+                break
+        if not pts:
+            return {}
+        pts = sorted({p[0]: p for p in pts}.values())
+        k = max(1, len(pts) // 200)
+        return {"step": last[0], "loss": last[1], "sec_per_step": sps, "points": pts[::k] + ([pts[-1]] if pts[-1] not in pts[::k] else [])}
+    except Exception as exc:  # noqa: BLE001
+        return {"error": f"{type(exc).__name__}: {str(exc)[:120]}"}
+
+
 def _live_status(job: dict, fallback: str) -> str:
     """The card's status from the live job: running only while SageMaker trains; waiting while queued or starting."""
     if not job or job.get("error"):
@@ -315,23 +365,31 @@ def live_state(config: str) -> dict:
             tr_status = _live_status(live, tr_status)
         ckpts = launch.find_checkpoints(cfg, k) if tr_status in ("running", "done") else []
         loss = _wandb_loss(cfg, k) if tr_status in ("running", "done") else []
+        cw = _cw_progress(cfg, live.get("sagemaker_job"), "s1") if tr_status in ("running", "done", "failed") else {}
+        if not loss and cw.get("points"):
+            loss = cw["points"]
         steps = int(t["steps"])
         s1_train = {"status": tr_status, "job": (tr_s.get("launch") or {}).get("job_name") or job.get("training_job"),
                     "instances": f"{t.get('instance_count', 2)} x {t.get('instance_type', 'p5')}",
                     "from_ckpt": rollout["s1_ckpt"], "batch": t["batch_size"], "steps": steps,
                     "step": loss[-1][0] if loss else (steps if tr_status == "done" else None),
+                    "sec_per_step": cw.get("sec_per_step"),
+                    "eta": "",
                     "lr": f"{t.get('lr')} flat, EMA {t.get('ema_decay')}", "new_frac": t.get("new_data_fraction"),
                     "data": (f"{pre['s1']['samples']:,} rollout samples ({float(t.get('new_data_fraction', 0.8)):.0%} of "
                              f"each batch) + the base set" if pre.get("s1") else None),
-                    "started": job.get("start") or tr_s.get("submitted"), "eta": job.get("end") or "",
+                    "started": job.get("start") or tr_s.get("submitted"),
                     "queue": f"{t.get('queue_full_name') or t.get('queue')} (priority {t.get('queue_priority')})",
                     "job_state": (f"{live.get('batch')} (Batch) / {live.get('sagemaker')} - {live.get('secondary')} (SageMaker)"
                                   if live.get("sagemaker") else (live.get("batch") or job.get("secondary") or job.get("batch_status"))),
                     "live": live,
                     "loss": loss, "ckpts": [{"step": a, "uri": b} for a, b in ckpts], "ckpt_uri": f"{cfg.s1_ckpt_uri(k)}/"}
+        if loss and cw.get("sec_per_step") and tr_status == "running":
+            left_h = (steps - loss[-1][0]) * cw["sec_per_step"] / 3600
+            s1_train["eta"] = (datetime.now() + timedelta(hours=left_h)).strftime("%Y-%m-%d %H:%M") + f" ({left_h:.1f} h left)"
         if tr_status == "running":
             now_running.append({"k": k, "stage": "s1_train", "progress": (loss[-1][0] / steps) if loss else 0.0,
-                                "eta": job.get("secondary") or ""})
+                                "eta": s1_train.get("eta") or job.get("secondary") or ""})
         s2_train = {"status": "queued", "model": "Qwen3-VL-4B (full fine-tune, from the original Qwen3-VL-4B-Instruct)",
                     "rounds": f"{k}", "rows": pre.get("s2", {}).get("rows"),
                     "note": "optional: only the evaluation needs it; 2 passes over the round's S2 training samples, 50% old set"}
@@ -339,6 +397,9 @@ def live_state(config: str) -> dict:
         if s2_job:  # a job tracked from the config (e.g. the S2 smoke, until the loop submits S2 itself)
             s2_live = _job_live(cfg, s2_job.get("name"), s2_job.get("queues") or ["fss-cv-wfm-spot-p5-48xlarge-us-west-2",
                                                                                   "fss-vla-spot-p5-48xlarge-us-west-2"])
+            s2cw = _cw_progress(cfg, s2_live.get("sagemaker_job"), "s2")
+            if s2cw.get("points"):
+                s2_train.update(loss=s2cw["points"], step=s2cw["step"], sec_per_step=s2cw.get("sec_per_step"))
             s2_train.update(status=_live_status(s2_live, "queued"), job=s2_job.get("name"), live=s2_live,
                             job_state=(f"{s2_live.get('batch')} (Batch) / {s2_live.get('sagemaker')} - {s2_live.get('secondary')} (SageMaker)"
                                        if s2_live.get("sagemaker") else s2_live.get("batch")),
