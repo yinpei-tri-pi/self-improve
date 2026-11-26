@@ -186,6 +186,9 @@ file_mounts:
   /home/ubuntu/.config/hexashell/api-key: ~/.config/selfimprove/secrets/openai-api-key
   /home/ubuntu/.config/selfimprove/wandb-api-key: ~/.config/selfimprove/secrets/wandb-api-key
 rsync_exclude:
+- 'site'
+- '**/site/**'
+- '**/sites'
 - '**/.venv'
 - '**/.venvs'
 - '**/results'
