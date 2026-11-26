@@ -108,7 +108,7 @@ def main() -> int:
     ap.add_argument("--inspector", default="http://127.0.0.1:7891")
     ap.add_argument("--s1", default="si_sub50check_iter00")
     ap.add_argument("--s2", default="si_sub50check_rollout")
-    ap.add_argument("--s2-old", default="old_full0804_v2")
+    ap.add_argument("--s2-old", default="", help="an old-set view to show too (e.g. old_full0804_v4); none by default")
     ap.add_argument("--old-shards", type=int, default=24, help="old-set shards scanned for the example links")
     ap.add_argument("--workers", type=int, default=12)
     args = ap.parse_args()

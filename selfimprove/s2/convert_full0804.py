@@ -1,6 +1,9 @@
 """The old System2 set (system2_full_0804: 1.1M records from 30,931 pretrain demos) -> the new single-mode S2 rows.
 
-    .venv/bin/python -m selfimprove.s2.convert_full0804 --out ~/data/old_s2/full0804_v2 [--workers 8] [--limit N]
+    .venv/bin/python -m selfimprove.s2.convert_full0804 --out ~/data/old_s2/full0804_v4 [--workers 8] [--limit N]
+
+The only version in use is full0804_v4 (2026-11-26: the ongoing milestone view, the last step listed); v2 / v3 are
+deleted. A new conversion gets a new version (full0804_v5, ...), never an overwrite of the one a training reads.
 
 What is converted (the rest is dropped):
 
@@ -335,7 +338,7 @@ def main() -> int:
     for items in first_rows.values():
         per_task.update(json.loads(js)["meta"]["task"] for _, js, _ in items)
     per_kind = {k.split(": ", 1)[1]: v for k, v in stats.items() if k.startswith("row: ")}
-    meta = {"dataset": "selfimprove/s2_base/full0804_v2",
+    meta = {"dataset": f"selfimprove/s2_base/{out.name}",
             "format": "system2-shards (sys2_train_eval): <key>.json {messages, meta, labels} + <key>.videobin | "
                       "<key>.imagebin0; the new single-mode S2 rows (selfimprove/s2/rows_v2.py)",
             "source": SRC, "num_shards": len(names), "num_samples": sum(counts.values()),

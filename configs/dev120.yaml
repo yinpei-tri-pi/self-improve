@@ -57,7 +57,7 @@ s2:
   base:
     data_name: full0804_v4
     inspector_view: old_full0804_v4     # RoboAnnotator dataset name (the view under ~/selfimprove_work/shard_view/s2)
-    ckpt_uri: s3://tri-ml-datasets-uw2/yinpeidai/self_improve/si_dev120/s2_base/   # the final checkpoint only
+    ckpt_uri: s3://tri-ml-datasets-uw2/yinpeidai/self_improve/si_dev120/s2_base/si-base-full0804v4-qwen3vl-4b-gb192-full-vitfull-lr1e5-vitlr2e6-alignerlr1e5-zero2-2n-ep2/   # the final checkpoint only (checkpoint-5830)
     data_uri: s3://tri-ml-datasets-uw2/yinpeidai/self_improve/s2_base/full0804_v4/
     samples: 562183                     # the conversion's meta.json (2026-11-26)
     epochs: 2

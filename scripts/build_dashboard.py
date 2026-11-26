@@ -429,8 +429,12 @@ def live_state(config: str) -> dict:
         s2_train = {"status": "queued", "model": "Qwen3-VL-4B, full fine-tune",
                     "from_ckpt": "the System2 base (start column)" if k == 0 else f"round {k - 1}'s System2",
                     "rounds": f"{k}", "rows": rows,
-                    "data": (f"{num(rows)} samples of round {k} ({frac:.0%} of each batch) + the old set ({1 - frac:.0%})" if rows
-                             else f"the round's samples ({frac:.0%}) + the old set ({1 - frac:.0%})"),
+                    "data": ((f"{num(rows)} samples of round {k}: iter_{k:02d}/s2_training_shard, built "
+                              f"{(pre.get('s2') or {}).get('built') or '?'} ({frac:.0%} of each batch) + "
+                              f"{(cfg.get('s2') or {}).get('base', {}).get('data_name', 'the old set')} ({1 - frac:.0%})") if rows
+                             else f"the round's S2 training shards ({frac:.0%}) + "
+                                  f"{(cfg.get('s2') or {}).get('base', {}).get('data_name', 'the old set')} ({1 - frac:.0%})"),
+                    "data_uri": f"{s2_uri(cfg, k)}/", "base_data_uri": (cfg.get("s2") or {}).get("base", {}).get("data_uri"),
                     "epochs": f"{ep} over the round's samples", "batch": int(s2r.get("batch", 192)), "lr": s2r.get("lr", "1e-5"),
                     "steps": -(-ep * int(rows) // int(frac * int(s2r.get("batch", 192)))) if rows else None,
                     "ckpt_uri": f"{it_uri}/s2_ckpts/", "note": "optional: only the evaluation needs it"}
@@ -455,7 +459,8 @@ def live_state(config: str) -> dict:
         trends["api_cost_usd"].append(prog.get("api_cost_usd"))
     sb = (cfg.get("s2") or {}).get("base") or {}
     start_s2 = {"status": "queued", "model": "Qwen3-VL-4B, full fine-tune", "from_ckpt": "the original Qwen3-VL-4B-Instruct",
-                "data": f"the old set only: {sb.get('data_name', 'full0804')} ({num(sb.get('samples'))} samples, the new format)",
+                "data": (f"the old set only: {sb.get('data_name', 'full0804')} ({num(sb.get('samples'))} samples; the new format, "
+                         "the ongoing milestone view of 2026-11-26)"),
                 "epochs": sb.get("epochs", 2), "batch": int(sb.get("batch", 192)), "lr": sb.get("lr", "1e-5"),
                 "steps": sb.get("steps"), "instances": sb.get("instances"), "queue": sb.get("queue"),
                 "ckpt_uri": sb.get("ckpt_uri"), "data_uri": sb.get("data_uri"),
@@ -481,8 +486,9 @@ def live_state(config: str) -> dict:
                                     else f"perturbed from round {r.get('augment_from_round', 1)}")
                                  + f" (+-{r.get('start_shift', 0) * 100:.0f} cm, +-{r.get('start_turn', 0):g} deg)"),
                        "s1_start": cfg["start"]["s1_ckpt"],
-                       "s2": ("Qwen3-VL-4B, single mode (judge, milestone, decision, subgoal): a base trained on the old set (2 epochs) "
-                              "at the start, then each round from the previous round's, 80% the round's samples / 20% the old set, 3 epochs"),
+                       "s2": ("Qwen3-VL-4B, single mode (judge, milestone, decision, subgoal), the ongoing milestone view: a base "
+                              "trained on full0804_v4 only (2 epochs, LR 1e-5) at the start, then each round from the previous "
+                              "round's, 80% the round's S2 training shards / 20% full0804_v4, 3 epochs, LR 5e-6"),
                        "train": f"batch {t['batch_size']}, {float(t.get('new_data_fraction', 0.8)):.0%} rollout / "
                                 f"{1 - float(t.get('new_data_fraction', 0.8)):.0%} base, {int(t['steps']) // 1000}k steps, "
                                 f"ckpts every {int(t['save_interval']) // 1000}k, {t.get('queue_full_name') or t.get('queue')}",
@@ -565,8 +571,6 @@ def s3_layout(cfg) -> dict:
     shared = n("shared, outside the experiment", "", "", [
         n(f"{cfg.s3_root}/s2_base/full0804_v4/", "the old System2 set in the new format and view (2026-11-26): all of the S2 "
                                                   "base's data, 20% of each batch of every round's S2", "convert_full0804.py (once) -> S2 training"),
-        n(f"{cfg.s3_root}/s2_base/full0804_v3/", "the earlier conversion (the 'now' view, without the last step listed): kept, "
-                                                  "not used"),
         n(cfg["start"]["s1_ckpt"] + "/", "the start System1 (270k openpi checkpoint)", "-> round 0"),
         n("s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_released_ckpt/Qwen3-VL-4B-Instruct/",
           "the original Qwen3-VL-4B-Instruct: every S2 training starts from it", "-> S2 training"),

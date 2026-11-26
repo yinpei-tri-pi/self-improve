@@ -473,7 +473,7 @@ function stageCard(key, name, s, it) {
       if (s.s2.judges) card.append(table(["judge", "samples"], Object.entries(s.s2.judges).map(([a, b]) => [a, num(b)])));
     }
   } else if (key === "s1_train" || key === "s2_train") {
-    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} training samples (round ${s.rounds})` : null)], ["data (S3)", s.data_uri, true],
+    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} training samples (round ${s.rounds})` : null)], ["data (S3)", s.data_uri, true], ["old set (S3)", s.base_data_uri, true],
       ["batch / lr", s.batch ? `${s.batch} / ${s.lr || ""}` : null], ["epochs", s.epochs], ["steps", s.step != null ? `${num(s.step)} / ${num(s.steps)}` : num(s.steps)],
       ["speed", s.sec_per_step ? s.sec_per_step + " s / step" : null], ["queue", s.queue], ["job state", s.job_state],
       ["started / ETA", s.started ? s.started + " → " + (s.eta || "…") : null], ["checkpoints", s.ckpt_uri, true], ["note", s.note]]));
