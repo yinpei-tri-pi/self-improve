@@ -91,6 +91,8 @@ def sagemaker_command(cfg: Config, k: int, ckpt_uri: str, extra_shards: str, *, 
            "OPENPI_WANDB_TAGS": f"iter_{int(k):02d},s1-train", "OPENPI_WANDB_JOB_TYPE": "s1-train"}
     cmd += [
         f"--instance.type={t['instance_type']}", f"--instance.count={int(t['instance_count'])}",
+        # SageMaker's run-time limit (whole days): 25k steps take ~8-10 h, a hung job ends within 2 days (not openpi's 14)
+        f"--job.max_run_days={int(t.get('max_run_days', 2))}",
         *([f"--queue.full_name={t['queue_full_name']}"] if t.get("queue_full_name") else [f"--queue.name={t['queue']}"]),
         f"--queue.priority={int(t['queue_priority'])}",
         f"--data.channels.robocasa.s3_uri={t['base_shards'].rstrip('/')}/",

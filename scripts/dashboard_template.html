@@ -347,10 +347,9 @@ function renderTrends() {
   lineChart(host, {title: "Held-out eval (System1 k + System2 k)", value: pct(last(t.eval_success)), xs: t.iterations, categorical: true,
     series: [{name: "target split", values: t.eval_success, color: "var(--s1)"}], yfmt: v => pct(v, 0), ymin: 0.3, ymax: 0.9,
     ref: {value: S.baseline.success, label: "start " + pct(S.baseline.success, 1)}});
-  lineChart(host, {title: "Astra prompt tokens per episode (k)", value: last(t.prompt_tokens_k) == null ? "–" : last(t.prompt_tokens_k).toFixed(0) + "k",
-    xs: t.iterations, categorical: true, series: [{name: "tokens (k)", values: t.prompt_tokens_k, color: "var(--s1)"}], yfmt: v => v.toFixed(0), ymin: 0, ymax: 800});
-  const rows = t.iterations.map((x, i) => [x, pct(t.rollout_success[i]), pct(t.s1_step_share[i]), pct(t.eval_success[i]), t.prompt_tokens_k[i] == null ? "–" : t.prompt_tokens_k[i] + "k"]);
-  document.getElementById("trend-table").replaceChildren(table(["", "rollout success", "System1 share", "held-out eval", "prompt tokens"], rows));
+  const cost = t.api_cost_usd || [];
+  const rows = t.iterations.map((x, i) => [x, pct(t.rollout_success[i]), pct(t.s1_step_share[i]), pct(t.eval_success[i]), cost[i] == null ? "–" : "$" + num(Math.round(cost[i]))]);
+  document.getElementById("trend-table").replaceChildren(table(["", "rollout success", "System1 share", "held-out eval", "API cost"], rows));
 }
 function table(head, rows) {
   return el("table", {cls: "tbl"}, [el("thead", {}, [el("tr", {}, head.map(h => el("th", {text: h})))]),
@@ -388,9 +387,13 @@ function stageCard(key, name, s, it) {
       ["tokens in / out", s.tokens_in != null ? (s.tokens_in / 1e6).toFixed(1) + "M (" + (s.tokens_in_cached / 1e6).toFixed(1) + "M cached) / " + (s.tokens_out / 1e6).toFixed(2) + "M" : null],
       ["records (S3)", s.uri, true], ["local copy", s.local, true]]));
     if (s.by_set) card.append(table(["task set", "success"], Object.entries(s.by_set).map(([a, b]) => [a, pct(b)])));
-    if (s.site) card.append(el("div", {}, [el("a", {href: s.site, text: "the round's rollout site (every episode, its S1 and S2 labels) →"})]));
+    if (s.site) card.append(el("div", {}, [el("a", {href: s.site, target: "_blank", text: "the round's rollout site (every episode, every turn, its S1 spans and S2 rows) →"})]));
   } else if (key === "preprocess") {
     card.append(kv([["started / finished", s.started ? s.started + " → " + (s.finished || "…") : (s.finished ? "finished " + s.finished : null)]]));
+    if (s.site) card.append(el("div", {}, [el("a", {href: s.site, target: "_blank", text: "the round's preprocessed data (every S1 span and S2 row, with the checks) →"})]));
+    if (s.inspect_s1) card.append(el("div", {cls: "note"}, [el("a", {href: s.inspect_s1, target: "_blank", text: "S1 shard inspector"}), " · ",
+      el("a", {href: s.inspect_s2, target: "_blank", text: "S2 shard inspector"}), " (each sample as the trainer reads it)"]));
+    if (s.site_note) card.append(el("div", {cls: "note", text: s.site_note}));
     if (s.s1) {
       card.append(el("h3", {text: "System1 shards"}), kv([["spans / samples", num(s.s1.spans) + " / " + num(s.s1.samples)], ["recovery spans", num(s.s1.recovery_spans)],
         ["episodes used", num(s.s1.episodes_used) + " of " + num(s.s1.episodes) + " (successful ones only)"], ["shards / size", num(s.s1.shards) + " / " + s.s1.size_gb + " GB"],

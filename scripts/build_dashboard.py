@@ -113,6 +113,9 @@ def mock_state(exp: str) -> dict:
 
 
 # -- live: the real state of an experiment (S3: state.json + every stage's _plan/_status/_DONE/meta, W&B loss) ------------
+#: rounds the dashboard shows (placeholders past the configured iterations)
+SHOW_ROUNDS = 6
+
 MAP = {"done": "done", "running": "running", "submitted": "running", "dry_run": "waiting", "failed": "failed",
        "skipped": "queued", "todo": "waiting", "pending": "queued"}
 
@@ -169,10 +172,16 @@ def live_state(config: str) -> dict:
     sets = {row["task"]: row.get("task_set") for row in T.rollout_tasks()}
     n_target = sum(sets.get(t) in ("atomic_seen", "composite_seen") for t in tasks)
     t = cfg["train"]
-    iters, trends = [], {"iterations": ["start"], "rollout_success": [None], "s1_step_share": [None],
-                         "prompt_tokens_k": [None], "eval_success": [None], "api_cost_usd": [None]}
+    iters, trends = [], {"iterations": [], "rollout_success": [], "s1_step_share": [], "eval_success": [],
+                         "api_cost_usd": []}
     now_running = []
-    for k in range(cfg.iterations):
+    for k in range(max(cfg.iterations, SHOW_ROUNDS)):
+        if k >= cfg.iterations:  # a placeholder: rounds beyond the configured ones (raise iterations to run them)
+            iters.append({"k": k, "label": f"round {k} (not configured)", "placeholder": True,
+                          **{st: {"status": "queued"} for st in ("rollout", "preprocess", "s1_train", "s2_train", "eval")}})
+            for key in trends:
+                trends[key].append(f"round {k}" if key == "iterations" else None)
+            continue
         sk = sit.get(str(k)) or sit.get(k) or {}
         ro_s, pp_s, tr_s, ev_s = (sk.get(x) or {} for x in ("rollout", "preprocess", "train", "eval"))
         it_uri = f"{cfg.exp_uri}/iter_{k:02d}"
@@ -199,8 +208,11 @@ def live_state(config: str) -> dict:
                    "started": ro_s.get("started"), "finished": ro_s.get("finished"),
                    "perturb": (f"{pert}/{len(eps)} perturbed (+-{r.get('start_shift', 0) * 100:.0f} cm, "
                                f"+-{r.get('start_turn', 0):g} deg)" if eps else None),
-                   "uri": f"{cfg.rollout_uri(k)}/", "local": str(cfg.work_dir / f"iter_{k:02d}" / "rollout"),
-                   "site": f"../debug_{cfg.exp_id}/index.html" if k == 0 else None}
+                   "uri": f"{cfg.rollout_uri(k)}/", "local": str(cfg.work_dir / f"iter_{k:02d}" / "rollout")}
+        sites_f = ROOT / "site" / "rounds" / f"{cfg.exp_id}_iter_{k:02d}.json"
+        sites = json.loads(sites_f.read_text()) if sites_f.exists() else {}
+        if sites.get("rollout_site"):
+            rollout["site"] = "../" + sites["rollout_site"]
         if ro_status == "running" and planned:
             now_running.append({"k": k, "stage": "rollout", "progress": (prog.get("episodes_done") or 0) / planned,
                                 "eta": prog.get("eta") or ""})
@@ -210,6 +222,13 @@ def live_state(config: str) -> dict:
         if pp_status == "running":
             now_running.append({"k": k, "stage": "preprocess", "progress": 0.5, "eta": ""})
         pre = {"status": pp_status, "started": pp_s.get("started"), "finished": pp_s.get("finished")}
+        if sites.get("data_site"):
+            insp, view = sites.get("inspector", "http://127.0.0.1:7891"), sites.get("view")
+            pre["site"] = "../" + sites["data_site"]
+            pre["inspect_s1"] = f"{insp}/system1_training_sample?dataset={view}"
+            pre["inspect_s2"] = f"{insp}/system2_training_sample?dataset={view}"
+        elif pp_status == "done":
+            pre["site_note"] = "the round's data site is being built (scripts/build_round_sites.py)"
         if s1m:
             use = s1m.get("segment_use") or {}
             pre["s1"] = {"spans": sum(v for a, v in use.items() if a.endswith("/kept")), "samples": s1m.get("samples"),
@@ -256,7 +275,6 @@ def live_state(config: str) -> dict:
         trends["iterations"].append(f"round {k}")
         trends["rollout_success"].append(prog.get("success_rate"))
         trends["s1_step_share"].append(prog.get("s1_step_share"))
-        trends["prompt_tokens_k"].append(round(prog["tokens_prompt_mean"] / 1000, 1) if prog.get("tokens_prompt_mean") else None)
         trends["eval_success"].append(ev["success"])
         trends["api_cost_usd"].append(prog.get("api_cost_usd"))
     nxt = next((f"{it['label']}: {s}" for it in iters for s in ("rollout", "preprocess", "s1_train")

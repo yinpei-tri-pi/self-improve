@@ -110,6 +110,7 @@ train:
   # S1 training always on the reserved p5 queue at priority 150 (the user, 2026-11-26; spot queues at 200 are for S2)
   queue_full_name: fss-vla-p5-48xlarge-us-west-2
   queue_priority: 150
+  max_run_days: 2                     # SageMaker's run-time limit per S1 job (25k steps ~8-10 h; 2 days to be safe)
   image_tag: null                     # null: build + push from openpi_dir's HEAD at the first round
   config: pi05_robocasa_system1
   # the 270k run's flags (progress-as-action, no executed-step) so the checkpoint loads unchanged
