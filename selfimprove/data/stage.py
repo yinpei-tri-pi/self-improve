@@ -59,16 +59,16 @@ def span_checks(shards: Path, workers: int = 12, log=print) -> dict:
     span end, the first frame at the span start (recoveries: at their fix), progress monotone in [0, 1], one subgoal,
     at most one halt frame. {"spans", "failing", "issues", "samples", "shards"}."""
     import collections
-    import importlib.util
     from concurrent.futures import ProcessPoolExecutor
 
-    spec = importlib.util.spec_from_file_location("bsi", Path(__file__).resolve().parents[2] / "scripts" / "build_shard_index.py")
-    bsi = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(bsi)
+    from .shard_checks import s1_scan, s1_spans
+
     tars = sorted(shards.glob("*.tar"))
     with ProcessPoolExecutor(workers) as pool:
-        samples = [r for part in pool.map(bsi.s1_scan, [str(t) for t in tars]) for r in part]
-    spans = bsi.s1_spans(samples)
+        samples = [r for part in pool.map(s1_scan, [str(t) for t in tars]) for r in part]
+    for i, r in enumerate(samples):  # the global sample index (tar order), as the data page numbers them
+        r["i"] = i
+    spans = s1_spans(samples)
     bad = [sp for sp in spans if sp["issues"]]
     issues = collections.Counter(i.split(" ")[0] + " " + i.split(" ")[1] for sp in bad for i in sp["issues"])
     out = {"spans": len(spans), "failing": len(bad), "issues": dict(issues), "samples": len(samples), "shards": len(tars)}
