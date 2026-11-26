@@ -52,8 +52,12 @@ main { padding: 0 28px 40px; display: grid; gap: 16px; grid-template-columns: mi
 .st-waiting .ic { background: var(--warning); color: #0b0b0b; } .st-queued .ic { background: var(--queued); }
 .st-failed .ic { background: var(--critical); }
 /* the pipeline picture */
-#pipe { width: 100%; overflow-x: auto; }
-#pipe svg { display: block; width: 100%; height: auto; max-width: 100%; }
+#pipe { display: flex; width: 100%; align-items: flex-start; }
+#pipe .pipe-labels { flex: none; display: block; }
+#pipe .pipe-scroll { flex: 1 1 auto; min-width: 0; overflow-x: auto; overflow-y: hidden; cursor: grab; scrollbar-width: thin; }
+#pipe .pipe-scroll.drag { cursor: grabbing; user-select: none; }
+#pipe .pipe-scroll svg { display: block; max-width: none; }
+.pipe-hint { font-size: 12px; color: var(--muted); margin: 2px 0 0 4px; }
 .node rect.box { fill: var(--surface); stroke: var(--axis); stroke-width: 1.2; }
 .node.done rect.box { stroke: var(--good); fill: var(--good-wash); }
 .node.running rect.box { stroke: var(--run); stroke-width: 2; fill: var(--run-wash); animation: pulse 1.8s ease-in-out infinite; }
@@ -123,9 +127,10 @@ details summary { cursor: pointer; color: var(--ink2); font-size: 12.5px; margin
   <section class="card">
     <h2>The loop</h2>
     <div id="pipe"></div>
+    <div class="pipe-hint">drag the picture sideways (or scroll) for the later rounds</div>
     <div class="legend" id="legend"></div>
     <p class="note">Round k's rollout (System1 + HexaShell) waits only for System1's training of round k&minus;1. System2 is off that path:
-      it trains on its round's S2 training shards (50% old set), and the held-out evaluation of round k runs once System1 k and System2 k are both ready.
+      the System2 base (start) is trained on the old set (2 epochs, LR 1e-5); round k's System2 continues from round k&minus;1's (round 0 from the base) on its round's S2 training shards, 80% of each batch, 20% the old set, 3 epochs, LR 5e-6; the held-out evaluation of round k runs once System1 k and System2 k are both ready.
       Click a box for its details.</p>
   </section>
   <section class="card">
@@ -197,7 +202,7 @@ function keyLine(stage, s, k) {
 function renderNow() {
   const box = document.getElementById("now"); box.replaceChildren();
   for (const r of S.now.running || []) {
-    const it = S.iterations.find(x => x.k === r.k), name = STAGES.find(x => x[0] === r.stage);
+    const it = r.k === "start" ? S.start : S.iterations.find(x => x.k === r.k), name = r.k === "start" ? [r.stage, "System2 base training"] : STAGES.find(x => x[0] === r.stage);
     const s = it[r.stage];
     box.append(el("div", {cls: "item"}, [
       el("div", {}, [badge("running"), el("span", {cls: "note", text: `  ${it.label}`})]),
@@ -223,9 +228,13 @@ function renderNow() {
 
 /* ---------------- the pipeline picture ---------------- */
 function renderPipe() {
-  const its = S.iterations, colW = 270, x0 = 330, laneH = 86, y0 = 46, bw = 214, bh = 58;
-  const W = x0 + 40 + its.length * colW, H = y0 + STAGES.length * laneH + 10;
-  const g = svg("svg", {viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "xMinYMin meet", role: "img", "aria-label": "the loop's stages per round"});
+  // drawn at SCALE px per unit: the labels pinned on the left, the columns (start, round 0, ...) in a strip dragged sideways
+  const SCALE = 1.45, labelW = 170, its = S.iterations, colW = 250, x0 = -10, laneH = 86, y0 = 46, bw = 214, bh = 58;
+  const W = 30 + (its.length + 1) * colW, H = y0 + STAGES.length * laneH + 10;
+  const host = document.getElementById("pipe"), oldScroll = host.querySelector(".pipe-scroll");
+  const keep = oldScroll ? oldScroll.scrollLeft : null;
+  const lab = svg("svg", {class: "pipe-labels", viewBox: `0 0 ${labelW} ${H}`, width: labelW * SCALE, height: H * SCALE, "aria-hidden": "true"});
+  const g = svg("svg", {viewBox: `0 0 ${W} ${H}`, width: W * SCALE, height: H * SCALE, role: "img", "aria-label": "the loop's stages per round"});
   const defs = svg("defs", {}, [svg("marker", {id: "arr", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse"},
     [svg("path", {d: "M0,0 L8,4 L0,8 z", style: "fill:var(--axis)"})]),
     svg("marker", {id: "arrl", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse"},
@@ -233,17 +242,12 @@ function renderPipe() {
   g.append(defs);
   STAGES.forEach(([key, name, sub], i) => {
     const y = y0 + i * laneH + bh / 2;
-    g.append(svg("text", {x: 12, y: y - 2, class: "lane-label", text: name}));
-    g.append(svg("text", {x: 12, y: y + 14, class: "lane-sub", text: sub}));
-    g.append(svg("line", {x1: 10, x2: W - 10, y1: y0 + i * laneH - 14, y2: y0 + i * laneH - 14, class: "gridl"}));
+    lab.append(svg("text", {x: 12, y: y - 2, class: "lane-label", text: name}));
+    lab.append(svg("text", {x: 12, y: y + 14, class: "lane-sub", text: sub}));
+    lab.append(svg("line", {x1: 10, x2: labelW, y1: y0 + i * laneH - 14, y2: y0 + i * laneH - 14, class: "gridl"}));
+    g.append(svg("line", {x1: 0, x2: W - 10, y1: y0 + i * laneH - 14, y2: y0 + i * laneH - 14, class: "gridl"}));
   });
-  // the start column: the checkpoints round 0 starts from
-  const sx = x0 + 20, startNode = svg("g", {class: "node done"}, [
-    svg("rect", {class: "box", x: sx - 150, y: y0, width: 120, height: bh, rx: 8}),
-    svg("text", {class: "t", x: sx - 140, y: y0 + 22, text: "start"}),
-    svg("text", {class: "k", x: sx - 140, y: y0 + 40, text: "System1 270k"})]);
-  g.append(startNode);
-  const pos = (k, i) => ({x: x0 + 30 + k * colW, y: y0 + i * laneH});
+  const pos = (k, i) => ({x: x0 + 30 + (k === "start" ? 0 : (k + 1) * colW), y: y0 + i * laneH});
   const center = (k, i, side) => { const p = pos(k, i); return side === "top" ? [p.x + bw / 2, p.y] : side === "bottom" ? [p.x + bw / 2, p.y + bh]
       : side === "left" ? [p.x, p.y + bh / 2] : [p.x + bw, p.y + bh / 2]; };
   const status = (k, key) => (S.iterations[k] && S.iterations[k][key] && S.iterations[k][key].status) || "queued";
@@ -270,8 +274,36 @@ function renderPipe() {
       const [px, py] = center(k, 2, "right"), [qx, qy] = center(k + 1, 0, "left");
       edge(`M${px},${py} C${px + 60},${py} ${qx - 60},${qy} ${qx - 2},${qy}`, status(k + 1, "rollout"), status(k, "s1_train"));
     }
-    if (k === 0) { const [qx, qy] = center(0, 0, "left"); edge(`M${sx - 30},${y0 + bh / 2} L${qx - 2},${qy}`, status(0, "rollout"), "done"); }
+    if (k + 1 < its.length) {   // System2 k -> the next round's System2 (it continues from it)
+      const [px, py] = center(k, 3, "right"), [qx, qy] = center(k + 1, 3, "left");
+      edge(`M${px},${py} L${qx - 2},${qy}`, status(k + 1, "s2_train"), status(k, "s2_train"), true);
+    }
   });
+  // the start column: System1 270k (-> round 0's rollout) and the System2 base (-> round 0's System2)
+  const ST = S.start || {};
+  g.append(svg("text", {x: pos("start", 0).x + bw / 2, y: 22, "text-anchor": "middle", class: "col-label" + (SEL === "start" ? " sel" : ""), text: "start"}));
+  { const [px, py] = center("start", 2, "right"), [qx, qy] = center(0, 0, "left");
+    edge(`M${px},${py} C${px + 50},${py} ${qx - 50},${qy} ${qx - 2},${qy}`, status(0, "rollout"), "done");
+    const [rx, ry] = center("start", 3, "right"), [tx, ty] = center(0, 3, "left");
+    edge(`M${rx},${ry} L${tx - 2},${ty}`, status(0, "s2_train"), (ST.s2_train || {}).status || "queued", true); }
+  for (const [i, key, name, s0] of [[2, "s1", "System1 start", ST.s1], [3, "s2_train", "System2 base", ST.s2_train]]) {
+    const s = s0 || {status: "queued"}, p = pos("start", i), st = s.status || "queued", [ic, lab] = STATUS[st] || ["?", st];
+    const node = svg("g", {class: "node " + st, tabindex: 0, role: "button", "aria-label": `start ${name}: ${lab}`});
+    node.append(svg("title", {text: `start · ${name}: ${lab}`}));
+    node.append(svg("rect", {class: "box", x: p.x, y: p.y, width: bw, height: bh, rx: 8}));
+    node.append(svg("text", {class: "t", x: p.x + 10, y: p.y + 19, text: `${ic}  ${name}`}));
+    if (st === "running" && s.eta_short) node.append(svg("text", {class: "k eta", x: p.x + bw - 8, y: p.y + 19, "text-anchor": "end", text: s.eta_short}));
+    const kl = key === "s1" ? "270k checkpoint" : keyLine("s2_train", s, 0) || "old set, 2 epochs";
+    node.append(svg("text", {class: "k", x: p.x + 10, y: p.y + 37, text: lab + " · " + kl}));
+    const pr = key === "s1" ? null : progressOf("s2_train", s);
+    if (st === "running" && pr != null) {
+      node.append(svg("rect", {class: "prog-bg", x: p.x + 10, y: p.y + 46, width: bw - 20, height: 5, rx: 2.5}));
+      node.append(svg("rect", {class: "prog", x: p.x + 10, y: p.y + 46, width: (bw - 20) * pr, height: 5, rx: 2.5}));
+    }
+    const go = () => { SEL = "start"; renderAll(key === "s1" ? "s1start" : "s2_train"); };
+    node.addEventListener("click", go); node.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    g.append(node);
+  }
   its.forEach((it, k) => STAGES.forEach(([key, name], i) => {
     const s = it[key] || {status: "queued"}, p = pos(k, i), st = s.status || "queued";
     const [ic, lab] = STATUS[st] || ["?", st];
@@ -295,7 +327,21 @@ function renderPipe() {
     node.addEventListener("click", go); node.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
     g.append(node);
   }));
-  document.getElementById("pipe").replaceChildren(g);
+  const strip = el("div", {cls: "pipe-scroll"}); strip.append(g);
+  host.replaceChildren(lab, strip);
+  if (keep != null) strip.scrollLeft = keep;
+  // drag to pan (a click on a box still opens it: a drag only starts after a few pixels)
+  let down = null, moved = false;
+  strip.addEventListener("pointerdown", e => { if (e.button !== 0) return; down = {x: e.clientX, left: strip.scrollLeft}; moved = false; });
+  strip.addEventListener("pointermove", e => {
+    if (!down) return;
+    const dx = e.clientX - down.x;
+    if (!moved && Math.abs(dx) > 4) { moved = true; strip.classList.add("drag"); strip.setPointerCapture(e.pointerId); }
+    if (moved) strip.scrollLeft = down.left - dx;
+  });
+  const up = () => { down = null; setTimeout(() => strip.classList.remove("drag"), 0); };
+  strip.addEventListener("pointerup", up); strip.addEventListener("pointercancel", up);
+  strip.addEventListener("click", e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
   const lg = document.getElementById("legend"); lg.replaceChildren();
   for (const st of ["done", "running", "waiting", "queued", "failed"]) lg.append(badge(st));
   lg.append(el("span", {}, [el("span", {cls: "sw", style: "border-top-style:dashed"}), "optional (System2)"]));
@@ -423,11 +469,11 @@ function stageCard(key, name, s, it) {
     }
     if (s.s2) {
       card.append(el("h3", {text: "System2 training shards"}), kv([["samples / shards", num(s.s2.rows) + " / " + num(s.s2.shards)], ["decisions", Object.entries(s.s2.decisions || {}).map(([a, b]) => a + " " + num(b)).join(", ")],
-        ["closing samples", num(s.s2.closing)], ["size", s.s2.size_gb != null ? s.s2.size_gb + " GB" : null], ["S3", s.s2.uri, true], ["local", s.s2.local, true]]));
+        ["closing samples", num(s.s2.closing)], ["size", s.s2.size_gb != null ? s.s2.size_gb + " GB" : null], ["built", s.s2.built], ["S3", s.s2.uri, true], ["local", s.s2.local, true]]));
       if (s.s2.judges) card.append(table(["judge", "samples"], Object.entries(s.s2.judges).map(([a, b]) => [a, num(b)])));
     }
   } else if (key === "s1_train" || key === "s2_train") {
-    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} training samples (round ${s.rounds}) + the old set (50%)` : null)],
+    card.append(kv([["model", s.model], ["job", s.job], ["instances", s.instances], ["from", s.from_ckpt], ["data", s.data || (s.rows ? `${num(s.rows)} training samples (round ${s.rounds})` : null)], ["data (S3)", s.data_uri, true],
       ["batch / lr", s.batch ? `${s.batch} / ${s.lr || ""}` : null], ["epochs", s.epochs], ["steps", s.step != null ? `${num(s.step)} / ${num(s.steps)}` : num(s.steps)],
       ["speed", s.sec_per_step ? s.sec_per_step + " s / step" : null], ["queue", s.queue], ["job state", s.job_state],
       ["started / ETA", s.started ? s.started + " → " + (s.eta || "…") : null], ["checkpoints", s.ckpt_uri, true], ["note", s.note]]));
@@ -447,6 +493,7 @@ function stageCard(key, name, s, it) {
         ["elapsed", L.hours != null ? L.hours + " h (limit " + L.max_run_h + " h)" : null], ["instances", L.instances],
         ["failure", L.failure], ["history", (L.history || []).join(" · ")], ["error", L.error]]));
     }
+    if (s.inspect) card.append(el("div", {cls: "note"}, [el("a", {href: s.inspect.href, target: "_blank", text: s.inspect.label + " →"})]));
     for (const c of s.ckpts || []) card.append(kv([["checkpoint " + num(c.step), c.uri, true]]));
   } else if (key === "eval") {
     card.append(kv([["pair", s.pair], ["split", s.split], ["episodes", s.done != null ? `${num(s.done)} / ${num(s.episodes)}` : num(s.episodes)],
@@ -469,9 +516,17 @@ function stageCard(key, name, s, it) {
 }
 function renderDetail(focus) {
   const tabs = document.getElementById("tabs"); tabs.replaceChildren();
+  if (S.start) tabs.append(el("button", {type: "button", cls: SEL === "start" ? "sel" : "", text: "start", onclick: () => { SEL = "start"; renderAll(); }}));
   S.iterations.forEach(it => tabs.append(el("button", {type: "button", cls: SEL === it.k ? "sel" : "", text: it.label, onclick: () => { SEL = it.k; renderAll(); }})));
-  const it = S.iterations.find(x => x.k === SEL) || S.iterations[0], box = document.getElementById("stages"); box.replaceChildren();
-  for (const [key, name] of STAGES) box.append(stageCard(key, name, it[key], it));
+  const box = document.getElementById("stages"); box.replaceChildren();
+  if (SEL === "start" && S.start) {
+    const c1 = el("div", {cls: "stage", id: "stage-s1start"}, [el("div", {cls: "hd"}, [el("b", {text: "System1 start"}), badge("done")]),
+      kv([["checkpoint", S.start.s1.ckpt, true], ["note", S.start.s1.note]])]);
+    box.append(c1, stageCard("s2_train", "System2 base training", S.start.s2_train, S.start));
+  } else {
+    const it = S.iterations.find(x => x.k === SEL) || S.iterations[0];
+    for (const [key, name] of STAGES) box.append(stageCard(key, name, it[key], it));
+  }
   if (focus) { const c = document.getElementById("stage-" + focus); if (c) { c.classList.add("flash"); c.scrollIntoView({behavior: "smooth", block: "nearest"}); setTimeout(() => c.classList.remove("flash"), 1400); } }
 }
 function renderConfig() {

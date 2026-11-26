@@ -231,6 +231,29 @@ def _cw_progress(cfg, sm_job: str | None, kind: str) -> dict:
         return {"error": f"{type(exc).__name__}: {str(exc)[:120]}"}
 
 
+def _s2_tracked(cfg, card: dict, job: dict | None, now_running: list, k) -> dict:
+    """A System2 card with its tracked SageMaker job (name / queues / steps from the config): status, loss, ETA."""
+    if not job or not job.get("name"):
+        return card
+    live = _job_live(cfg, job.get("name"), job.get("queues") or ["fss-vla-p5-48xlarge-us-west-2"])
+    cw = _cw_progress(cfg, live.get("sagemaker_job"), "s2")
+    if job.get("steps"):
+        card["steps"] = int(job["steps"])
+    if cw.get("points"):
+        card.update(loss=cw["points"], step=cw["step"], sec_per_step=cw.get("sec_per_step"))
+        if card.get("steps") and cw.get("sec_per_step"):
+            card.update(_eta((card["steps"] - cw["step"]) * cw["sec_per_step"] / 3600))
+    card.update(status=_live_status(live, "queued"), job=job.get("name"), live=live,
+                job_state=(f"{live.get('batch')} (Batch) / {live.get('sagemaker')} - {live.get('secondary')} (SageMaker)"
+                           if live.get("sagemaker") else live.get("batch")))
+    if job.get("note"):
+        card["note"] = job["note"]
+    if card["status"] == "running":
+        now_running.append({"k": k, "stage": "s2_train", "progress": (card.get("step") or 0) / (card.get("steps") or 1),
+                            "eta": card.get("eta") or ""})
+    return card
+
+
 def _live_status(job: dict, fallback: str) -> str:
     """The card's status from the live job: running only while SageMaker trains; waiting while queued or starting."""
     if not job or job.get("error"):
@@ -366,6 +389,7 @@ def live_state(config: str) -> dict:
                          "decisions": {"model": dec.get("s1", 0), "expert": dec.get("harness", 0)},
                          "closing": (s2m.get("per_kind") or {}).get("closing"), "kinds": s2m.get("per_kind"),
                          "judges": s2m.get("per_judge"), "size_gb": _size_gb(f"{s2_uri(cfg, k)}/shards"),
+                         "built": str(s2m.get("built") or "").replace("T", " ")[:16],
                          "uri": f"{s2_uri(cfg, k)}/", "local": str(cfg.work_dir / f"iter_{k:02d}" / "s2_training_shard")}
         job = tr_s.get("job") or {}
         tr_status = MAP.get(tr_s.get("status", "pending"), "queued")
@@ -399,23 +423,21 @@ def live_state(config: str) -> dict:
         if tr_status == "running":
             now_running.append({"k": k, "stage": "s1_train", "progress": (loss[-1][0] / steps) if loss else 0.0,
                                 "eta": s1_train.get("eta") or job.get("secondary") or ""})
-        s2_train = {"status": "queued", "model": "Qwen3-VL-4B (full fine-tune, from the original Qwen3-VL-4B-Instruct)",
-                    "rounds": f"{k}", "rows": pre.get("s2", {}).get("rows"),
-                    "note": "optional: only the evaluation needs it; 2 passes over the round's S2 training samples, 50% old set"}
-        s2_job = (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train")
-        if s2_job:  # a job tracked from the config (e.g. the S2 smoke, until the loop submits S2 itself)
-            s2_live = _job_live(cfg, s2_job.get("name"), s2_job.get("queues") or ["fss-vla-p5-48xlarge-us-west-2"])
-            s2cw = _cw_progress(cfg, s2_live.get("sagemaker_job"), "s2")
-            if s2cw.get("points"):
-                s2_train.update(loss=s2cw["points"], step=s2cw["step"], sec_per_step=s2cw.get("sec_per_step"))
-                if s2_job.get("steps"):
-                    s2_train["steps"] = int(s2_job["steps"])
-                    if s2cw.get("sec_per_step"):
-                        s2_train.update(_eta((int(s2_job["steps"]) - s2cw["step"]) * s2cw["sec_per_step"] / 3600))
-            s2_train.update(status=_live_status(s2_live, "queued"), job=s2_job.get("name"), live=s2_live,
-                            job_state=(f"{s2_live.get('batch')} (Batch) / {s2_live.get('sagemaker')} - {s2_live.get('secondary')} (SageMaker)"
-                                       if s2_live.get("sagemaker") else s2_live.get("batch")),
-                            note=s2_job.get("note") or s2_train["note"])
+        s2r = (cfg.get("s2") or {}).get("round") or {}
+        rows = (pre.get("s2") or {}).get("rows")
+        frac, ep = float(s2r.get("new_fraction", 0.8)), int(s2r.get("epochs", 3))
+        s2_train = {"status": "queued", "model": "Qwen3-VL-4B, full fine-tune",
+                    "from_ckpt": "the System2 base (start column)" if k == 0 else f"round {k - 1}'s System2",
+                    "rounds": f"{k}", "rows": rows,
+                    "data": (f"{num(rows)} samples of round {k} ({frac:.0%} of each batch) + the old set ({1 - frac:.0%})" if rows
+                             else f"the round's samples ({frac:.0%}) + the old set ({1 - frac:.0%})"),
+                    "epochs": f"{ep} over the round's samples", "batch": int(s2r.get("batch", 192)), "lr": s2r.get("lr", "1e-5"),
+                    "steps": -(-ep * int(rows) // int(frac * int(s2r.get("batch", 192)))) if rows else None,
+                    "ckpt_uri": f"{it_uri}/s2_ckpts/", "note": "optional: only the evaluation needs it"}
+        if pre.get("inspect_s2"):
+            s2_train["inspect"] = {"href": pre["inspect_s2"], "label": f"round {k}'s S2 training samples in the inspector"}
+        s2_train = _s2_tracked(cfg, s2_train, (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train"),
+                               now_running, k)
         ev = {"status": MAP.get(ev_s.get("status", "pending"), "queued") if cfg["eval"].get("enabled", True) else "queued",
               "pair": f"System1 round {k} + System2", "split": "target (held out)", "uri": f"{cfg.eval_uri(k)}/",
               "success": (ev_s.get("summary") or {}).get("overall")}
@@ -431,6 +453,20 @@ def live_state(config: str) -> dict:
         trends["s1_step_share"].append(prog.get("s1_step_share"))
         trends["eval_success"].append(ev["success"])
         trends["api_cost_usd"].append(prog.get("api_cost_usd"))
+    sb = (cfg.get("s2") or {}).get("base") or {}
+    start_s2 = {"status": "queued", "model": "Qwen3-VL-4B, full fine-tune", "from_ckpt": "the original Qwen3-VL-4B-Instruct",
+                "data": f"the old set only: {sb.get('data_name', 'full0804')} ({num(sb.get('samples'))} samples, the new format)",
+                "epochs": sb.get("epochs", 2), "batch": int(sb.get("batch", 192)), "lr": sb.get("lr", "1e-5"),
+                "steps": sb.get("steps"), "instances": sb.get("instances"), "queue": sb.get("queue"),
+                "ckpt_uri": sb.get("ckpt_uri"), "data_uri": sb.get("data_uri"),
+                "note": sb.get("note", "every round's System2 continues from here (round 0 from this one)")}
+    if sb.get("inspector_view"):
+        start_s2["inspect"] = {"href": f"http://127.0.0.1:7891/system2_training_sample?dataset={sb['inspector_view']}",
+                               "label": f"the old set ({sb.get('data_name')}) in the inspector"}
+    start_s2 = _s2_tracked(cfg, start_s2, ((cfg.get("dashboard") or {}).get("start") or {}).get("s2_train"), now_running, "start")
+    start = {"k": "start", "label": "start",
+             "s1": {"status": "done", "ckpt": cfg["start"]["s1_ckpt"], "note": "the 270k openpi checkpoint: round 0's rollout System1"},
+             "s2_train": start_s2}
     nxt = next((f"{it['label']}: {s}" for it in iters for s in ("rollout", "preprocess", "s1_train")
                 if it[s]["status"] in ("waiting", "queued")), "all rounds done")
     base = cfg["eval"].get("baseline") or {}
@@ -445,7 +481,8 @@ def live_state(config: str) -> dict:
                                     else f"perturbed from round {r.get('augment_from_round', 1)}")
                                  + f" (+-{r.get('start_shift', 0) * 100:.0f} cm, +-{r.get('start_turn', 0):g} deg)"),
                        "s1_start": cfg["start"]["s1_ckpt"],
-                       "s2": "Qwen3-VL-4B from the original checkpoint, single mode (judge, milestone, decision, subgoal); 50% the round's samples / 50% the old set",
+                       "s2": ("Qwen3-VL-4B, single mode (judge, milestone, decision, subgoal): a base trained on the old set (2 epochs) "
+                              "at the start, then each round from the previous round's, 80% the round's samples / 20% the old set, 3 epochs"),
                        "train": f"batch {t['batch_size']}, {float(t.get('new_data_fraction', 0.8)):.0%} rollout / "
                                 f"{1 - float(t.get('new_data_fraction', 0.8)):.0%} base, {int(t['steps']) // 1000}k steps, "
                                 f"ckpts every {int(t['save_interval']) // 1000}k, {t.get('queue_full_name') or t.get('queue')}",
@@ -456,7 +493,7 @@ def live_state(config: str) -> dict:
             "baseline": {"label": base.get("label", "start: System1 270k + System2 (0804), language steering"), "success": base.get("overall"),
                          "by_set": {a: base[a] for a in ("atomic_seen", "composite_seen", "composite_unseen") if a in base},
                          "note": base.get("note", "the earlier target-split run, 1,500 episodes")},
-            "trends": trends, "iterations": iters, "generated": time_now(), "s3": s3_layout(cfg),
+            "trends": trends, "iterations": iters, "start": start, "generated": time_now(), "s3": s3_layout(cfg),
             "reference": (cfg.get("dashboard") or {}).get("reference") or []}
 
 
@@ -501,10 +538,13 @@ def s3_layout(cfg) -> dict:
             n("meta.json, _DONE", "stats: spans kept / dropped and why, samples, shards"),
             n("manifest.jsonl, segments.jsonl, README.md", "per-shard counts, every span's verdict"),
         ]),
-        n("s2_training_shard/", "System2 training data", "preprocessing -> S2 training (the 50% new stream)", [
+        n("s2_training_shard/", "System2 training data (the milestone view of 2026-11-26: the ongoing milestone, its last "
+                                "step listed as ongoing)", "preprocessing -> the round's S2 training (80% of each batch)", [
             n("shards/*.tar", "system2-shards: <key>.json messages + <key>.videobin (the last step's clip) / .imagebin0"),
-            n("meta.json, _DONE, manifest.jsonl, README.md", "stats: per kind, judge, decision; per-shard counts"),
+            n("meta.json, _DONE, manifest.jsonl, README.md", "stats: per kind, judge, decision; per-shard counts; built"),
         ]),
+        n("s2_ckpts/", "the round's System2: continued from round k-1's (round 0: the base), 3 epochs, LR 5e-6, the final "
+                       "checkpoint only", "S2 training (SageMaker) -> the next round's S2 training, eval"),
         n("s1_ckpts/", "the round's System1", "S1 training (SageMaker) -> next round's rollout, eval", [
             n("si-<exp>-iterNN/pi05_robocasa_system1/si-<exp>-iterNN__progact_granfine_verbsimp_noexec/24999/",
               "the final checkpoint: params/ (EMA weights), assets/ (norm stats)"),
@@ -516,15 +556,17 @@ def s3_layout(cfg) -> dict:
     ])
     exp = n(cfg.exp_uri + "/", f"everything of {cfg.exp_id}", "", [
         n("config.yaml", "the experiment's resolved config (written once)", "scheduler"),
+        n("s2_base/", "the System2 base: Qwen3-VL-4B-Instruct trained on the old set only, 2 epochs, LR 1e-5, the final "
+                      "checkpoint only", "S2 base training (SageMaker, once) -> round 0's S2 training"),
         n("state.json", "the loop's state: every round's stages, the training jobs, events, heartbeat",
           "scheduler (every tick) -> dashboard"),
         rnd,
     ])
     shared = n("shared, outside the experiment", "", "", [
-        n(f"{cfg.s3_root}/s2_base/full0804_v3/", "the old System2 set in the new format (562,183 samples): the 50% old stream of "
-                                                  "every S2 training", "convert_full0804.py (once) -> S2 training"),
-        n("s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_ft_ckpts/<S2 run>/", "S2 checkpoints, one folder per S2 run",
-          "S2 training -> eval"),
+        n(f"{cfg.s3_root}/s2_base/full0804_v4/", "the old System2 set in the new format and view (2026-11-26): all of the S2 "
+                                                  "base's data, 20% of each batch of every round's S2", "convert_full0804.py (once) -> S2 training"),
+        n(f"{cfg.s3_root}/s2_base/full0804_v3/", "the earlier conversion (the 'now' view, without the last step listed): kept, "
+                                                  "not used"),
         n(cfg["start"]["s1_ckpt"] + "/", "the start System1 (270k openpi checkpoint)", "-> round 0"),
         n("s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_released_ckpt/Qwen3-VL-4B-Instruct/",
           "the original Qwen3-VL-4B-Instruct: every S2 training starts from it", "-> S2 training"),
@@ -550,6 +592,10 @@ def _eta(hours_left: float | None) -> dict:
 
 #: preprocessing of a round took ~1.9 h (round 0: download 34 min, S1 shards 25, upload 25, S2 26): its ETA from the start
 PREPROCESS_HOURS = 1.9
+
+
+def num(v) -> str:
+    return "?" if v is None else f"{int(v):,}"
 
 
 def time_now() -> str:

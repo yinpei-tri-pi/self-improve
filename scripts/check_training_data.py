@@ -117,6 +117,20 @@ def check_episode(folder: str) -> list[tuple[str, str]]:
         m = re.search(r"<milestones>\n(.*?)\n</milestones>", a, re.S)
         if m:
             emitted = rows_v2.parse_milestones(m.group(1))
+    # the view of 2026-11-26: one milestone ongoing, its last line the step just executed (ongoing) = the restated step
+    for r in rows:
+        u = r["messages"][1]["content"]
+        if "Milestones:\n" not in u:
+            continue
+        lines = u.split("Milestones:\n")[1].split("\n\nThe last step")[0].splitlines()
+        cur = [i for i, ln in enumerate(lines) if re.match(r"  M\d+.*\(ongoing(, again)?\)$", ln)]
+        steps = [i for i, ln in enumerate(lines) if ln.startswith("    - ") and ln.endswith(" (ongoing)")]
+        said = re.search(r"The last step was '(.*?)', executed by", u, re.S)
+        tail = cur and next((i for i in range(cur[0] + 1, len(lines)) if not lines[i].startswith("    ")), len(lines)) - 1
+        if (len(cur) != 1 or len(steps) != 1 or steps[0] != tail or not said
+                or lines[steps[0]][len("    - "):-len(" (ongoing)")] != said.group(1)):
+            bad.append(("S2 view: the last step not listed last under the one ongoing milestone",
+                        f"{name} turn {r['meta']['turn']}"))
     for r in rows_v2.trained(rows):
         if r["meta"].get("clip_frames") is not None and r["meta"]["clip_frames"] < rows_v2.MIN_FRAMES:
             bad.append(("S2 trained row with a video under MIN_FRAMES", f"{name} turn {r['meta']['turn']}"))

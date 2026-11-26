@@ -42,9 +42,10 @@ SYSTEM = (
     "You are the high-level planner of a one-arm mobile robot (a Franka Panda arm with a parallel gripper on a wheeled "
     "base) in a home kitchen, seen from three cameras tiled side by side: left shoulder, right shoulder, wrist. Two "
     "controllers can execute a step: the model, a learned policy that is fast and cheap but fails on some steps, and "
-    "the expert, which is reliable but slow and costly. Each turn you see the task, its milestones (each done, now or "
-    "to do, with the recent steps of the current one and how each went: done, partial or failed), the video of the "
-    "last step, the gripper status and the task status (begin, ongoing, success or failed). Judge the last step, then give the next step in the model's words "
+    "the expert, which is reliable but slow and costly. Each turn you see the task, its milestones (each done, "
+    "ongoing or to do; the ongoing one with its recent steps, each with how it went: done, partial or failed, and "
+    "last the step just executed, marked ongoing), the video of that last step, the gripper status and the task "
+    "status (begin, ongoing, success or failed). Judge the last step, then give the next step in the model's words "
     "and who should execute it: the model whenever it can do the step, the expert only when the model is likely to "
     "fail. Answer with <thought>, <judge>, <milestone>, <decision> (model or expert) and <subgoal>; when the task "
     "status is success or failed, only <thought> and <judge> (task_finish or task_failed).")
@@ -120,14 +121,16 @@ def parse_milestones(text: str) -> list[tuple[str, str]]:
     return out
 
 
-def checklist_text(done: list[dict], current: str, milestones: list[tuple[str, str]]) -> str:
-    """The milestones, each done / now / to do, and the current one's recent steps (the design of 2026-11-25).
+def checklist_text(done: list[dict], current: str, milestones: list[tuple[str, str]], last_step: str | None = None) -> str:
+    """The milestones, each done / ongoing / to do, and the ongoing one's recent steps (the design of 2026-11-25; the
+    words and the last step of 2026-11-26).
 
     ``done``: the steps before the last one ({milestone, subgoal, outcome}), in order; ``current``: the last step's
     milestone. Milestones before the current one are done, those after it to do. Going back (M3 -> M2) makes the
-    earlier one "now, again", marks the return in its step list ("(back from M3)") and empties the later ones, which
+    earlier one "ongoing, again", marks the return in its step list ("(back from M3)") and empties the later ones, which
     become "to do, tried before". The current milestone shows its last RECENT steps (the attempts at one step, X /
-    "continue to X" / "X again", are one line with how the latest went)."""
+    "continue to X" / "X again", are one line with how the latest went). ``last_step``: the step just executed (the
+    video, judged in this turn), listed last under the ongoing milestone as "(ongoing)" (the prompt restates it)."""
     order = [mid for mid, _ in milestones]
     text = dict(milestones)
     for d in done + [{"milestone": current}]:  # labels missing from the list: appended in the order they appear
@@ -170,10 +173,12 @@ def checklist_text(done: list[dict], current: str, milestones: list[tuple[str, s
         elif i > c:
             lines.append(f"  {text[m]} (to do" + (", tried before)" if m in tried else ")"))
         else:
-            lines.append(f"  {text[m]} (now" + (", again)" if m in again or m in tried else ")"))
+            lines.append(f"  {text[m]} (ongoing" + (", again)" if m in again or m in tried else ")"))
             shown = steps[m][-RECENT:]
             for st in shown:
                 lines.append(f"    {st['mark']}" if "mark" in st else f"    - {st['text']} ({st['outcome']})")
+            if last_step:
+                lines.append(f"    - {last_step} (ongoing)")
     return "\n".join(lines) if lines else "(none yet)"
 
 
@@ -270,11 +275,12 @@ def user_first(goal: str) -> str:
             "List the milestones, then give the first step and who should execute it.")
 
 
-def user_turn(goal: str, plan: str, last: str, mover: str, gripper: str, status: str) -> str:
-    """Every other row's user text: the milestone view, the last step and its video, the gripper and task status."""
+def user_turn(goal: str, plan: str, last: str, mover: str, gripper: str, status: str | None) -> str:
+    """Every other row's user text: the milestone view, the last step and its video, the gripper and task status
+    (``status`` None: no status line, the proposed format)."""
     return (f"The task is: {goal}\n\nMilestones:\n{plan}\n\nThe last step was '{last}', "
             f"executed by {MOVER.get(mover, mover)}. Here is its video:\n<video>\n"
-            f"Current gripper: {gripper}.\nCurrent task status: {status}.\n\n"
+            f"Current gripper: {gripper}.\n" + (f"Current task status: {status}.\n" if status else "") + "\n"
             "Judge the last step, then give the next step and who should execute it.")
 
 
@@ -342,7 +348,7 @@ def episode_rows(folder: str | Path, out_dir: Path, *, make_media: bool = True) 
                 clip_steps(prev["start"], prev["end"]))
             done = [{"milestone": x["milestone"], "subgoal": x["subgoal"], "by": x["by"],
                      "outcome": OUTCOME.get(x["judge_of_this"], x["judge_of_this"])} for x in turns[:k - 1]]
-            plan = checklist_text(done, prev["milestone"], latest_milestones(turns[:k]))
+            plan = checklist_text(done, prev["milestone"], latest_milestones(turns[:k]), prev["subgoal"])
             user = user_turn(goal, plan, prev["subgoal"], prev["by"], gripper_status(traj, prev["end"]), STATUS["turn"])
             meta.update(clip=f"clips/{media}", clip_frames=n, clip_fps=CLIP_FPS, clip_span=[prev["start"], prev["end"]])
         judge = "task_begin" if prev is None else (t["judge_given"] or prev["judge_of_this"] or "subgoal_complete")
@@ -365,7 +371,7 @@ def episode_rows(folder: str | Path, out_dir: Path, *, make_media: bool = True) 
             clip_steps(last["start"], last["end"]))
         done = [{"milestone": x["milestone"], "subgoal": x["subgoal"], "by": x["by"],
                  "outcome": OUTCOME.get(x["judge_of_this"], x["judge_of_this"])} for x in turns[:-1]]
-        plan = checklist_text(done, last["milestone"], latest_milestones(turns))
+        plan = checklist_text(done, last["milestone"], latest_milestones(turns), last["subgoal"])
         user = user_turn(goal, plan, last["subgoal"], last["by"], gripper_status(traj, last["end"]), status)
         judge = "task_finish" if rec.success else "task_failed"
         thought = ("The task is complete." if rec.success else

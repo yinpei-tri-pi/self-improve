@@ -170,13 +170,13 @@ def test_s2_checklist():
     # going back: M2 now again, the return marked, M3 emptied and "to do, tried before"
     assert checklist_text(done, "M2: place", ms).splitlines() == [
         "  M1: pick the mug from the cabinet (done)",
-        "  M2: place the mug under the dispenser (now, again)",
+        "  M2: place the mug under the dispenser (ongoing, again)",
         "    - carry the mug to the dispenser (done)",
         "    (back from M3)",
         "  M3: press the start button (to do, tried before)"]
     # forward: M1 done, M2 now with its steps (the attempts at one step are one line), M3 to do
     assert checklist_text(done[:3], "M2: place", ms).splitlines() == [
-        "  M1: pick the mug from the cabinet (done)", "  M2: place the mug under the dispenser (now)",
+        "  M1: pick the mug from the cabinet (done)", "  M2: place the mug under the dispenser (ongoing)",
         "  M3: press the start button (to do)"]
     lines = checklist_text(done[:3], "M1: pick", ms).splitlines()
     assert lines[1:3] == ["    - reach to the mug (done)", "    - grasp the mug (done)"]
@@ -185,6 +185,13 @@ def test_s2_checklist():
     out = checklist_text(many, "M1: pick", ms).splitlines()
     assert out[1:6] == [f"    - step {i} ({'failed' if i % 3 == 0 else 'done'})" for i in range(4, 9)]
     assert out[6] == "  M2: place the mug under the dispenser (to do)" and not any("so far" in x for x in out)
+    # the last step (the video): listed last under the ongoing milestone, as ongoing - after a failed try too
+    assert checklist_text(done[:2], "M1: pick", ms, "grasp the mug again").splitlines()[:4] == [
+        "  M1: pick the mug from the cabinet (ongoing)", "    - reach to the mug (done)", "    - grasp the mug (failed)",
+        "    - grasp the mug again (ongoing)"]
+    # a new milestone: the last step is its first line
+    assert checklist_text(done[:3], "M2: place", ms, "carry the mug to the dispenser").splitlines()[1:3] == [
+        "  M2: place the mug under the dispenser (ongoing)", "    - carry the mug to the dispenser (ongoing)"]
 
 
 def test_s2_merge_fragments_stop_at_a_milestone():

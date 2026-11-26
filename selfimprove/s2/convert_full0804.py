@@ -5,8 +5,9 @@
 What is converted (the rest is dropped):
 
 - ``plan_exec_v2 · execution`` and the ``failure_v2`` pairs (failure+recovery, incomplete+continue): one new row each.
-  The old two-level plan becomes the milestone view: ``[x]`` milestones done, the ``[~]`` one now, ``[ ]`` to do; the
-  ``[x]`` fine steps of the current milestone are its steps (done); its ``[~]`` fine step is the last step (the video).
+  The old two-level plan becomes the milestone view: ``[x]`` milestones done, the ``[~]`` one ongoing, ``[ ]`` to do;
+  the ``[x]`` fine steps of the ongoing milestone are its steps (done); its ``[~]`` fine step is the last step (the
+  video), listed last as ongoing.
   The recovery of a failure pair (role y) shows the failed try in the steps and "X again" as the last step; the
   continuation of an incomplete+continue pair (role y) the partial try and "continue to X". Rows whose status says
   success without a task_finish target are dropped (they contradict the system prompt). The
@@ -143,7 +144,7 @@ def convert_turn(rec: dict) -> tuple[dict | None, str]:
         done.append({"milestone": label(cur), "subgoal": last["text"], "outcome": "partial"})
         last_words = f"continue to {base_step(last['text']) or last['text']}"
     # the old plan's [x] marks after the current milestone (rare): keep the order, checklist_text decides by position
-    view = R.checklist_text(done, label(cur), milestones)
+    view = R.checklist_text(done, label(cur), milestones, last_words)
     status = _status(u)
     if status == "success" and judge != "task_finish":
         return None, "status success without task_finish (contradicts the system prompt)"

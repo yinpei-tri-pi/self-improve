@@ -38,10 +38,9 @@ train:
 cluster:
   rollout_address: http://10.242.5.98:8265   # the running head: the scheduler never runs ray up itself
 dashboard:
-  jobs:
-    0:
-      s2_train: {name: yinpei-sys2-si-mix-qwen3vl-4b-gb192-full-zero2-2-11-26-09-31-47, queues: [fss-vla-p5-48xlarge-us-west-2], steps: 300,
-                 note: "the S2 SMOKE test (300 steps, the check run's 4,008 rows + the old set 50/50), not round 0's S2 training: that one is submitted once the smoke passes"}
+  jobs: {}      # k: {s2_train: {name, queues, steps}}: a round's S2 job, tracked on the dashboard once submitted
+  start:
+    s2_train: null   # {name, queues, steps}: the System2 base job, once submitted
   # the starting checkpoints' own training runs (2026-11-26, from their SageMaker CloudWatch logs and the S2 logging.jsonl)
   reference:
     - {name: "S1 start: the 270k openpi checkpoint (f0717-270k-bs512-progact)", final: "loss 0.0059 (flow_loss_real 0.0162) at step 268,800",
@@ -51,3 +50,26 @@ dashboard:
        final: "loss ~0.115, token accuracy ~0.956 (0.150 averaged over the run)", start: "1.39 at step 1",
        run: "2 x p5, batch 192 (3 x 16 GPUs x grad-acc 4), 17,124 steps = 3 epochs of full0804 (1.1M samples), 30 h",
        where: "s3://tri-ml-datasets-uw2/yinpeidai/system2_ckpt/qwen_ft_ckpts/system2-full-0804-qwen3vl-4b-gb192-full-vitfull-lr1e5-vitlr2e6-alignerlr1e5-zero2-2n-ep3/logging.jsonl"}
+
+# System2 (the user, 2026-11-26): a base on the old set first, then each round from the previous round's
+s2:
+  base:
+    data_name: full0804_v4
+    inspector_view: old_full0804_v4     # RoboAnnotator dataset name (the view under ~/selfimprove_work/shard_view/s2)
+    ckpt_uri: s3://tri-ml-datasets-uw2/yinpeidai/self_improve/si_dev120/s2_base/   # the final checkpoint only
+    data_uri: s3://tri-ml-datasets-uw2/yinpeidai/self_improve/s2_base/full0804_v4/
+    samples: 562183                     # the conversion's meta.json (2026-11-26)
+    epochs: 2
+    steps: 5857                         # ceil(2 x 562,183 / 192)
+    batch: 192
+    lr: "1e-5 (ViT 2e-6, aligner 1e-5), cosine, 3% warmup"
+    instances: "2 x p5 (ZeRO-2, 3 per GPU x grad-acc 4)"
+    queue: "fss-vla-p5-48xlarge-us-west-2, priority 150"
+    max_run_days: 2
+    note: "every round's System2 continues from here. Smoke (300 steps, 2026-11-26): loss 1.82 -> 0.206, token acc 0.934, 5.84 s/step"
+  round:
+    new_fraction: 0.8                   # 80% the round's samples, 20% the old set, per batch
+    epochs: 3                           # over the round's own samples: steps = ceil(3 x N_round / (0.8 x 192)), N_round from its meta.json
+    batch: 192
+    lr: "5e-6 (ViT 1e-6, aligner 5e-6), cosine, 3% warmup"   # half the base's (the user, 2026-11-26): continued fine-tuning
+    max_run_days: 2
