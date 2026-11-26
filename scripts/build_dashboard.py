@@ -269,6 +269,10 @@ def live_state(config: str) -> dict:
         ev = {"status": MAP.get(ev_s.get("status", "pending"), "queued") if cfg["eval"].get("enabled", True) else "queued",
               "pair": f"System1 round {k} + System2", "split": "target (held out)", "uri": f"{cfg.eval_uri(k)}/",
               "success": (ev_s.get("summary") or {}).get("overall")}
+        extra = ((cfg.get("dashboard") or {}).get("links") or {}).get(k) or ((cfg.get("dashboard") or {}).get("links") or {}).get(str(k)) or {}
+        for stage, d in (("rollout", rollout), ("preprocess", pre), ("s1_train", s1_train)):
+            if extra.get(stage):
+                d["links"] = extra[stage]
         label = f"round {k}" + (" (recorded starts)" if eps and not pert else "")
         iters.append({"k": k, "label": label, "rollout": rollout, "preprocess": pre, "s1_train": s1_train,
                       "s2_train": s2_train, "eval": ev})

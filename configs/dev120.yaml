@@ -37,3 +37,8 @@ train:
   warmup_steps: 2000
 cluster:
   rollout_address: http://10.242.5.98:8265   # the running head: the scheduler never runs ray up itself
+dashboard:
+  links:
+    0:
+      preprocess:
+        - {label: "the pre-check before round 0: 70 tasks x 2 (the tasks outside the subset), its rollout site", href: "../debug_dev120_check_20261126/index.html"}

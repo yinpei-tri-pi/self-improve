@@ -373,6 +373,7 @@ function stageCard(key, name, s, it) {
   const st = (s && s.status) || "queued", card = el("div", {cls: "stage", id: "stage-" + key});
   card.append(el("div", {cls: "hd"}, [el("b", {text: name}), badge(st)]));
   if (!s) return card;
+  for (const l of s.links || []) card.append(el("div", {}, [el("a", {href: l.href, target: "_blank", text: l.label + " →"})]));
   const nameOf = w => { const m = STAGES.find(x => x[0] === w); return m ? `${m[1]} of ${it.label}` : w; };
   if (s.waits_for) card.append(el("div", {cls: "note", text: "waits for: " + s.waits_for.map(nameOf).join(", ")}));
   const pr = progressOf(key, s);
