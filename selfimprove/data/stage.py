@@ -54,6 +54,28 @@ def download_round(cfg: Config, k: int, dest: Path, workers: int = 16, log=print
     return out
 
 
+def span_checks(shards: Path, workers: int = 12, log=print) -> dict:
+    """The data page's per-span checks (scripts/build_shard_index.py) over every shard: contiguous frames ending at the
+    span end, the first frame at the span start (recoveries: at their fix), progress monotone in [0, 1], one subgoal,
+    at most one halt frame. {"spans", "failing", "issues", "samples", "shards"}."""
+    import collections
+    import importlib.util
+    from concurrent.futures import ProcessPoolExecutor
+
+    spec = importlib.util.spec_from_file_location("bsi", Path(__file__).resolve().parents[2] / "scripts" / "build_shard_index.py")
+    bsi = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bsi)
+    tars = sorted(shards.glob("*.tar"))
+    with ProcessPoolExecutor(workers) as pool:
+        samples = [r for part in pool.map(bsi.s1_scan, [str(t) for t in tars]) for r in part]
+    spans = bsi.s1_spans(samples)
+    bad = [sp for sp in spans if sp["issues"]]
+    issues = collections.Counter(i.split(" ")[0] + " " + i.split(" ")[1] for sp in bad for i in sp["issues"])
+    out = {"spans": len(spans), "failing": len(bad), "issues": dict(issues), "samples": len(samples), "shards": len(tars)}
+    log(f"S1 span checks on all {len(tars)} shards: {len(spans)} spans, {len(bad)} failing {dict(issues) or ''}")
+    return out
+
+
 def prune_rollouts(cfg: Config, k: int, log=print) -> None:
     """Raw rollout copies of at most filter.keep_rollout_rounds rounds on this machine (the rest are on S3): before
     round k's download, the copies of rounds <= k - keep are removed, each only if its rollout _DONE is on S3."""
@@ -88,6 +110,8 @@ def run(cfg: Config, k: int, *, upload: bool = True, keep_local: bool = True, lo
     f = cfg["filter"]
     meta = s1_shards.build(episodes, out, exp_id=cfg.exp_id, iteration=k, fcfg=f, workers=int(f.get("workers", 16)),
                            log=log)
+    meta["span_checks"] = span_checks(out / "shards", log=log)  # on all shards, before any is pruned
+    (out / "meta.json").write_text(json.dumps(meta, indent=1))
     if upload:
         s3.sync_up(out, cfg.s1_shard_uri(k), delete=True)
         s3.write_json(f"{cfg.s1_shard_uri(k)}/_DONE", meta)

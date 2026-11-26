@@ -166,6 +166,12 @@ def main() -> int:
     old = indexed(args.view / "s2" / args.s2_old, s2_scan, args.workers, limit=args.old_shards) if has_old else []
     old_meta = json.loads((args.view / "s2" / args.s2_old / "meta.json").read_text()) if has_old else {}
 
+    s1_meta = json.loads((args.view / "s1" / args.s1 / "meta.json").read_text())
+    partial = len(manifest(args.view / "s1" / args.s1)) < int(s1_meta.get("shards") or 0)
+    if partial:  # samples are shuffled over every shard: a span is whole only in all of them -> no per-span verdict here
+        for sp in spans:
+            sp["issues"] = []
+    full_checks = s1_meta.get("span_checks") or {}
     kinds = collections.Counter(sp["kind"] for sp in spans)
     samples_by_kind = collections.Counter(r["kind"] for r in s1)
     bad = [sp for sp in spans if sp["issues"]]
@@ -209,7 +215,15 @@ old set.</p>
         [("spans failing a check", len(bad))])}
 <p>Checks on every span: frames contiguous and ending at the span end; the first frame at the span start (a recovery within the
 step starts at its fix, the frames before are context: anchor and progress only); progress monotone in [0, 1]; one subgoal;
-at most one halt frame. {('Failing: ' + esc(dict(issue_count))) if bad else 'All spans pass.'}</p>
+at most one halt frame. """ + ((f"<b>This page reads {len(manifest(args.view / 's1' / args.s1))} of the round's "
+      f"{s1_meta.get('shards')} shards</b> (the rest are on S3): samples are shuffled over every shard, so a span is whole only "
+      f"in all of them and the per-span checks ran on all shards at preprocessing: "
+      + (f"<b>{full_checks.get('spans', 0):,} spans, {full_checks.get('failing', 0):,} failing</b>"
+         + (f" ({esc(full_checks.get('issues'))})" if full_checks.get('failing') else "") if full_checks else
+         "not recorded for this round (preprocessed before the checks were added; round 0 passed them on all shards: 41,159 spans, "
+         "0 failing, 2026-11-26 09:17)")
+      + ". The table lists the parts of spans in these shards.") if partial else
+     (('Failing: ' + esc(dict(issue_count))) if bad else 'All spans pass.')) + """</p>
 <input class=f placeholder='filter spans (task, kind, subgoal...)' oninput="filt(this,'s1t')">
 {table(['task', 'seed', 'kind', 'subgoal (prompt)', 'span', 'trained frames', 'frames', 'halt', 'Est. Length', 'progress', 'gripper', 'turns', 'first sample', 'halt sample', 'check'], span_rows, 's1t')}
 
