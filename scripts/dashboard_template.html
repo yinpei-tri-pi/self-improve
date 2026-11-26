@@ -279,7 +279,7 @@ function renderPipe() {
     node.append(svg("rect", {class: "box", x: p.x, y: p.y, width: bw, height: bh, rx: 8}));
     node.append(svg("text", {class: "t", x: p.x + 10, y: p.y + 19, text: `${ic}  ${name}`}));
     if (st === "running" && s.eta_short) {
-      const e = svg("text", {class: "k eta", x: p.x + bw - 8, y: p.y + 19, "text-anchor": "end", text: "ETA " + s.eta_short});
+      const e = svg("text", {class: "k eta", x: p.x + bw - 8, y: p.y + 19, "text-anchor": "end", text: s.eta_short});
       e.append(svg("title", {text: "ETA " + (s.eta || s.eta_short)}));
       node.append(e);
     }

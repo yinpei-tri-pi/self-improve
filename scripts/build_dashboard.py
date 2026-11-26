@@ -542,8 +542,10 @@ def _eta(hours_left: float | None) -> dict:
         return {}
     t = datetime.now() + timedelta(hours=hours_left)
     days = (t.date() - datetime.now().date()).days
-    return {"eta": t.strftime("%Y-%m-%d %H:%M") + f" ({hours_left:.1f} h left)",
-            "eta_short": t.strftime("%H:%M") + (f" +{days}d" if days > 0 else "")}
+    rough = (f"~{round(hours_left * 60 / 5) * 5 or 5} min left" if hours_left < 1 else
+             f"~{hours_left:.1f} h left" if hours_left < 10 else f"~{hours_left:.0f} h left")
+    return {"eta": t.strftime("%Y-%m-%d %H:%M") + (f" +{days}d" if days > 0 else "") + f" ({hours_left:.1f} h left)",
+            "eta_short": rough}
 
 
 #: preprocessing of a round took ~1.9 h (round 0: download 34 min, S1 shards 25, upload 25, S2 26): its ETA from the start
