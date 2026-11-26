@@ -5,7 +5,7 @@ exp_id: si_v1
 s3_root: s3://tri-ml-datasets-uw2/yinpeidai/self_improve
 aws_region: us-west-2                 # the bucket's region (the Ray clusters run in us-east-1)
 aws_profile: sagemaker                # local profile for S3 + SageMaker (the clusters use instance roles)
-work_dir: ~/selfimprove_work          # local cache: downloads, shard staging, logs
+work_dir: /mnt/ssd1/self_improve_runs  # everything an experiment downloads or makes here (the user, 2026-11-25): rollout copies, shards, state, logs
 iterations: 6                         # rollout -> filter -> train rounds (S2 is trained once, at the end)
 
 start:

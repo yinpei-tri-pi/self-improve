@@ -457,9 +457,11 @@ def main() -> int:
     args = ap.parse_args()
     cfg = Config.load(None, [f"exp_id={args.exp}"])
     s3.configure(cfg.get("aws_profile"), cfg.region)
-    legacy = Path(cfg["work_dir"]).expanduser() / args.exp / "rollout"  # where the debug round's records are
+    from selfimprove.config import exp_dir
+
+    legacy = exp_dir(args.exp) / "rollout"  # where the debug round's records are
     # the preprocessing stage's download folder (selfimprove/data/stage.py), so a round is downloaded once
-    cache = args.cache or (legacy if legacy.exists() else cfg.work_dir / f"iter_{args.iteration:02d}" / "rollout")
+    cache = args.cache or (legacy if legacy.exists() else exp_dir(args.exp) / f"iter_{args.iteration:02d}" / "rollout")
     out = args.out or ROOT / "site" / f"debug_{args.exp}"
     if args.index_only:
         summ = json.loads((out / "summary.json").read_text())["episodes"]

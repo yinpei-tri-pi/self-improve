@@ -1,7 +1,7 @@
 """Rollout episodes -> System2 training shards (the ``system2-shards`` layout of sys2_train_eval's plugin).
 
     .venv/bin/python -m selfimprove.s2.shards sub50_check_20261125 [more exps] --iterations 0 \\
-        --out ~/selfimprove_work/sub50_check_20261125/s2_training_shard [--workers 8] [--min-shards 64]
+        --out /mnt/ssd1/self_improve_runs/<exp>/s2_training_shard [--workers 8] [--min-shards 64]
 
 Every episode of the given rounds (failures too; composite_unseen tasks refused by rows_v2) -> its rows
 (``rows_v2.episode_rows``), the trained ones (``rows_v2.trained``: no video under MIN_FRAMES frames) written as
@@ -26,7 +26,8 @@ import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
-WORK = Path.home() / "selfimprove_work"
+from ..config import exp_dir
+
 
 
 def _key(exp: str, k: int, task: str, seed: int, turn: int, kind: str) -> str:
@@ -77,7 +78,7 @@ def build(exps: list[str], iterations: list[int], out: Path, *, workers: int = 8
     media.mkdir()
     for exp in exps:
         for k in iterations:
-            for root in (WORK / exp / f"iter_{k:02d}" / "rollout", WORK / exp / "rollout"):
+            for root in (exp_dir(exp) / f"iter_{k:02d}" / "rollout", exp_dir(exp) / "rollout"):
                 if root.exists():
                     jobs += [(str(p.parent), exp, k, str(media)) for p in sorted(root.glob("*/*/result.json"))]
                     break

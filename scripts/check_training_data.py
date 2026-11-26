@@ -129,10 +129,11 @@ def main() -> int:
     ap.add_argument("exps", nargs="+")
     ap.add_argument("--jobs", type=int, default=16)
     args = ap.parse_args()
-    work = Path.home() / "selfimprove_work"
+    from selfimprove.config import exp_dir
+
     folders = []
     for exp in args.exps:
-        for root in (work / exp / "iter_00" / "rollout", work / exp / "rollout"):
+        for root in (exp_dir(exp) / "iter_00" / "rollout", exp_dir(exp) / "rollout"):
             if root.exists():
                 folders += [str(p.parent) for p in sorted(root.glob("*/*/result.json"))]
                 break

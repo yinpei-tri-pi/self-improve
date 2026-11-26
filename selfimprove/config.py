@@ -116,7 +116,7 @@ class Config:
 
     @property
     def work_dir(self) -> Path:
-        return Path(os.path.expanduser(str(self.raw.get("work_dir") or "~/selfimprove_work"))) / self.exp_id
+        return Path(os.path.expanduser(str(self.raw.get("work_dir") or WORK_ROOT))) / self.exp_id
 
     # -- S3 layout ---------------------------------------------------------------------------------
     @property
@@ -166,3 +166,17 @@ class Config:
         if int(k) == 0 and r.get("pilot_seeds_per_task"):
             return int(r["pilot_seeds_per_task"])
         return int(r["seeds_per_task"])
+
+
+
+#: where experiments keep what they download and make (configs/default.yaml work_dir); LEGACY_WORK_ROOT holds the runs
+#: from before 2026-11-25 (sub50_check_20261125, si_v1, ...), still read by exp_dir()
+WORK_ROOT = "/mnt/ssd1/self_improve_runs"
+LEGACY_WORK_ROOT = "~/selfimprove_work"
+
+
+def exp_dir(exp: str) -> Path:
+    """An experiment's local folder: under the work root, or the legacy one for runs made before the move."""
+    new = Path(WORK_ROOT) / exp
+    old = Path(os.path.expanduser(LEGACY_WORK_ROOT)) / exp
+    return old if (old.exists() and not new.exists()) else new
