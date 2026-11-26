@@ -13,12 +13,12 @@ rollout:
   seeds_per_task: 30
   num_gpus: 16
   # starts (the user, 2026-11-25): each task's recordings in one fixed shuffled order, 30 per round, wrapping around
-  # when they run out, so every round has 30 per task however many rounds; round 0 plays the recorded starts, from
-  # round 1 on (and whenever a recording is played again) the robot is placed up to 10 cm forward/sideways and 15
-  # degrees off the recording's start, salted by the round, so no two starts repeat (HexaShell start_shift /
-  # start_turn / start_salt per episode; draws closer than 4 cm to the kitchen are redrawn)
+  # when they run out, so every round has 30 per task however many rounds. The first pass plays the recorded starts;
+  # a recording played again (its second pass on) is placed up to 10 cm forward/sideways and 15 degrees off its start,
+  # salted by the round, so no two starts repeat (HexaShell start_shift / start_turn / start_salt per episode; draws
+  # closer than 4 cm to the kitchen are redrawn). With ~100 recordings a task: rounds 0-2 recorded, from 3 perturbed
   start_draw: sequential
-  augment_from_round: 1
+  augment_from_round: null
   start_shift: 0.1
   start_turn: 15
 eval:

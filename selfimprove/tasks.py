@@ -202,7 +202,8 @@ def plan_round(cfg, iteration: int, used_seeds: dict[str, set[int]] | None = Non
                 for i in draw_demos(key, iteration, task, len(ids), n, used_seeds.get(task, set())):
                     out.append(Episode(task, i, kind, horizon, demo=ids[i], start_salt=salt))
                 continue
-            for i, salt in demo_starts(key, iteration, task, len(ids), n, mode, int(r.get("augment_from_round", 1))):
+            aug = r.get("augment_from_round", 1)  # null: never by round, only a recording played again is perturbed
+            for i, salt in demo_starts(key, iteration, task, len(ids), n, mode, 10**9 if aug is None else int(aug)):
                 out.append(Episode(task, i, kind, horizon, demo=ids[i], start_salt=salt))
         tasks = []
     for task in tasks:
