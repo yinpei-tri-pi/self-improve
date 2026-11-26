@@ -68,7 +68,31 @@ def run(cfg: Config, k: int, *, upload: bool = True, keep_local: bool = True, lo
         s3.write_json(f"{cfg.s1_shard_uri(k)}/_DONE", meta)
     if not keep_local:
         shutil.rmtree(out / "shards", ignore_errors=True)
+    meta["s2"] = s2_rows(cfg, k, work, upload=upload, log=log)
     return meta
+
+
+def s2_uri(cfg: Config, k: int) -> str:
+    return f"{cfg.exp_uri}/iter_{int(k):02d}/s2_training_shard"
+
+
+def s2_rows(cfg: Config, k: int, work: Path, *, upload: bool = True, log=print) -> dict:
+    """The round's System2 rows (selfimprove/s2/shards.py, every episode, failures too) -> iter_k/s2_training_shard/ on
+    S3 with _DONE. S2 is optional (only the evaluation needs it): a failure here is recorded, it does not stop S1."""
+    from ..s2 import shards as s2_shards
+
+    out = work / "s2_training_shard"
+    try:
+        meta = s2_shards.build([cfg.exp_id], [int(k)], out, workers=int(cfg["filter"].get("workers", 4)))
+    except Exception as exc:  # noqa: BLE001
+        log(f"iteration {k}: the S2 rows failed: {type(exc).__name__}: {exc}")
+        return {"status": "failed", "error": f"{type(exc).__name__}: {exc}"[:500]}
+    if upload:
+        s3.sync_up(out, s2_uri(cfg, k), delete=True)
+        s3.write_json(f"{s2_uri(cfg, k)}/_DONE", meta)
+    log(f"iteration {k}: {meta['num_samples']} S2 rows in {meta['num_shards']} shards")
+    return {"status": "done", "uri": s2_uri(cfg, k), **{a: meta[a] for a in ("num_samples", "num_shards", "per_kind",
+                                                                              "per_judge", "per_decision", "built", "seconds")}}
 
 
 def summary_metrics(meta: dict) -> dict:
