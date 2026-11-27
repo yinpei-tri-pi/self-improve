@@ -436,12 +436,20 @@ def live_state(config: str) -> dict:
                                   f"{(cfg.get('s2') or {}).get('base', {}).get('data_name', 'the old set')} ({1 - frac:.0%})"),
                     "data_uri": f"{s2_uri(cfg, k)}/", "base_data_uri": (cfg.get("s2") or {}).get("base", {}).get("data_uri"),
                     "epochs": f"{ep} over the round's samples", "batch": int(s2r.get("batch", 192)), "lr": s2r.get("lr", "1e-5"),
-                    "steps": -(-ep * int(rows) // int(frac * int(s2r.get("batch", 192)))) if rows else None,
+                    "steps": math.ceil(ep * int(rows) / (frac * int(s2r.get("batch", 192)))) if rows else None,
                     "ckpt_uri": f"{it_uri}/s2_ckpts/", "note": "optional: only the evaluation needs it"}
         if pre.get("inspect_s2"):
             s2_train["inspect"] = {"href": pre["inspect_s2"], "label": f"round {k}'s S2 training samples in the inspector"}
-        s2_train = _s2_tracked(cfg, s2_train, (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train"),
-                               now_running, k)
+        # the round's S2 job: the launch record of selfimprove/train/s2_rounds.py (iter_k/s2_ckpts/_launch.json)
+        s2_rec = s3.read_json(f"{it_uri}/s2_ckpts/_launch.json", default=None) or {}
+        s2_job = (((cfg.get("dashboard") or {}).get("jobs") or {}).get(k) or {}).get("s2_train")
+        if s2_rec.get("job_name"):
+            s2_job = {"name": s2_rec["job_name"], "queues": [s2_rec.get("queue")], "steps": s2_rec.get("steps")}
+            s2_train.update(from_ckpt=s2_rec.get("init"), ckpt_uri=s2_rec.get("checkpoint_uri"),
+                            note=f"submitted {s2_rec.get('submitted')} by selfimprove.train.s2_rounds "
+                                 f"({num(s2_rec.get('samples'))} samples x {s2_rec.get('epochs')} epochs / "
+                                 f"({s2_rec.get('new_fraction')} x 192) = {num(s2_rec.get('steps'))} steps)")
+        s2_train = _s2_tracked(cfg, s2_train, s2_job, now_running, k)
         ev = {"status": MAP.get(ev_s.get("status", "pending"), "queued") if cfg["eval"].get("enabled", True) else "queued",
               "pair": f"System1 round {k} + System2", "split": "target (held out)", "uri": f"{cfg.eval_uri(k)}/",
               "success": (ev_s.get("summary") or {}).get("overall")}

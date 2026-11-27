@@ -73,4 +73,10 @@ s2:
     epochs: 3                           # over the round's own samples: steps = ceil(3 x N_round / (0.8 x 192)), N_round from its meta.json
     batch: 192
     lr: "5e-6 (ViT 1e-6, aligner 5e-6), cosine, 3% warmup"   # half the base's (the user, 2026-11-26): continued fine-tuning
+    learning_rate: 5.0e-6
+    vit_lr: 1.0e-6
+    aligner_lr: 5.0e-6
+    queue_full_name: fss-vla-p5-48xlarge-us-west-2
+    queue_priority: 150
+    image_tag: "20261126-si-mixed-v2"   # the base's image (mixed mode: the 'base' channel at 1 - new_fraction)
     max_run_days: 2
